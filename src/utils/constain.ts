@@ -12,15 +12,6 @@ export const setLocalStorage = (key: string, value: string | object | []) => {
   }
 };
 
-// export const getLocalStorage = (key: string) => {
-//   try {
-//     const storedValue = localStorage.getItem(key);
-//     return storedValue;
-//   } catch (error) {
-//     console.error("Lỗi khi truy xuất từ localStorage:", error);
-//     return null;
-//   }
-// };
 export const getToken = () => {
   try {
     const storedValue = localStorage.getItem(
@@ -42,3 +33,8 @@ export const convertToString = (value: string | string[]): string => {
     return ""; // Nếu không phải kiểu string hoặc mảng, trả về chuỗi trống
   }
 };
+
+export enum ELanguage {
+  En,
+  Vi,
+}

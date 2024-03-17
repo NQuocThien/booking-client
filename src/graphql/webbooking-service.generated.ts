@@ -81,6 +81,7 @@ export type CreateMedicalFacilityInput = {
   schedule: Scalars['String']['input'];
   status: Scalars['String']['input'];
   taxCode: Scalars['String']['input'];
+  typeOfFacility: ETypeOfFacility;
   userId: Scalars['String']['input'];
 };
 
@@ -276,6 +277,13 @@ export enum EStatusService {
   Open = 'Open'
 }
 
+export enum ETypeOfFacility {
+  Clinic = 'clinic',
+  PrivateHospital = 'privateHospital',
+  PublicHospital = 'publicHospital',
+  VaccinationCenter = 'vaccinationCenter'
+}
+
 export enum ETypeOfNotification {
   NotSeen = 'NotSeen',
   Seen = 'Seen'
@@ -388,6 +396,7 @@ export type MedicalFacilities = {
   totalPackages?: Maybe<Scalars['Float']['output']>;
   totalSpecialties?: Maybe<Scalars['Float']['output']>;
   totalVaccinations?: Maybe<Scalars['Float']['output']>;
+  typeOfFacility: Scalars['String']['output'];
   userId: Scalars['String']['output'];
   vaccinations?: Maybe<Array<Vaccination>>;
 };
@@ -734,6 +743,7 @@ export type Profile = {
 export type Query = {
   __typename?: 'Query';
   checklogin: User;
+  checkloginCustomer: User;
   getAllCustomer: Array<Customer>;
   getAllCustomerPagination: Array<Customer>;
   getAllDoctor: Array<Doctor>;
@@ -1214,6 +1224,7 @@ export type UpdateMedicalFacilityInput = {
   schedule: Scalars['String']['input'];
   status: Scalars['String']['input'];
   taxCode: Scalars['String']['input'];
+  typeOfFacility: ETypeOfFacility;
   userId: Scalars['String']['input'];
 };
 
@@ -1369,6 +1380,18 @@ export type GetGeneralInforQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetGeneralInforQuery = { __typename?: 'Query', getGeneralInfor: { __typename?: 'GeneralInfor', company: string, address: string, copyrigth: string, email: string, hotline: string, liscenceBusiness: string, liscenceOparating: string, ID?: string | null, logoFooter: { __typename?: 'LinkImage', filename: string, type: string, url: string }, logoHeader: { __typename?: 'LinkImage', filename: string, type: string, url: string } } };
 
+export type CheckloginCustomerQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+
+export type LoginCustomerMutationVariables = Exact<{
+  input: LoginUserInput;
+}>;
+
+
+export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null } } };
+
 
 export const GetGeneralInforDocument = gql`
     query GetGeneralInfor {
@@ -1426,6 +1449,111 @@ export type GetGeneralInforQueryHookResult = ReturnType<typeof useGetGeneralInfo
 export type GetGeneralInforLazyQueryHookResult = ReturnType<typeof useGetGeneralInforLazyQuery>;
 export type GetGeneralInforSuspenseQueryHookResult = ReturnType<typeof useGetGeneralInforSuspenseQuery>;
 export type GetGeneralInforQueryResult = Apollo.QueryResult<GetGeneralInforQuery, GetGeneralInforQueryVariables>;
+export const CheckloginCustomerDocument = gql`
+    query checkloginCustomer {
+  checkloginCustomer {
+    id
+    linkImage {
+      filename
+      type
+      url
+    }
+    email
+    username
+    password
+    roles
+    customer {
+      id
+      name
+      gender
+      email
+      numberPhone
+      address
+      dateOfBirth
+      ethnic
+      userId
+    }
+  }
+}
+    `;
+
+/**
+ * __useCheckloginCustomerQuery__
+ *
+ * To run a query within a React component, call `useCheckloginCustomerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckloginCustomerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckloginCustomerQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCheckloginCustomerQuery(baseOptions?: Apollo.QueryHookOptions<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>(CheckloginCustomerDocument, options);
+      }
+export function useCheckloginCustomerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>(CheckloginCustomerDocument, options);
+        }
+export function useCheckloginCustomerSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>(CheckloginCustomerDocument, options);
+        }
+export type CheckloginCustomerQueryHookResult = ReturnType<typeof useCheckloginCustomerQuery>;
+export type CheckloginCustomerLazyQueryHookResult = ReturnType<typeof useCheckloginCustomerLazyQuery>;
+export type CheckloginCustomerSuspenseQueryHookResult = ReturnType<typeof useCheckloginCustomerSuspenseQuery>;
+export type CheckloginCustomerQueryResult = Apollo.QueryResult<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>;
+export const LoginCustomerDocument = gql`
+    mutation loginCustomer($input: LoginUserInput!) {
+  login(loginUserInput: $input) {
+    access_token
+    user {
+      id
+      username
+      email
+      password
+      linkImage {
+        filename
+        type
+        url
+      }
+      roles
+      active
+    }
+  }
+}
+    `;
+export type LoginCustomerMutationFn = Apollo.MutationFunction<LoginCustomerMutation, LoginCustomerMutationVariables>;
+
+/**
+ * __useLoginCustomerMutation__
+ *
+ * To run a mutation, you first call `useLoginCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginCustomerMutation, { data, loading, error }] = useLoginCustomerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginCustomerMutation(baseOptions?: Apollo.MutationHookOptions<LoginCustomerMutation, LoginCustomerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginCustomerMutation, LoginCustomerMutationVariables>(LoginCustomerDocument, options);
+      }
+export type LoginCustomerMutationHookResult = ReturnType<typeof useLoginCustomerMutation>;
+export type LoginCustomerMutationResult = Apollo.MutationResult<LoginCustomerMutation>;
+export type LoginCustomerMutationOptions = Apollo.BaseMutationOptions<LoginCustomerMutation, LoginCustomerMutationVariables>;
 export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'gender' | 'id' | 'name' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1493,7 +1621,7 @@ export type LogoutUserKeySpecifier = ('logout' | LogoutUserKeySpecifier)[];
 export type LogoutUserFieldPolicy = {
 	logout?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MedicalFacilitiesKeySpecifier = ('address' | 'dateOff' | 'discription' | 'doctors' | 'email' | 'id' | 'image' | 'introduce' | 'lat' | 'legalRepresentation' | 'lng' | 'logo' | 'medicalFacilityName' | 'medicalSpecialties' | 'medicalStaffs' | 'numberPhone' | 'operatingStatus' | 'packages' | 'schedule' | 'status' | 'taxCode' | 'totalDoctors' | 'totalPackages' | 'totalSpecialties' | 'totalVaccinations' | 'userId' | 'vaccinations' | MedicalFacilitiesKeySpecifier)[];
+export type MedicalFacilitiesKeySpecifier = ('address' | 'dateOff' | 'discription' | 'doctors' | 'email' | 'id' | 'image' | 'introduce' | 'lat' | 'legalRepresentation' | 'lng' | 'logo' | 'medicalFacilityName' | 'medicalSpecialties' | 'medicalStaffs' | 'numberPhone' | 'operatingStatus' | 'packages' | 'schedule' | 'status' | 'taxCode' | 'totalDoctors' | 'totalPackages' | 'totalSpecialties' | 'totalVaccinations' | 'typeOfFacility' | 'userId' | 'vaccinations' | MedicalFacilitiesKeySpecifier)[];
 export type MedicalFacilitiesFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	dateOff?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1520,6 +1648,7 @@ export type MedicalFacilitiesFieldPolicy = {
 	totalPackages?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalSpecialties?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalVaccinations?: FieldPolicy<any> | FieldReadFunction<any>,
+	typeOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>,
 	vaccinations?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -1631,9 +1760,10 @@ export type ProfileFieldPolicy = {
 	register?: FieldPolicy<any> | FieldReadFunction<any>,
 	relationship?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('checklogin' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityPagination' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationSelect' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getSetting' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalFacilitiesCount' | 'getTotalMedicalSpecialtiesCount' | 'getTotalPackagesCount' | 'getTotalVaccinationsCount' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityPagination' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationSelect' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getSetting' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalFacilitiesCount' | 'getTotalMedicalSpecialtiesCount' | 'getTotalPackagesCount' | 'getTotalVaccinationsCount' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	checklogin?: FieldPolicy<any> | FieldReadFunction<any>,
+	checkloginCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllCustomerPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
