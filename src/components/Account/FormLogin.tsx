@@ -1,26 +1,17 @@
 "use client";
 import { LoginUserInput } from "@/graphql/webbooking-service.generated";
-import { FormEvent, useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store/store";
 import { accountVi } from "@/locales/vi/Account";
-import { accountUs } from "@/locales/en/Account";
 
 interface IProps {
   onLogin: (input: LoginUserInput) => void;
+  lan: typeof accountVi;
 }
 function FormLogin(props: IProps): JSX.Element {
-  const { onLogin } = props;
-  const currentLan = useSelector((state: RootState) => state.client.language);
-  const [lan, setLan] = useState(accountVi);
-  useLayoutEffect(() => {
-    if (currentLan.code === "us") {
-      setLan(accountUs);
-    } else setLan(accountVi);
-  }, [currentLan]);
+  const { onLogin, lan } = props;
 
   const [dataLogin, setDataLogin] = useState<LoginUserInput>({
     username: "",
@@ -35,11 +26,13 @@ function FormLogin(props: IProps): JSX.Element {
       [name]: value,
     });
   };
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
+
+    e.stopPropagation();
     if (form.checkValidity() === false) {
-      e.stopPropagation();
+      setValidated(true);
     } else {
       onLogin(dataLogin);
     }
@@ -82,6 +75,9 @@ function FormLogin(props: IProps): JSX.Element {
               {lan.texBtnLogin}
             </Button>
           </Form>
+          {/* <Form onSubmit={handleSubmit}>
+            <Button type="submit">Bấm</Button>
+          </Form> */}
         </Col>
         <Col>
           <Image

@@ -4,4 +4,28 @@ export const accountUs = {
   texPass: "Password",
   holPass: "enter password...",
   texBtnLogin: "Login",
+  messSuccess: "Login success",
+  messErr: "An error occurred",
+  messInvalid: "Invalid password",
+  messNotFound: "Account not found",
+  messNotActive: "Account has been locked",
+};
+
+export const accountInforUs = {
+  titleAvatar: "Choose your avatar",
+  title: "account information",
+  titleUsername: "User name",
+  titleEmail: "Email",
+  btnUpdate: "Update",
+  btnCancel: "Cancel",
+  btnSave: "Save",
+  titleOldPass: "Old password",
+  titleNewPass: "A new password",
+  holderUsername: "Enter your username",
+  holderEmail: "Enter your email",
+  holderNewPassword: "Enter your new password",
+  holderOldPassword: "Enter your old password",
+  messSuccess: "Information saved",
+  messError: "An error occurred",
+  messValidPass: "Password is incorrect",
 };

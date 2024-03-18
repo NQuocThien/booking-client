@@ -1,5 +1,5 @@
-/** @type {import('next').NextConfig} */
-import * as path from "path";
+// next.config.mjs
+import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

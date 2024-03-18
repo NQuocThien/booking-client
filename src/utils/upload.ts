@@ -14,7 +14,7 @@ export enum ETypeFile {
   Document = "document",
 }
 const BackendUri = process.env.BACKEND_URI
-  ? process.env.BACKEND_URI
+  ? process.env.NEXT_PUBLIC_BACKEND_URI
   : "http://localhost:4000";
 export const backendUrlFile = {
   image: `${BackendUri}${"/images"}`,
@@ -87,14 +87,14 @@ export const uploadImage = (
           var ulrImage: string;
           var linkImage: ILinkImage;
           if (typeFileImage === "") {
-            ulrImage = `${process.env.REACT_APP_BACKEND_URI_IMAGE}/${result[0]?.filename}`;
+            ulrImage = `${process.env.NEXT_PUBLIC_BACKEND_URI_IMAGE}/${result[0]?.filename}`;
             linkImage = {
               filename: result[0]?.filename + "",
               type: "image",
               url: ulrImage,
             };
           } else {
-            ulrImage = `${process.env.REACT_APP_BACKEND_URI_IMAGE}/${typeFileImage}/${result[0]?.filename}`;
+            ulrImage = `${process.env.NEXT_PUBLIC_BACKEND_URI_IMAGE}/${typeFileImage}/${result[0]?.filename}`;
             linkImage = {
               filename: result[0]?.filename + "",
               type: "image",

@@ -1375,6 +1375,20 @@ export type WorkScheduleInput = {
   status: EStatusService;
 };
 
+export type UpdateUserMutationVariables = Exact<{
+  input: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+
+export type UpdateUserWithPassMutationVariables = Exact<{
+  input: UpdateUserWithPassInput;
+}>;
+
+
+export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+
 export type GetGeneralInforQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1393,6 +1407,112 @@ export type LoginCustomerMutationVariables = Exact<{
 export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null } } };
 
 
+export const UpdateUserDocument = gql`
+    mutation updateUser($input: UpdateUserInput!) {
+  updateUser(updateUserInput: $input) {
+    id
+    linkImage {
+      filename
+      type
+      url
+    }
+    email
+    username
+    password
+    roles
+    customer {
+      id
+      name
+      gender
+      email
+      numberPhone
+      address
+      dateOfBirth
+      ethnic
+      userId
+    }
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UpdateUserWithPassDocument = gql`
+    mutation updateUserWithPass($input: UpdateUserWithPassInput!) {
+  updateUserWithPass(updateUserInput: $input) {
+    id
+    linkImage {
+      filename
+      type
+      url
+    }
+    email
+    username
+    password
+    roles
+    customer {
+      id
+      name
+      gender
+      email
+      numberPhone
+      address
+      dateOfBirth
+      ethnic
+      userId
+    }
+  }
+}
+    `;
+export type UpdateUserWithPassMutationFn = Apollo.MutationFunction<UpdateUserWithPassMutation, UpdateUserWithPassMutationVariables>;
+
+/**
+ * __useUpdateUserWithPassMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserWithPassMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserWithPassMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserWithPassMutation, { data, loading, error }] = useUpdateUserWithPassMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserWithPassMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserWithPassMutation, UpdateUserWithPassMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserWithPassMutation, UpdateUserWithPassMutationVariables>(UpdateUserWithPassDocument, options);
+      }
+export type UpdateUserWithPassMutationHookResult = ReturnType<typeof useUpdateUserWithPassMutation>;
+export type UpdateUserWithPassMutationResult = Apollo.MutationResult<UpdateUserWithPassMutation>;
+export type UpdateUserWithPassMutationOptions = Apollo.BaseMutationOptions<UpdateUserWithPassMutation, UpdateUserWithPassMutationVariables>;
 export const GetGeneralInforDocument = gql`
     query GetGeneralInfor {
   getGeneralInfor {

@@ -4,4 +4,28 @@ export const accountVi = {
   texPass: "Mật khẩu",
   holPass: "Nhập mật khẩu ...",
   texBtnLogin: "Đăng nhập",
+  messSuccess: "Đã đăng nhập",
+  messErr: "Có lỗi xảy ra",
+  messInvalid: "Sai mật khẩu",
+  messNotFound: "Tài khoản không tồn tại",
+  messNotActive: "Tài khoản đã bị khoán",
+};
+
+export const accountInforVi = {
+  titleAvatar: "Chọn ảnh đại diện",
+  title: "Thông tin tài khoản",
+  titleUsername: "Tên đăng nhập",
+  titleEmail: "Email",
+  btnUpdate: "Cập nhật",
+  btnCancel: "Hủy",
+  btnSave: "Lưu",
+  titleOldPass: "Mật khẩu củ",
+  titleNewPass: "Mật khẩu mới",
+  holderUsername: "Nhập tên tài khoản",
+  holderEmail: "Nhập email",
+  holderNewPassword: "Nhập mật khẩu mới",
+  holderOldPassword: "Nhập mật khẩu cũ",
+  messSuccess: "Đã lưu thông tin",
+  messError: "Có lỗi xảy ra",
+  messValidPass: "Mật khẩu không chính sát",
 };

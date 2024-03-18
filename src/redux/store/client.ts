@@ -1,6 +1,7 @@
 // clientReduce.ts
 import { Language } from "@/assets/contains/item-interface";
 import { User } from "@/graphql/webbooking-service.generated";
+import { checkExToken } from "@/utils/tools";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ClientState {
@@ -37,6 +38,11 @@ const clientSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<User>) => {
       state.inforUser = action.payload;
     },
+    checkExpToken: (state) => {
+      if (!checkExToken()) {
+        logout();
+      }
+    },
   },
 });
 
@@ -46,6 +52,7 @@ export const {
   logout,
   setLanguage,
   setUserInfo,
+  checkExpToken,
 } = clientSlice.actions;
 
 export default clientSlice.reducer;

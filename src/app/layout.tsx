@@ -3,8 +3,9 @@ import { Inter } from "next/font/google";
 import { StoreProvider } from "@/redux/store/StoreProvider";
 import { MainContextProvider } from "@/contexts/MainContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "@/assets/scss/style.scss";
+import "@/styles/style.scss";
 import MainLayout from "@/components/Layout/MainLayout";
+import "nprogress/nprogress.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,9 +23,9 @@ export default function RootLayout({
         <html lang="en">
           <body className={inter.className}>
             <MainLayout>
-              <div id="main" className="container-fluid">
-                {children}
-              </div>
+              {/* <div id="main" className="container-fluid">
+              </div> */}
+              {children}
             </MainLayout>
           </body>
         </html>

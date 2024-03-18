@@ -42,3 +42,16 @@ export const checkExpirationToken = (token: string | undefined): boolean => {
     return true;
   } else return false;
 };
+
+export const checkExToken = (): boolean => {
+  const token = getToken();
+  // cắt token lấy payload và giải mã Base64 URL-encoded  thành JSON rồi chuyển json thành object
+  if (token) {
+    const expirationTime = JSON.parse(atob(token.split(".")[1])).exp;
+    const currentTime = Math.floor(Date.now() / 1000); // Lấy thời gian hiện tại ở đơn vị giây
+    if (expirationTime && expirationTime < currentTime) {
+      return false;
+    }
+    return true;
+  } else return false;
+};

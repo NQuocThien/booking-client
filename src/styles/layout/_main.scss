@@ -25,20 +25,14 @@ h6 {
 #main {
   width: 100%;
   margin-top: 79px;
-  height: 90vh;
-  // background: url("../img/hero-bg.jpg") top center;
-  background-size: cover;
-  margin-bottom: -200px;
+  margin-bottom: 20px;
 }
 
 .container-fluid {
-  // padding-right: 15px;
-  // padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
 }
 
-/* CSS cho container-fluid ở màn hình nhỏ */
 @media (min-width: 576px) {
   .container-fluid {
     max-width: 100%;
@@ -46,8 +40,8 @@ h6 {
 }
 
 /* CSS cho container ở màn hình lớn */
-// @media (min-width: 992px) {
-//   .container-fluid {
-//     max-width: 1140px;
-//   }
-// }
+@media (min-width: 992px) {
+  .container-fluid {
+    max-width: 1140px;
+  }
+}

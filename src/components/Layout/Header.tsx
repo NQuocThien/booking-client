@@ -192,7 +192,9 @@ function Header({ data }: { data: GeneralInfor | undefined }) {
                 id="dropdown-basic"
                 variant="outline-success">
                 <span className="d-none d-md-inline">
-                  {(isLogin && "Nguyễn Quốc Thiện") || lan.texNavLogin}
+                  {(isLogin && inforUser?.customer?.name) ||
+                    "Tài khoản" ||
+                    lan.texNavLogin}
                 </span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -204,11 +206,11 @@ function Header({ data }: { data: GeneralInfor | undefined }) {
                   </span>{" "}
                 </p>
                 <Dropdown.Divider />
-                <Dropdown.Item href="#/action-1">
+                <Dropdown.Item as={Link} href="/account">
                   <i className="text-primary me-1bi bi-person-check-fill"></i>
                   {lan.texBtnAccout}
                 </Dropdown.Item>
-                <Dropdown.Item href="#/action-1">
+                <Dropdown.Item as={Link} href="/account/customer">
                   <i className="text-primary me-1 bi bi-info-circle-fill"></i>
                   {lan.texBtnInfo}
                 </Dropdown.Item>
@@ -235,9 +237,7 @@ function Header({ data }: { data: GeneralInfor | undefined }) {
           )) || (
             <div className="dropdown">
               <Link href="/account/login" className="user-btn 56786 ">
-                <span className="d-none d-md-inline">
-                  {(isLogin && "Nguyễn Quốc Thiện") || lan.texNavLogin}
-                </span>
+                <span className="d-none d-md-inline">{lan.texNavLogin}</span>
               </Link>
             </div>
           )}

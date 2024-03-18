@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-
 export const metadata: Metadata = {
-  title: "Account",
+  title: "Customer",
 };
 export default function Layout({
   children,

@@ -8,7 +8,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { redirect } from "next/navigation";
 
-function AccountDetailPage() {
+function CustomerDetailPage() {
   const [lan, setLan] = useState(accountInforVi);
   const currentLan = useSelector((state: RootState) => state.client.language);
   const userInfo = useSelector((state: RootState) => state.client.inforUser);
@@ -21,4 +21,4 @@ function AccountDetailPage() {
   if (!isloginIn) redirect("/account/login");
   return <InforUserCpn inforUser={userInfo} isloginIn={isloginIn} lan={lan} />;
 }
-export default AccountDetailPage;
+export default CustomerDetailPage;
