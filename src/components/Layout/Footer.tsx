@@ -15,8 +15,8 @@ function Footer({ data }: { data: GeneralInfor | undefined }) {
   }, [currentLan]);
   return (
     <footer id="footer">
-      <div className="footer-top container">
-        <div className="container">
+      <div className="footer-top ">
+        <div className="">
           <div className="row">
             <div className="col-lg-6 col-md-6 footer-contact">
               <h6>{data?.company}</h6>

@@ -115,3 +115,57 @@ const updateCustomer = gql`
     }
   }
 `;
+const createProfile = gql`
+  mutation createProfile($input: CreateProfileInput!) {
+    createProfile(input: $input) {
+      id
+      customerId
+      fullname
+      numberPhone
+      email
+      address
+      gender
+      dataOfBirth
+      ethnic
+      identity
+      relationship
+      job
+    }
+  }
+`;
+const updateProfileInput = gql`
+  mutation updateProfile($input: UpdateProfileInput!) {
+    updateProfile(input: $input) {
+      id
+      customerId
+      fullname
+      numberPhone
+      email
+      address
+      gender
+      dataOfBirth
+      ethnic
+      identity
+      relationship
+      job
+    }
+  }
+`;
+const deleteProfileInput = gql`
+  mutation deleteProfile($input: String!) {
+    deleteProfile(id: $input) {
+      id
+      customerId
+      fullname
+      numberPhone
+      email
+      address
+      gender
+      dataOfBirth
+      ethnic
+      identity
+      relationship
+      job
+    }
+  }
+`;

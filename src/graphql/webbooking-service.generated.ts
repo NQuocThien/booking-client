@@ -1410,6 +1410,27 @@ export type UpdateCustomerMutationVariables = Exact<{
 
 export type UpdateCustomerMutation = { __typename?: 'Mutation', updateCustomer: { __typename?: 'Customer', id: string, userId: string, name: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
 
+export type CreateProfileMutationVariables = Exact<{
+  input: CreateProfileInput;
+}>;
+
+
+export type CreateProfileMutation = { __typename?: 'Mutation', createProfile: { __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string } };
+
+export type UpdateProfileMutationVariables = Exact<{
+  input: UpdateProfileInput;
+}>;
+
+
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string } };
+
+export type DeleteProfileMutationVariables = Exact<{
+  input: Scalars['String']['input'];
+}>;
+
+
+export type DeleteProfileMutation = { __typename?: 'Mutation', deleteProfile: { __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string } };
+
 export type GetGeneralInforQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1419,6 +1440,13 @@ export type CheckloginCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage: { __typename?: 'LinkImage', filename: string, type: string, url: string }, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+
+export type GetProfileByCustomerIdQueryVariables = Exact<{
+  input: Scalars['String']['input'];
+}>;
+
+
+export type GetProfileByCustomerIdQuery = { __typename?: 'Query', getProfileByCustomerId: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string }> };
 
 
 export const UpdateUserDocument = gql`
@@ -1666,6 +1694,138 @@ export function useUpdateCustomerMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateCustomerMutationHookResult = ReturnType<typeof useUpdateCustomerMutation>;
 export type UpdateCustomerMutationResult = Apollo.MutationResult<UpdateCustomerMutation>;
 export type UpdateCustomerMutationOptions = Apollo.BaseMutationOptions<UpdateCustomerMutation, UpdateCustomerMutationVariables>;
+export const CreateProfileDocument = gql`
+    mutation createProfile($input: CreateProfileInput!) {
+  createProfile(input: $input) {
+    id
+    customerId
+    fullname
+    numberPhone
+    email
+    address
+    gender
+    dataOfBirth
+    ethnic
+    identity
+    relationship
+    job
+  }
+}
+    `;
+export type CreateProfileMutationFn = Apollo.MutationFunction<CreateProfileMutation, CreateProfileMutationVariables>;
+
+/**
+ * __useCreateProfileMutation__
+ *
+ * To run a mutation, you first call `useCreateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProfileMutation, { data, loading, error }] = useCreateProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProfileMutation(baseOptions?: Apollo.MutationHookOptions<CreateProfileMutation, CreateProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProfileMutation, CreateProfileMutationVariables>(CreateProfileDocument, options);
+      }
+export type CreateProfileMutationHookResult = ReturnType<typeof useCreateProfileMutation>;
+export type CreateProfileMutationResult = Apollo.MutationResult<CreateProfileMutation>;
+export type CreateProfileMutationOptions = Apollo.BaseMutationOptions<CreateProfileMutation, CreateProfileMutationVariables>;
+export const UpdateProfileDocument = gql`
+    mutation updateProfile($input: UpdateProfileInput!) {
+  updateProfile(input: $input) {
+    id
+    customerId
+    fullname
+    numberPhone
+    email
+    address
+    gender
+    dataOfBirth
+    ethnic
+    identity
+    relationship
+    job
+  }
+}
+    `;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const DeleteProfileDocument = gql`
+    mutation deleteProfile($input: String!) {
+  deleteProfile(id: $input) {
+    id
+    customerId
+    fullname
+    numberPhone
+    email
+    address
+    gender
+    dataOfBirth
+    ethnic
+    identity
+    relationship
+    job
+  }
+}
+    `;
+export type DeleteProfileMutationFn = Apollo.MutationFunction<DeleteProfileMutation, DeleteProfileMutationVariables>;
+
+/**
+ * __useDeleteProfileMutation__
+ *
+ * To run a mutation, you first call `useDeleteProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProfileMutation, { data, loading, error }] = useDeleteProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteProfileMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProfileMutation, DeleteProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteProfileMutation, DeleteProfileMutationVariables>(DeleteProfileDocument, options);
+      }
+export type DeleteProfileMutationHookResult = ReturnType<typeof useDeleteProfileMutation>;
+export type DeleteProfileMutationResult = Apollo.MutationResult<DeleteProfileMutation>;
+export type DeleteProfileMutationOptions = Apollo.BaseMutationOptions<DeleteProfileMutation, DeleteProfileMutationVariables>;
 export const GetGeneralInforDocument = gql`
     query GetGeneralInfor {
   getGeneralInfor {
@@ -1781,6 +1941,57 @@ export type CheckloginCustomerQueryHookResult = ReturnType<typeof useCheckloginC
 export type CheckloginCustomerLazyQueryHookResult = ReturnType<typeof useCheckloginCustomerLazyQuery>;
 export type CheckloginCustomerSuspenseQueryHookResult = ReturnType<typeof useCheckloginCustomerSuspenseQuery>;
 export type CheckloginCustomerQueryResult = Apollo.QueryResult<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>;
+export const GetProfileByCustomerIdDocument = gql`
+    query getProfileByCustomerId($input: String!) {
+  getProfileByCustomerId(id: $input) {
+    id
+    customerId
+    fullname
+    numberPhone
+    email
+    address
+    gender
+    dataOfBirth
+    ethnic
+    identity
+    relationship
+    job
+  }
+}
+    `;
+
+/**
+ * __useGetProfileByCustomerIdQuery__
+ *
+ * To run a query within a React component, call `useGetProfileByCustomerIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileByCustomerIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileByCustomerIdQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetProfileByCustomerIdQuery(baseOptions: Apollo.QueryHookOptions<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables> & ({ variables: GetProfileByCustomerIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables>(GetProfileByCustomerIdDocument, options);
+      }
+export function useGetProfileByCustomerIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables>(GetProfileByCustomerIdDocument, options);
+        }
+export function useGetProfileByCustomerIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables>(GetProfileByCustomerIdDocument, options);
+        }
+export type GetProfileByCustomerIdQueryHookResult = ReturnType<typeof useGetProfileByCustomerIdQuery>;
+export type GetProfileByCustomerIdLazyQueryHookResult = ReturnType<typeof useGetProfileByCustomerIdLazyQuery>;
+export type GetProfileByCustomerIdSuspenseQueryHookResult = ReturnType<typeof useGetProfileByCustomerIdSuspenseQuery>;
+export type GetProfileByCustomerIdQueryResult = Apollo.QueryResult<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables>;
 export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'gender' | 'id' | 'name' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,

@@ -51,3 +51,21 @@ const checkLoginUser = gql`
     }
   }
 `;
+const getProfileByCustomerId = gql`
+  query getProfileByCustomerId($input: String!) {
+    getProfileByCustomerId(id: $input) {
+      id
+      customerId
+      fullname
+      numberPhone
+      email
+      address
+      gender
+      dataOfBirth
+      ethnic
+      identity
+      relationship
+      job
+    }
+  }
+`;

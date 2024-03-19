@@ -214,7 +214,7 @@ function Header({ data }: { data: GeneralInfor | undefined }) {
                   <i className="text-primary me-1 bi bi-info-circle-fill"></i>
                   {lan.texBtnInfo}
                 </Dropdown.Item>
-                <Dropdown.Item href="#/action-2">
+                <Dropdown.Item as={Link} href="/account/profile">
                   <i className="text-primary me-1 bi bi-person-badge"></i>
                   {lan.texBtnProfile}
                 </Dropdown.Item>
