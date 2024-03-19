@@ -21,11 +21,18 @@ function LoginPage() {
   const router = useRouter();
   const [lan, setLan] = useState(accountVi);
   const currentLan = useSelector((state: RootState) => state.client.language);
+  const isloginIn = useSelector((state: RootState) => state.client.isLogin);
   useLayoutEffect(() => {
     if (currentLan.code === "us") {
       setLan(accountUs);
     } else setLan(accountVi);
   }, [currentLan]);
+
+  useEffect(() => {
+    if (isloginIn) {
+      router.push("./");
+    }
+  }, [isloginIn]);
 
   useEffect(() => {
     if (data?.login) {

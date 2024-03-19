@@ -29,3 +29,27 @@ export const accountInforUs = {
   messError: "An error occurred",
   messValidPass: "Password is incorrect",
 };
+
+export const formCustomerUs = {
+  titleCreate: "Create personal information",
+  titleUpdate: "Personal information",
+  titleFullname: "Full name",
+  holderFullname: "Nguyen Quoc Thien",
+  titlePhone: "Phone number",
+  holderPhone: "0987654321",
+  titleGender: "Gender",
+  labelGender: "Select gender",
+  labelMale: "Male",
+  labelFemale: "Female",
+  titleDateOfBirth: "Date of birth",
+  titleEmail: "Email address",
+  holderMail: "nqthien@gmail.com",
+  titleEthnic: "Ethnicity",
+  holderEthnic: "Kinh",
+  titleAddress: "Address",
+  holderAddress: "Long Xuyen, An Giang",
+  btnSave: "Save",
+  btnUpdate: "Update information",
+  messUpdateSuccess: "Đã sửa thông tin cá nhân",
+  messError: "Có lổi xảy ra",
+};

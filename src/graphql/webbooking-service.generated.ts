@@ -31,13 +31,13 @@ export type ConfirmRegisterInput = {
 };
 
 export type CreateCustomerInput = {
-  address?: InputMaybe<Scalars['String']['input']>;
-  dateOfBirth?: InputMaybe<Scalars['DateTime']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  ethnic?: InputMaybe<Scalars['String']['input']>;
-  gender?: InputMaybe<EGender>;
+  address: Scalars['String']['input'];
+  dateOfBirth: Scalars['DateTime']['input'];
+  email: Scalars['String']['input'];
+  ethnic: Scalars['String']['input'];
+  gender: EGender;
   name: Scalars['String']['input'];
-  numberPhone?: InputMaybe<Scalars['String']['input']>;
+  numberPhone: Scalars['String']['input'];
   userId: Scalars['String']['input'];
 };
 
@@ -429,6 +429,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   activeUser: User;
   confirmRegister: Register;
+  createCustomer: Customer;
   createDoctor: Doctor;
   createEvaluate: Evaluate;
   createMedicalFacility: MedicalFacilities;
@@ -442,7 +443,6 @@ export type Mutation = {
   createRegisterSpecialty: Register;
   createRegisterVaccine: Register;
   createVaccination: Vaccination;
-  createcustomer: Customer;
   deleteDoctor: Doctor;
   deleteEvaluate: Evaluate;
   deleteMecialSpecialty: MedicalSpecialties;
@@ -483,6 +483,11 @@ export type MutationActiveUserArgs = {
 
 export type MutationConfirmRegisterArgs = {
   input: ConfirmRegisterInput;
+};
+
+
+export type MutationCreateCustomerArgs = {
+  input: CreateCustomerInput;
 };
 
 
@@ -548,11 +553,6 @@ export type MutationCreateRegisterVaccineArgs = {
 
 export type MutationCreateVaccinationArgs = {
   input: CreateVaccineInput;
-};
-
-
-export type MutationCreatecustomerArgs = {
-  input: CreateCustomerInput;
 };
 
 
@@ -1171,14 +1171,14 @@ export type Setting = {
 };
 
 export type UpdateCustomerInput = {
-  address?: InputMaybe<Scalars['String']['input']>;
-  dateOfBirth?: InputMaybe<Scalars['DateTime']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  ethnic?: InputMaybe<Scalars['String']['input']>;
-  gender?: InputMaybe<EGender>;
+  address: Scalars['String']['input'];
+  dateOfBirth: Scalars['DateTime']['input'];
+  email: Scalars['String']['input'];
+  ethnic: Scalars['String']['input'];
+  gender: EGender;
   id: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  numberPhone?: InputMaybe<Scalars['String']['input']>;
+  numberPhone: Scalars['String']['input'];
 };
 
 export type UpdateDoctorInput = {
@@ -1311,7 +1311,7 @@ export type UpdateUserWithPassInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
   email: Scalars['String']['input'];
   id: Scalars['String']['input'];
-  linkImage?: InputMaybe<LinkImageInput>;
+  linkImage: LinkImageInput;
   password: Scalars['String']['input'];
   passwordNew: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -1336,7 +1336,7 @@ export type User = {
   doctor?: Maybe<Doctor>;
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  linkImage?: Maybe<LinkImage>;
+  linkImage: LinkImage;
   medicalFacilities?: Maybe<MedicalFacilities>;
   password: Scalars['String']['output'];
   roles?: Maybe<Array<Scalars['String']['output']>>;
@@ -1380,14 +1380,35 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage: { __typename?: 'LinkImage', filename: string, type: string, url: string }, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type UpdateUserWithPassMutationVariables = Exact<{
   input: UpdateUserWithPassInput;
 }>;
 
 
-export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage: { __typename?: 'LinkImage', filename: string, type: string, url: string }, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+
+export type CreateCustomerByUserIdMutationVariables = Exact<{
+  input: CreateCustomerInput;
+}>;
+
+
+export type CreateCustomerByUserIdMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'Customer', id: string, userId: string, name: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
+
+export type LoginCustomerMutationVariables = Exact<{
+  input: LoginUserInput;
+}>;
+
+
+export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, linkImage: { __typename?: 'LinkImage', filename: string, type: string, url: string }, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } } };
+
+export type UpdateCustomerMutationVariables = Exact<{
+  input: UpdateCustomerInput;
+}>;
+
+
+export type UpdateCustomerMutation = { __typename?: 'Mutation', updateCustomer: { __typename?: 'Customer', id: string, userId: string, name: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
 
 export type GetGeneralInforQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1397,14 +1418,7 @@ export type GetGeneralInforQuery = { __typename?: 'Query', getGeneralInfor: { __
 export type CheckloginCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
-
-export type LoginCustomerMutationVariables = Exact<{
-  input: LoginUserInput;
-}>;
-
-
-export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null } } };
+export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage: { __typename?: 'LinkImage', filename: string, type: string, url: string }, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 
 export const UpdateUserDocument = gql`
@@ -1513,6 +1527,145 @@ export function useUpdateUserWithPassMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateUserWithPassMutationHookResult = ReturnType<typeof useUpdateUserWithPassMutation>;
 export type UpdateUserWithPassMutationResult = Apollo.MutationResult<UpdateUserWithPassMutation>;
 export type UpdateUserWithPassMutationOptions = Apollo.BaseMutationOptions<UpdateUserWithPassMutation, UpdateUserWithPassMutationVariables>;
+export const CreateCustomerByUserIdDocument = gql`
+    mutation createCustomerByUserId($input: CreateCustomerInput!) {
+  createCustomer(input: $input) {
+    id
+    userId
+    name
+    numberPhone
+    email
+    address
+    gender
+    dateOfBirth
+    ethnic
+  }
+}
+    `;
+export type CreateCustomerByUserIdMutationFn = Apollo.MutationFunction<CreateCustomerByUserIdMutation, CreateCustomerByUserIdMutationVariables>;
+
+/**
+ * __useCreateCustomerByUserIdMutation__
+ *
+ * To run a mutation, you first call `useCreateCustomerByUserIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCustomerByUserIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCustomerByUserIdMutation, { data, loading, error }] = useCreateCustomerByUserIdMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCustomerByUserIdMutation(baseOptions?: Apollo.MutationHookOptions<CreateCustomerByUserIdMutation, CreateCustomerByUserIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCustomerByUserIdMutation, CreateCustomerByUserIdMutationVariables>(CreateCustomerByUserIdDocument, options);
+      }
+export type CreateCustomerByUserIdMutationHookResult = ReturnType<typeof useCreateCustomerByUserIdMutation>;
+export type CreateCustomerByUserIdMutationResult = Apollo.MutationResult<CreateCustomerByUserIdMutation>;
+export type CreateCustomerByUserIdMutationOptions = Apollo.BaseMutationOptions<CreateCustomerByUserIdMutation, CreateCustomerByUserIdMutationVariables>;
+export const LoginCustomerDocument = gql`
+    mutation loginCustomer($input: LoginUserInput!) {
+  login(loginUserInput: $input) {
+    access_token
+    user {
+      id
+      username
+      email
+      password
+      linkImage {
+        filename
+        type
+        url
+      }
+      roles
+      active
+      customer {
+        id
+        name
+        gender
+        email
+        numberPhone
+        address
+        dateOfBirth
+        ethnic
+        userId
+      }
+    }
+  }
+}
+    `;
+export type LoginCustomerMutationFn = Apollo.MutationFunction<LoginCustomerMutation, LoginCustomerMutationVariables>;
+
+/**
+ * __useLoginCustomerMutation__
+ *
+ * To run a mutation, you first call `useLoginCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginCustomerMutation, { data, loading, error }] = useLoginCustomerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginCustomerMutation(baseOptions?: Apollo.MutationHookOptions<LoginCustomerMutation, LoginCustomerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginCustomerMutation, LoginCustomerMutationVariables>(LoginCustomerDocument, options);
+      }
+export type LoginCustomerMutationHookResult = ReturnType<typeof useLoginCustomerMutation>;
+export type LoginCustomerMutationResult = Apollo.MutationResult<LoginCustomerMutation>;
+export type LoginCustomerMutationOptions = Apollo.BaseMutationOptions<LoginCustomerMutation, LoginCustomerMutationVariables>;
+export const UpdateCustomerDocument = gql`
+    mutation updateCustomer($input: UpdateCustomerInput!) {
+  updateCustomer(input: $input) {
+    id
+    userId
+    name
+    numberPhone
+    email
+    address
+    gender
+    dateOfBirth
+    ethnic
+  }
+}
+    `;
+export type UpdateCustomerMutationFn = Apollo.MutationFunction<UpdateCustomerMutation, UpdateCustomerMutationVariables>;
+
+/**
+ * __useUpdateCustomerMutation__
+ *
+ * To run a mutation, you first call `useUpdateCustomerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCustomerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCustomerMutation, { data, loading, error }] = useUpdateCustomerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCustomerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCustomerMutation, UpdateCustomerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCustomerMutation, UpdateCustomerMutationVariables>(UpdateCustomerDocument, options);
+      }
+export type UpdateCustomerMutationHookResult = ReturnType<typeof useUpdateCustomerMutation>;
+export type UpdateCustomerMutationResult = Apollo.MutationResult<UpdateCustomerMutation>;
+export type UpdateCustomerMutationOptions = Apollo.BaseMutationOptions<UpdateCustomerMutation, UpdateCustomerMutationVariables>;
 export const GetGeneralInforDocument = gql`
     query GetGeneralInfor {
   getGeneralInfor {
@@ -1628,52 +1781,6 @@ export type CheckloginCustomerQueryHookResult = ReturnType<typeof useCheckloginC
 export type CheckloginCustomerLazyQueryHookResult = ReturnType<typeof useCheckloginCustomerLazyQuery>;
 export type CheckloginCustomerSuspenseQueryHookResult = ReturnType<typeof useCheckloginCustomerSuspenseQuery>;
 export type CheckloginCustomerQueryResult = Apollo.QueryResult<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>;
-export const LoginCustomerDocument = gql`
-    mutation loginCustomer($input: LoginUserInput!) {
-  login(loginUserInput: $input) {
-    access_token
-    user {
-      id
-      username
-      email
-      password
-      linkImage {
-        filename
-        type
-        url
-      }
-      roles
-      active
-    }
-  }
-}
-    `;
-export type LoginCustomerMutationFn = Apollo.MutationFunction<LoginCustomerMutation, LoginCustomerMutationVariables>;
-
-/**
- * __useLoginCustomerMutation__
- *
- * To run a mutation, you first call `useLoginCustomerMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginCustomerMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginCustomerMutation, { data, loading, error }] = useLoginCustomerMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useLoginCustomerMutation(baseOptions?: Apollo.MutationHookOptions<LoginCustomerMutation, LoginCustomerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginCustomerMutation, LoginCustomerMutationVariables>(LoginCustomerDocument, options);
-      }
-export type LoginCustomerMutationHookResult = ReturnType<typeof useLoginCustomerMutation>;
-export type LoginCustomerMutationResult = Apollo.MutationResult<LoginCustomerMutation>;
-export type LoginCustomerMutationOptions = Apollo.BaseMutationOptions<LoginCustomerMutation, LoginCustomerMutationVariables>;
 export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'gender' | 'id' | 'name' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1794,10 +1901,11 @@ export type MedicalStaffFieldPolicy = {
 	specialtyId?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('activeUser' | 'confirmRegister' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'createcustomer' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('activeUser' | 'confirmRegister' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	activeUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	confirmRegister?: FieldPolicy<any> | FieldReadFunction<any>,
+	createCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	createDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	createEvaluate?: FieldPolicy<any> | FieldReadFunction<any>,
 	createMedicalFacility?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1811,7 +1919,6 @@ export type MutationFieldPolicy = {
 	createRegisterSpecialty?: FieldPolicy<any> | FieldReadFunction<any>,
 	createRegisterVaccine?: FieldPolicy<any> | FieldReadFunction<any>,
 	createVaccination?: FieldPolicy<any> | FieldReadFunction<any>,
-	createcustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteEvaluate?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteMecialSpecialty?: FieldPolicy<any> | FieldReadFunction<any>,

@@ -29,3 +29,27 @@ export const accountInforVi = {
   messError: "Có lỗi xảy ra",
   messValidPass: "Mật khẩu không chính sát",
 };
+
+export const formCustomerVi = {
+  titleCreate: "Tạo thông tin cá nhân",
+  titleUpdate: "Thông tin cá nhân",
+  titleFullname: "Họ và tên",
+  holderFullname: "Nguyễn Quốc Thiện",
+  titlePhone: "Số điện thoại",
+  holderPhone: "0987654321",
+  titleGender: "Giới tính",
+  labelGender: "Chọn giới tính",
+  labelMale: "Nam",
+  labelFemale: "Nữ",
+  titleDateOfBirth: "Ngày sinh",
+  titleEmail: "Địa chỉ email",
+  holderMail: "nqthien@gmail.com",
+  titleEthnic: "Dân tộc",
+  holderEthnic: "Kinh",
+  titleAddress: "Địa chỉ",
+  holderAddress: "Long Xuyên, An Giang",
+  btnSave: "Lưu",
+  btnUpdate: "Sửa thông tin",
+  messUpdateSuccess: "Đã sửa thông tin cá nhân",
+  messError: "Có lổi xảy ra",
+};

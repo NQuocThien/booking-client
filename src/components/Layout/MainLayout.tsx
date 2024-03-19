@@ -26,11 +26,11 @@ function MainLayout({ children }: { children: React.ReactNode }) {
     }
     useNProgress(loading);
   }, [data, loading]);
-  useLayoutEffect(() => {
+  useEffect(() => {
     const token = getToken();
     if (checkExpirationToken(token)) {
-      getDataCustomer();
       dispatch(login());
+      getDataCustomer();
     }
   }, []);
   useEffect(() => {

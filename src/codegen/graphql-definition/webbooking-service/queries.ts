@@ -51,23 +51,3 @@ const checkLoginUser = gql`
     }
   }
 `;
-const loginCustomer = gql`
-  mutation loginCustomer($input: LoginUserInput!) {
-    login(loginUserInput: $input) {
-      access_token
-      user {
-        id
-        username
-        email
-        password
-        linkImage {
-          filename
-          type
-          url
-        }
-        roles
-        active
-      }
-    }
-  }
-`;
