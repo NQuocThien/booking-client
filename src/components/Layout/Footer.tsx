@@ -14,8 +14,8 @@ function Footer({ data }: { data: GeneralInfor | undefined }) {
     } else setLan(footerVi);
   }, [currentLan]);
   return (
-    <footer id="footer">
-      <div className="footer-top ">
+    <footer id="footer" className="">
+      <div className="container footer-top ">
         <div className="">
           <div className="row">
             <div className="col-lg-6 col-md-6 footer-contact">

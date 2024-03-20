@@ -1,0 +1,77 @@
+#main .poster {
+  background-image: url("/imgs/poster-home.png");
+  background-size: cover; /* Hiển thị ảnh nền mà không làm biến dạng nó */
+  background-position: center; /* Hiển thị ảnh nền ở giữa trang */
+  height: 100vh; /* Đặt chiều cao của container là 100% của viewport */
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  color: $white; /* Màu chữ trắng để tương phản với ảnh nền */
+  // text-align: center;
+  @include respond(sm) {
+    height: 90vh;
+  }
+  @include respond(mobile) {
+    height: 85vh;
+  }
+}
+
+.poster .service-item {
+  background-color: $white;
+  height: 170px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  border-radius: 10px;
+  .caption {
+    font-size: 16px;
+  }
+  .img-icon {
+    width: 60%;
+  }
+  @include respond(lg) {
+    height: 140px;
+    width: 150px;
+    .caption {
+      font-size: 14px;
+    }
+  }
+  @include respond(md) {
+    height: 140px;
+    width: 150px;
+    .caption {
+      font-size: 14px;
+    }
+  }
+  @include respond(sm) {
+    height: 140px;
+    width: 140px;
+    .caption {
+      font-size: 13px;
+    }
+  }
+  @include respond(mobile) {
+    height: 130px;
+    width: 130px;
+    .caption {
+      font-size: 12px;
+    }
+  }
+}
+.poster .service-item:hover {
+  border: $black 1px solid;
+  cursor: pointer;
+}
+
+.top-facility .facility.odd {
+  background-color: $white-body;
+  border-radius: 10px;
+}
+.top-facility .facility {
+  background-color: $white;
+  border-radius: 10px;
+  padding: 10px 0;
+  margin: 10px 0;
+}

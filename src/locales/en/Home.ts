@@ -1,0 +1,18 @@
+export const homeUs = {
+  title1: "Medical examination and treatment registration information portal",
+  title2: "Find information about medical facilities and doctors",
+  srvDoctor: "Doctor consultation",
+  srvSpecialty: "Specialty consultation",
+  srvPackage: "Package examination",
+  srvVaccination: "Vaccination",
+  publicHospitalTopTitle: "Public Hospitals",
+  publicHospitalTopTitleBottom: "Public hospitals in An Giang province area",
+  privateHospitalTopTitle: "Private Hospitals",
+  privateHospitalTopTitleBottom: "Private hospitals in An Giang province area",
+  clinicTopTitle: "Prominent Clinics",
+  clinicTopTitleBottom: "Private clinics in An Giang province area",
+  vaccinationTopTitle: "Prominent Vaccination Centers",
+  vaccinationTopTitleBottom: "Vaccination centers in An Giang province area",
+  btnRegis: "Book Appointment",
+  btnDetail: "Details",
+};

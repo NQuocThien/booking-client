@@ -3,7 +3,7 @@
 import Footer from "./Footer";
 import Header from "./Header";
 import { useDispatch } from "react-redux";
-import { login, setUserInfo } from "@/redux/store/client";
+import { login, setUserInfo, logout } from "@/redux/store/client";
 import {
   GeneralInfor,
   useCheckloginCustomerLazyQuery,
@@ -39,10 +39,14 @@ function MainLayout({ children }: { children: React.ReactNode }) {
     }
   }, [dataCustomer]);
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
-    <div className="container-fluid">
-      <Header data={generalData} />
-      <div id="main" className="container main">
+    <div className="">
+      <Header onLogout={handleLogout} data={generalData} />
+      <div id="main" className="main">
         {children}
       </div>
       <Footer data={generalData} />

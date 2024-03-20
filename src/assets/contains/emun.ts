@@ -22,3 +22,9 @@ export enum ErrorMes {
   InvalidPassword = "Invalid password",
   UserIsInactive = "User is inactive",
 }
+export enum GetETypeOfFacility {
+  publicHospital = "Bệnh viện công",
+  privateHospital = "Bệnh viện tư",
+  clinic = "Phòng khám",
+  vaccinationCenter = "Trung tâm tiêm chủng",
+}

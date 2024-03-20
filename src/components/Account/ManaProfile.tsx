@@ -918,8 +918,8 @@ function ManaProfile({ customerId, lan }: IProps) {
             setProfileDetail(undefined);
           }}
           closeButton={false}
-          textButtonSave="Đống"
-          headerText="Thông tin hố sơ chi tiết"
+          textButtonSave={lan.modalClose}
+          headerText={lan.modalHeader}
           openRequest={modal}>
           <div className="shadow-lg bg-light p-3 mt-3">
             {profileDetail && (

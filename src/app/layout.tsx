@@ -22,11 +22,7 @@ export default function RootLayout({
       <StoreProvider>
         <html lang="en">
           <body className={inter.className}>
-            <MainLayout>
-              {/* <div id="main" className="container-fluid">
-              </div> */}
-              {children}
-            </MainLayout>
+            <MainLayout>{children}</MainLayout>
           </body>
         </html>
       </StoreProvider>

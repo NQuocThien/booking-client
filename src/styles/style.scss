@@ -1,7 +1,12 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
+@import "./abstracts/variables";
+@import "./abstracts/mixin";
+
 @import "./layout/header";
 @import "./layout/main";
 @import "./layout/footer";
+
+@import "./pages/home";
 
 @import "./components/LanguageSelector";

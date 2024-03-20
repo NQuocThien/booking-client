@@ -4,6 +4,8 @@ export const accountVi = {
   texPass: "Mật khẩu",
   holPass: "Nhập mật khẩu ...",
   texBtnLogin: "Đăng nhập",
+  texBtnSignUp: "Đăng ký",
+  titleSignUp: "Form đăng ký",
   messSuccess: "Đã đăng nhập",
   messErr: "Có lỗi xảy ra",
   messInvalid: "Sai mật khẩu",

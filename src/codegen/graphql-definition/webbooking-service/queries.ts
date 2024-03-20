@@ -69,3 +69,39 @@ const getProfileByCustomerId = gql`
     }
   }
 `;
+
+const getTopMedicalFacilities = gql`
+  query getTopMedicalFacilities($limit: Float!, $typeFacility: String!) {
+    getTopMedicalFacilities(limit: $limit, typeFacility: $typeFacility) {
+      id
+      userId
+      medicalFacilityName
+      address
+      numberPhone
+      email
+      logo {
+        filename
+        type
+        url
+      }
+
+      image {
+        filename
+        type
+        url
+      }
+      lat
+      lng
+      discription
+      introduce
+      typeOfFacility
+      operatingStatus
+      legalRepresentation
+      taxCode
+      status
+      dateOff
+      schedule
+      typeOfFacility
+    }
+  }
+`;

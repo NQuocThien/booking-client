@@ -11,7 +11,12 @@ import { headerVi } from "@/locales/vi/Layout";
 import { headerUs } from "@/locales/en/Layout";
 import { Dropdown } from "react-bootstrap";
 import Link from "next/link";
-function Header({ data }: { data: GeneralInfor | undefined }) {
+interface IProps {
+  data: GeneralInfor | undefined;
+  onLogout: () => void;
+}
+function Header(props: IProps) {
+  const { data, onLogout } = props;
   const isLogin = useSelector((state: RootState) => state.client.isLogin);
   const currentLan = useSelector((state: RootState) => state.client.language);
   const inforUser = useSelector((state: RootState) => state.client.inforUser);
@@ -227,7 +232,7 @@ function Header({ data }: { data: GeneralInfor | undefined }) {
                   {lan.texBtnNotification}
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href="#/action-3">
+                <Dropdown.Item as={"button"} onClick={() => onLogout()}>
                   <i className="text-danger me-1 bi bi-box-arrow-right"></i>
                   <strong className="text-danger">{lan.texBtnLogout}</strong>
                 </Dropdown.Item>

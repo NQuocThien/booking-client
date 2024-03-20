@@ -4,6 +4,8 @@ export const accountUs = {
   texPass: "Password",
   holPass: "enter password...",
   texBtnLogin: "Login",
+  texBtnSignUp: "Sign Up",
+  titleSignUp: "Form Sign Up",
   messSuccess: "Login success",
   messErr: "An error occurred",
   messInvalid: "Invalid password",
