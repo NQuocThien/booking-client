@@ -1,16 +1,22 @@
 export const accountVi = {
   texUsername: "Tên đăng nhập",
   holUsername: "Nhập tên đăng nhập...",
-  texPass: "Mật khẩu",
+  titlePass: "Mật khẩu",
   holPass: "Nhập mật khẩu ...",
-  texBtnLogin: "Đăng nhập",
-  texBtnSignUp: "Đăng ký",
+  btnLogin: "Đăng nhập",
+  btnSignUp: "Đăng ký",
   titleSignUp: "Form đăng ký",
+  titleLogin: "Form đăng nhập",
+  titleEmail: "Địa chỉ email",
+  holderEmail: "nqthien@gmail.com",
+  navSignup: "Tạo tài khoản",
   messSuccess: "Đã đăng nhập",
+  messSuccessSignUp: "Đã tạo tài khoản",
   messErr: "Có lỗi xảy ra",
   messInvalid: "Sai mật khẩu",
   messNotFound: "Tài khoản không tồn tại",
   messNotActive: "Tài khoản đã bị khoán",
+  messUserExist: "Tài khoản đã tồn tại",
 };
 
 export const accountInforVi = {

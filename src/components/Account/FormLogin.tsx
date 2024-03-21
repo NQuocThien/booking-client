@@ -2,6 +2,7 @@
 import { LoginUserInput } from "@/graphql/webbooking-service.generated";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Image from "next/image";
 import { accountVi } from "@/locales/vi/Account";
@@ -43,6 +44,7 @@ function FormLogin(props: IProps): JSX.Element {
     <div className="modal-overlay">
       <Row className="bg-light rounded-2">
         <Col>
+          <h4 className="text-center mt-5">{lan.titleLogin}</h4>
           <Form
             className="p-5"
             noValidate
@@ -61,7 +63,7 @@ function FormLogin(props: IProps): JSX.Element {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>{lan.texPass}</Form.Label>
+              <Form.Label>{lan.titlePass}</Form.Label>
               <Form.Control
                 required
                 type="password"
@@ -71,13 +73,17 @@ function FormLogin(props: IProps): JSX.Element {
                 onChange={hanldeChangForm}
               />
             </Form.Group>
-            <Button variant="success" type="submit">
-              {lan.texBtnLogin}
-            </Button>
+            <div className="text-center">
+              <Button className="" variant="success" type="submit">
+                {lan.btnLogin}
+              </Button>
+            </div>
+            <div className="text-center mt-2">
+              <Link className="" href={"/account/signup"}>
+                {lan.navSignup}
+              </Link>
+            </div>
           </Form>
-          {/* <Form onSubmit={handleSubmit}>
-            <Button type="submit">Bấm</Button>
-          </Form> */}
         </Col>
         <Col>
           <Image

@@ -1,16 +1,23 @@
 export const accountUs = {
   texUsername: "Username",
   holUsername: "enter userame....",
-  texPass: "Password",
+  titlePass: "Password",
   holPass: "enter password...",
-  texBtnLogin: "Login",
-  texBtnSignUp: "Sign Up",
+  btnLogin: "Login",
+  btnSignUp: "Sign Up",
   titleSignUp: "Form Sign Up",
+  titleLogin: "Form Login",
+  titleEmail: "Email",
+  holderEmail: "leomesi@gmail.com",
+  navSignup: "Create new account",
   messSuccess: "Login success",
+  messSuccessSignUp: "Created new account successfully",
+
   messErr: "An error occurred",
   messInvalid: "Invalid password",
   messNotFound: "Account not found",
   messNotActive: "Account has been locked",
+  messUserExist: "Account already exists",
 };
 
 export const accountInforUs = {
@@ -42,7 +49,7 @@ export const formCustomerUs = {
   titleProfileSay: "Create a profile",
   titleJob: "Occupation",
   holderJob: "Stdent",
-
+  messDeletePropfile: "Deleted propfile successfully",
   titleCreateProfile: "Add profile",
   titleUpdateProfile: "Edit profile information",
   titleUpdate: "Personal information",

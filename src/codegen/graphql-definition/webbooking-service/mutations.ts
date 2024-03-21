@@ -169,3 +169,10 @@ const deleteProfileInput = gql`
     }
   }
 `;
+const signUp = gql`
+  mutation signup($input: CreateUserInput!) {
+    signup(createUserInput: $input) {
+      id
+    }
+  }
+`;

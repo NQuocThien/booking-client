@@ -1,9 +1,10 @@
 "use client";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { formCustomerVi } from "@/locales/vi/Account";
 import {
   CreateCustomerInput,
+  Customer,
   EGender,
   User,
   useCreateCustomerByUserIdMutation,
@@ -18,10 +19,16 @@ interface InforUserCpnProps {
   isloginIn: boolean;
   lan: typeof formCustomerVi;
   inforUser: User;
+  onCreate: (user: Customer) => void;
 }
-function FormCreateCustomer({ isloginIn, lan, inforUser }: InforUserCpnProps) {
-  console.log("test:11 ", inforUser);
-  console.log("test:22 ", isloginIn);
+function FormCreateCustomer({
+  isloginIn,
+  lan,
+  inforUser,
+  onCreate,
+}: InforUserCpnProps) {
+  // console.log("test:11 ", inforUser);
+  // console.log("test:22 ", isloginIn);
 
   const [formData, setFormData] = useState<CreateCustomerInput>({
     address: "",
@@ -35,25 +42,26 @@ function FormCreateCustomer({ isloginIn, lan, inforUser }: InforUserCpnProps) {
   });
   const [validated, setValidated] = useState(false);
   const [createCustomer, { data: dataupdateUser, loading: loadingUpdateUser }] =
-    useCreateCustomerByUserIdMutation({
-      onQueryUpdated: () => {},
-    });
+    useCreateCustomerByUserIdMutation();
   const dispatch = useDispatch();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(checkExpToken());
-    createCustomer({
-      variables: {
-        input: formData,
-      },
-    })
-      .then(() => {
-        showToast("Đã thêm");
+    setValidated(true);
+    if (e.currentTarget.checkValidity()) {
+      await createCustomer({
+        variables: {
+          input: formData,
+        },
       })
-      .catch((err) => {
-        console.log(err);
-        showToast("Lỗi", "error");
-      });
+        .then(() => {
+          showToast(lan.messCreatedProfile);
+        })
+        .catch((err) => {
+          console.log(err);
+          showToast(lan.messError, "error");
+        });
+    }
   };
   useEffect(() => {
     if (inforUser) {
@@ -65,7 +73,10 @@ function FormCreateCustomer({ isloginIn, lan, inforUser }: InforUserCpnProps) {
   }, [inforUser]);
   useEffect(() => {
     useNProgress(loadingUpdateUser);
-  }, [dataupdateUser, loadingUpdateUser]);
+  }, [loadingUpdateUser]);
+  useEffect(() => {
+    if (dataupdateUser?.createCustomer) onCreate(dataupdateUser.createCustomer);
+  }, [dataupdateUser]);
 
   return (
     <Container className="account">
@@ -154,7 +165,6 @@ function FormCreateCustomer({ isloginIn, lan, inforUser }: InforUserCpnProps) {
                   <Form.Control
                     required
                     value={formData.dateOfBirth}
-                    defaultValue={formData.dateOfBirth}
                     onChange={(e) =>
                       setFormData(
                         (pre) =>

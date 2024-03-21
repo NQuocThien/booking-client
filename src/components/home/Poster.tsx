@@ -71,40 +71,49 @@ function PosterCpn(props: IProps) {
           />
         </Col>
       </Row>
-      <Row className="mt-3 g-3">
-        <div className="service-item py-2 mx-3">
-          <img
-            className="img-icon mb-3"
-            src="/imgs/icons/doctor-icon.png"
-            alt="package"
-          />
-          <p className="text-dark text-center caption">{lan.srvDoctor}</p>
-        </div>
-        <div className="service-item py-2 mx-3">
-          <img
-            className="img-icon mb-3"
-            src="/imgs/icons/specialty-icon.png"
-            alt="package"
-          />
-          <p className="text-dark text-center caption">{lan.srvSpecialty}</p>
-        </div>
-        <div className="service-item py-2 mx-3">
-          <img
-            className="img-icon mb-3"
-            src="/imgs/icons/package-icon.png"
-            alt="package"
-          />
-          <p className="text-dark text-center caption">{lan.srvPackage}</p>
-        </div>
-
-        <div className="service-item py-2 mx-3">
-          <img
-            className="img-icon mb-3"
-            src="/imgs/icons/vaccination-icon.png"
-            alt="package"
-          />
-          <p className="text-dark text-center caption">{lan.srvVaccination}</p>
-        </div>
+      <Row className="mt-3 g-2 justify-content-center">
+        <Col lg={3} md={4} sm={6} xs={6}>
+          <div className="service-item py-2">
+            <img
+              className="img-icon mb-3"
+              src="/imgs/icons/doctor-icon.png"
+              alt="package"
+            />
+            <p className="text-dark text-center caption">{lan.srvDoctor}</p>
+          </div>
+        </Col>
+        <Col lg={3} md={4} sm={6} xs={6}>
+          <div className="service-item py-2">
+            <img
+              className="img-icon mb-3"
+              src="/imgs/icons/specialty-icon.png"
+              alt="package"
+            />
+            <p className="text-dark text-center caption">{lan.srvSpecialty}</p>
+          </div>
+        </Col>
+        <Col lg={3} md={4} sm={6} xs={6}>
+          <div className="service-item py-2">
+            <img
+              className="img-icon mb-3"
+              src="/imgs/icons/package-icon.png"
+              alt="package"
+            />
+            <p className="text-dark text-center caption">{lan.srvPackage}</p>
+          </div>
+        </Col>
+        <Col lg={3} md={4} sm={6} xs={6}>
+          <div className="service-item py-2">
+            <img
+              className="img-icon mb-3"
+              src="/imgs/icons/vaccination-icon.png"
+              alt="package"
+            />
+            <p className="text-dark text-center caption">
+              {lan.srvVaccination}
+            </p>
+          </div>
+        </Col>
       </Row>
     </Row>
   );

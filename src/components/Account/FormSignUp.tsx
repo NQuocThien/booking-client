@@ -20,42 +20,27 @@ function FormSignUp(props: IProps): JSX.Element {
     username: "",
     password: "",
     email: "",
-    fullname: "",
   });
   const [validated, setValidated] = useState<boolean | undefined>(false);
-  //   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     const form = e.currentTarget;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
 
-  //     e.stopPropagation();
-  //     if (form.checkValidity() === false) {
-  //       setValidated(true);
-  //     } else {
-  //       onLogin(dataLogin);
-  //     }
-  //     setValidated(true);
-  //   };
+    e.stopPropagation();
+    if (form.checkValidity() === false) {
+      setValidated(true);
+    } else {
+      onLogin(createUserInput);
+    }
+    setValidated(true);
+  };
 
   return (
     <div className="modal-overlay">
       <Row className="bg-light rounded-2">
         <Col>
-          <h4>{lan.titleSignUp}</h4>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Tên: </Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={lan.holUsername}
-                onChange={(e) => {
-                  setCreateUserInput((pre) => ({
-                    ...pre,
-                    fullname: e.target.value,
-                  }));
-                }}
-                value={createUserInput.fullname}
-              />
-            </Form.Group>
+          <h4 className="text-center mt-3">{lan.titleSignUp}</h4>
+          <Form onSubmit={handleSubmit} validated={validated}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>{lan.texUsername} </Form.Label>
               <Form.Control
@@ -71,10 +56,10 @@ function FormSignUp(props: IProps): JSX.Element {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Địa chỉ email:</Form.Label>
+              <Form.Label>{lan.titleEmail}</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Nhập email"
+                placeholder={lan.holderEmail}
                 onChange={(e) => {
                   setCreateUserInput((pre) => ({
                     ...pre,
@@ -86,10 +71,10 @@ function FormSignUp(props: IProps): JSX.Element {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Mật khẩu:</Form.Label>
+              <Form.Label>{lan.titlePass}:</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Password"
+                placeholder={lan.holPass}
                 onChange={(e) => {
                   setCreateUserInput((pre) => ({
                     ...pre,
@@ -99,7 +84,11 @@ function FormSignUp(props: IProps): JSX.Element {
                 value={createUserInput.password}
               />
             </Form.Group>
-            <Button type="submit">Lưu</Button>
+            <div className="text-center">
+              <Button type="submit" variant="success">
+                {lan.btnSignUp}
+              </Button>
+            </div>
           </Form>
         </Col>
         <Col>

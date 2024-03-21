@@ -2,9 +2,8 @@
 import FormLogin from "@/components/Account/FormLogin";
 import {
   CreateUserInput,
-  LoginUserInput,
   User,
-  useLoginCustomerMutation,
+  useSignupMutation,
 } from "@/graphql/webbooking-service.generated";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +17,7 @@ import { accountUs } from "@/locales/en/Account";
 import { ErrorMes } from "@/assets/contains/emun";
 import FormSignUp from "@/components/Account/FormSignUp";
 function LoginPage() {
-  const [loginUser, { data, loading, error }] = useLoginCustomerMutation();
+  const [signUpUser, { data, loading, error }] = useSignupMutation();
   const dispatch = useDispatch();
   const router = useRouter();
   const [lan, setLan] = useState(accountVi);
@@ -36,46 +35,34 @@ function LoginPage() {
     }
   }, [isloginIn]);
 
-  useEffect(() => {
-    if (data?.login) {
-      const token = data.login.access_token;
-      const user: User = data.login.user;
+  // useEffect(() => {
+  //   if (data?.signup) {
+  //     const token = data.si.access_token;
+  //     const user: User = data.login.user;
 
-      setToken(token);
-      dispatch(login());
-      dispatch(setUserInfo(user));
-    }
-  }, [data]);
-  const hanleLogin = async (input: CreateUserInput) => {
-    await loginUser({
+  //     setToken(token);
+  //     dispatch(login());
+  //     dispatch(setUserInfo(user));
+  //   }
+  // }, [data]);
+
+  const hanleSignUp = async (input: CreateUserInput) => {
+    await signUpUser({
       variables: {
         input: input,
       },
     })
       .then(() => {
         showToast(lan.messSuccess);
-        router.push("/");
+        router.push("/account/login");
       })
       .catch((err) => {
         console.log(err.message);
-        switch (err.message) {
-          case ErrorMes.UseNotFound:
-            showToast(lan.messNotFound);
-            break;
-          case ErrorMes.InvalidPassword:
-            showToast(lan.messInvalid);
-            break;
-          case ErrorMes.UserIsInactive:
-            showToast(lan.messNotActive);
-            break;
-
-          default:
-            showToast(lan.messErr);
-            break;
-        }
-        showToast("Lỗi đăng nhập !", "error");
+        if (err.message === "User already exists ! ")
+          showToast(lan.messUserExist);
+        else showToast(lan.messErr, "error");
       });
   };
-  return <FormSignUp lan={lan} onLogin={hanleLogin} />;
+  return <FormSignUp lan={lan} onLogin={hanleSignUp} />;
 }
 export default LoginPage;

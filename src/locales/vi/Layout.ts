@@ -12,7 +12,7 @@ export const headerVi = {
   texBtnUserHello: "Xin chào",
   texBtnAccout: "Tài khoản",
   texBtnInfo: "Thông tin cá nhân",
-  texBtnProfile: "Hồ sơ cá bệnh nhân",
+  texBtnProfile: "Hồ sơ bệnh nhân",
   texBtnTiked: "Phiếu khám bệnh",
   texBtnNotification: "Thông báo",
   texBtnLogout: "Đăng xuất",

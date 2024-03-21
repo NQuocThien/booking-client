@@ -39,7 +39,12 @@ function CustomerDetailPage() {
   if (!isloginIn) redirect("/account/login");
   if (userInfo && !userInfo.customer) {
     return (
-      <FormCreateCustomer inforUser={userInfo} isloginIn={true} lan={lan} />
+      <FormCreateCustomer
+        inforUser={userInfo}
+        isloginIn={true}
+        lan={lan}
+        onCreate={handleChangCustomerInfor}
+      />
     );
   } else if (userInfo && userInfo.customer) {
     return (
