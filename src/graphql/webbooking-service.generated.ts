@@ -149,14 +149,14 @@ export type CreateRegisterPackageInput = {
   isHealthInsurance: Scalars['Boolean']['input'];
   packageId: Scalars['String']['input'];
   profileId: Scalars['String']['input'];
-  sessionId: Scalars['String']['input'];
+  session: SessionInput;
 };
 
 export type CreateRegisterSpecialtyInput = {
   date: Scalars['DateTime']['input'];
   isHealthInsurance: Scalars['Boolean']['input'];
   profileId: Scalars['String']['input'];
-  sessionId: Scalars['String']['input'];
+  session: SessionInput;
   specialtyId: Scalars['String']['input'];
 };
 
@@ -164,7 +164,7 @@ export type CreateRegisterVaccineInput = {
   date: Scalars['DateTime']['input'];
   isHealthInsurance: Scalars['Boolean']['input'];
   profileId: Scalars['String']['input'];
-  sessionId: Scalars['String']['input'];
+  session: SessionInput;
   vaccineId: Scalars['String']['input'];
 };
 
@@ -1485,6 +1485,13 @@ export type SignupMutationVariables = Exact<{
 
 export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'User', id: string } };
 
+export type CreateRegisterMedicalSpecialtyMutationVariables = Exact<{
+  input: CreateRegisterSpecialtyInput;
+}>;
+
+
+export type CreateRegisterMedicalSpecialtyMutation = { __typename?: 'Mutation', createRegisterSpecialty: { __typename?: 'Register', id: string } };
+
 export type GetGeneralInforQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1494,6 +1501,14 @@ export type CheckloginCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+
+export type GetMedicalFacilityRegisInfoByIdQueryVariables = Exact<{
+  input: Scalars['String']['input'];
+  isClient: Scalars['Boolean']['input'];
+}>;
+
+
+export type GetMedicalFacilityRegisInfoByIdQuery = { __typename?: 'Query', getMedicalFacilityById: { __typename?: 'MedicalFacilities', id: string, medicalFacilityName: string, address: string, typeOfFacility: string, status: string, dateOff?: Array<any> | null, schedule: string, totalDoctors?: number | null, totalPackages?: number | null, totalSpecialties?: number | null, totalVaccinations?: number | null } };
 
 export type GetProfileByCustomerIdQueryVariables = Exact<{
   input: Scalars['String']['input'];
@@ -1529,6 +1544,14 @@ export type GetTotalFacilitiesCountQueryVariables = Exact<{
 
 
 export type GetTotalFacilitiesCountQuery = { __typename?: 'Query', getTotalFacilitiesCount: number };
+
+export type GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables = Exact<{
+  input: Scalars['String']['input'];
+  isClient: Scalars['Boolean']['input'];
+}>;
+
+
+export type GetListMedicalSpecialtyRegisInfoByFacilityIdQuery = { __typename?: 'Query', getMedicalFacilityById: { __typename?: 'MedicalFacilities', id: string, medicalSpecialties?: Array<{ __typename?: 'MedicalSpecialties', id: string, specialtyName: string, discription: string, price: number, medicalFactilityId: string, workSchedule?: { __typename?: 'WorkSchedule', dayOff: Array<any>, numberSlot: number, status: string, schedule: Array<{ __typename?: 'Schedule', dayOfWeek: string, sessions: Array<{ __typename?: 'Session', endTime: string, startTime: string }> }> } | null }> | null } };
 
 
 export const UpdateUserDocument = gql`
@@ -1941,6 +1964,39 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const CreateRegisterMedicalSpecialtyDocument = gql`
+    mutation createRegisterMedicalSpecialty($input: CreateRegisterSpecialtyInput!) {
+  createRegisterSpecialty(input: $input) {
+    id
+  }
+}
+    `;
+export type CreateRegisterMedicalSpecialtyMutationFn = Apollo.MutationFunction<CreateRegisterMedicalSpecialtyMutation, CreateRegisterMedicalSpecialtyMutationVariables>;
+
+/**
+ * __useCreateRegisterMedicalSpecialtyMutation__
+ *
+ * To run a mutation, you first call `useCreateRegisterMedicalSpecialtyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRegisterMedicalSpecialtyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRegisterMedicalSpecialtyMutation, { data, loading, error }] = useCreateRegisterMedicalSpecialtyMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateRegisterMedicalSpecialtyMutation(baseOptions?: Apollo.MutationHookOptions<CreateRegisterMedicalSpecialtyMutation, CreateRegisterMedicalSpecialtyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRegisterMedicalSpecialtyMutation, CreateRegisterMedicalSpecialtyMutationVariables>(CreateRegisterMedicalSpecialtyDocument, options);
+      }
+export type CreateRegisterMedicalSpecialtyMutationHookResult = ReturnType<typeof useCreateRegisterMedicalSpecialtyMutation>;
+export type CreateRegisterMedicalSpecialtyMutationResult = Apollo.MutationResult<CreateRegisterMedicalSpecialtyMutation>;
+export type CreateRegisterMedicalSpecialtyMutationOptions = Apollo.BaseMutationOptions<CreateRegisterMedicalSpecialtyMutation, CreateRegisterMedicalSpecialtyMutationVariables>;
 export const GetGeneralInforDocument = gql`
     query GetGeneralInfor {
   getGeneralInfor {
@@ -2056,6 +2112,57 @@ export type CheckloginCustomerQueryHookResult = ReturnType<typeof useCheckloginC
 export type CheckloginCustomerLazyQueryHookResult = ReturnType<typeof useCheckloginCustomerLazyQuery>;
 export type CheckloginCustomerSuspenseQueryHookResult = ReturnType<typeof useCheckloginCustomerSuspenseQuery>;
 export type CheckloginCustomerQueryResult = Apollo.QueryResult<CheckloginCustomerQuery, CheckloginCustomerQueryVariables>;
+export const GetMedicalFacilityRegisInfoByIdDocument = gql`
+    query getMedicalFacilityRegisInfoById($input: String!, $isClient: Boolean!) {
+  getMedicalFacilityById(id: $input) {
+    id
+    medicalFacilityName
+    address
+    typeOfFacility
+    status
+    dateOff
+    schedule
+    totalDoctors(isClient: $isClient)
+    totalPackages(isClient: $isClient)
+    totalSpecialties
+    totalVaccinations(isClient: $isClient)
+  }
+}
+    `;
+
+/**
+ * __useGetMedicalFacilityRegisInfoByIdQuery__
+ *
+ * To run a query within a React component, call `useGetMedicalFacilityRegisInfoByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMedicalFacilityRegisInfoByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMedicalFacilityRegisInfoByIdQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      isClient: // value for 'isClient'
+ *   },
+ * });
+ */
+export function useGetMedicalFacilityRegisInfoByIdQuery(baseOptions: Apollo.QueryHookOptions<GetMedicalFacilityRegisInfoByIdQuery, GetMedicalFacilityRegisInfoByIdQueryVariables> & ({ variables: GetMedicalFacilityRegisInfoByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMedicalFacilityRegisInfoByIdQuery, GetMedicalFacilityRegisInfoByIdQueryVariables>(GetMedicalFacilityRegisInfoByIdDocument, options);
+      }
+export function useGetMedicalFacilityRegisInfoByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMedicalFacilityRegisInfoByIdQuery, GetMedicalFacilityRegisInfoByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMedicalFacilityRegisInfoByIdQuery, GetMedicalFacilityRegisInfoByIdQueryVariables>(GetMedicalFacilityRegisInfoByIdDocument, options);
+        }
+export function useGetMedicalFacilityRegisInfoByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetMedicalFacilityRegisInfoByIdQuery, GetMedicalFacilityRegisInfoByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMedicalFacilityRegisInfoByIdQuery, GetMedicalFacilityRegisInfoByIdQueryVariables>(GetMedicalFacilityRegisInfoByIdDocument, options);
+        }
+export type GetMedicalFacilityRegisInfoByIdQueryHookResult = ReturnType<typeof useGetMedicalFacilityRegisInfoByIdQuery>;
+export type GetMedicalFacilityRegisInfoByIdLazyQueryHookResult = ReturnType<typeof useGetMedicalFacilityRegisInfoByIdLazyQuery>;
+export type GetMedicalFacilityRegisInfoByIdSuspenseQueryHookResult = ReturnType<typeof useGetMedicalFacilityRegisInfoByIdSuspenseQuery>;
+export type GetMedicalFacilityRegisInfoByIdQueryResult = Apollo.QueryResult<GetMedicalFacilityRegisInfoByIdQuery, GetMedicalFacilityRegisInfoByIdQueryVariables>;
 export const GetProfileByCustomerIdDocument = gql`
     query getProfileByCustomerId($input: String!) {
   getProfileByCustomerId(id: $input) {
@@ -2292,6 +2399,66 @@ export type GetTotalFacilitiesCountQueryHookResult = ReturnType<typeof useGetTot
 export type GetTotalFacilitiesCountLazyQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountLazyQuery>;
 export type GetTotalFacilitiesCountSuspenseQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountSuspenseQuery>;
 export type GetTotalFacilitiesCountQueryResult = Apollo.QueryResult<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>;
+export const GetListMedicalSpecialtyRegisInfoByFacilityIdDocument = gql`
+    query getListMedicalSpecialtyRegisInfoByFacilityId($input: String!, $isClient: Boolean!) {
+  getMedicalFacilityById(id: $input) {
+    id
+    medicalSpecialties(isClient: $isClient) {
+      id
+      specialtyName
+      discription
+      price
+      medicalFactilityId
+      workSchedule {
+        dayOff
+        numberSlot
+        schedule {
+          dayOfWeek
+          sessions {
+            endTime
+            startTime
+          }
+        }
+        status
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetListMedicalSpecialtyRegisInfoByFacilityIdQuery__
+ *
+ * To run a query within a React component, call `useGetListMedicalSpecialtyRegisInfoByFacilityIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetListMedicalSpecialtyRegisInfoByFacilityIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetListMedicalSpecialtyRegisInfoByFacilityIdQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      isClient: // value for 'isClient'
+ *   },
+ * });
+ */
+export function useGetListMedicalSpecialtyRegisInfoByFacilityIdQuery(baseOptions: Apollo.QueryHookOptions<GetListMedicalSpecialtyRegisInfoByFacilityIdQuery, GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables> & ({ variables: GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetListMedicalSpecialtyRegisInfoByFacilityIdQuery, GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables>(GetListMedicalSpecialtyRegisInfoByFacilityIdDocument, options);
+      }
+export function useGetListMedicalSpecialtyRegisInfoByFacilityIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetListMedicalSpecialtyRegisInfoByFacilityIdQuery, GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetListMedicalSpecialtyRegisInfoByFacilityIdQuery, GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables>(GetListMedicalSpecialtyRegisInfoByFacilityIdDocument, options);
+        }
+export function useGetListMedicalSpecialtyRegisInfoByFacilityIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetListMedicalSpecialtyRegisInfoByFacilityIdQuery, GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetListMedicalSpecialtyRegisInfoByFacilityIdQuery, GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables>(GetListMedicalSpecialtyRegisInfoByFacilityIdDocument, options);
+        }
+export type GetListMedicalSpecialtyRegisInfoByFacilityIdQueryHookResult = ReturnType<typeof useGetListMedicalSpecialtyRegisInfoByFacilityIdQuery>;
+export type GetListMedicalSpecialtyRegisInfoByFacilityIdLazyQueryHookResult = ReturnType<typeof useGetListMedicalSpecialtyRegisInfoByFacilityIdLazyQuery>;
+export type GetListMedicalSpecialtyRegisInfoByFacilityIdSuspenseQueryHookResult = ReturnType<typeof useGetListMedicalSpecialtyRegisInfoByFacilityIdSuspenseQuery>;
+export type GetListMedicalSpecialtyRegisInfoByFacilityIdQueryResult = Apollo.QueryResult<GetListMedicalSpecialtyRegisInfoByFacilityIdQuery, GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables>;
 export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,

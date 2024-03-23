@@ -41,6 +41,7 @@ export const accountInforVi = {
 export const formCustomerVi = {
   titleCreate: "Tạo thông tin cá nhân",
   titleProfile: "Danh sách hồ sơ của bạn",
+  subProfile: "Chọn hồ sơ bệnh nhân đăng ký khám",
   titleProfileNone: "Danh sách hồ sơ Trống",
   titleProfileSay: "Hãy tạo hồ sơ",
   titleCreateProfile: "Thêm hồ sơ",
@@ -74,6 +75,8 @@ export const formCustomerVi = {
   messCreatedProfile: "Đã thêm hồ sơ",
   messUpdatedProfile: "Đã sửa hồ sơ",
   messUpdateProfile: "Đã sửa hồ sơ",
+  messRegisSuccess: "Đăng ký khám thành công",
+  messRegisError: "Đăng ký khám lỗi",
   titleIndentity: "Số chứng minh nhân dân",
   holderIndentity: "888888888",
   titleMedicalInsurance: "Số bảo hiểm y tế",

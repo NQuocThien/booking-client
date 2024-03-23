@@ -176,3 +176,12 @@ const signUp = gql`
     }
   }
 `;
+const createRegisterSpecialt = gql`
+  mutation createRegisterMedicalSpecialty(
+    $input: CreateRegisterSpecialtyInput!
+  ) {
+    createRegisterSpecialty(input: $input) {
+      id
+    }
+  }
+`;

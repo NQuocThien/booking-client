@@ -1,52 +1,37 @@
 "use client";
-import FormLogin from "@/components/Account/FormLogin";
-import {
-  LoginUserInput,
-  User,
-  useLoginCustomerMutation,
-} from "@/graphql/webbooking-service.generated";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
-import { login, setUserInfo } from "@/redux/store/client";
-import { showToast } from "@/components/subs/toast";
-import { setToken } from "@/utils/tools";
 import { useRouter } from "next/navigation";
-import { accountVi } from "@/locales/vi/Account";
-import { accountUs } from "@/locales/en/Account";
-import { ErrorMes } from "@/assets/contains/emun";
-import MedicalFacilities from "@/components/MedicalFacility/MedicalFacility";
 import Register from "@/components/Register/Register";
-function LoginPage() {
-  const [loginUser, { data, loading, error }] = useLoginCustomerMutation();
-  const dispatch = useDispatch();
+import { regisVi } from "@/locales/vi/Facility";
+import { regisUs } from "@/locales/en/Facility";
+import Link from "next/link";
+function RegisPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [lan, setLan] = useState(accountVi);
+  const [lan, setLan] = useState(regisVi);
   const currentLan = useSelector((state: RootState) => state.client.language);
   const isloginIn = useSelector((state: RootState) => state.client.isLogin);
+  const [login, setLogin] = useState(false);
   useLayoutEffect(() => {
     if (currentLan.code === "us") {
-      setLan(accountUs);
-    } else setLan(accountVi);
+      setLan(regisUs);
+    } else setLan(regisVi);
   }, [currentLan]);
 
   useEffect(() => {
-    if (isloginIn) {
-      router.push("./");
-    }
+    setLogin(isloginIn);
   }, [isloginIn]);
 
-  useEffect(() => {
-    if (data?.login) {
-      const token = data.login.access_token;
-      const user: User = data.login.user;
-
-      setToken(token);
-      dispatch(login());
-      dispatch(setUserInfo(user));
-    }
-  }, [data]);
-
-  return <Register facilityId="" type={undefined} />;
+  if (!login)
+    return (
+      <div className="container">
+        <Link className="container fw-bold" href={"/account/login"}>
+          {lan.messLogin} !!!
+        </Link>
+      </div>
+    );
+  if (login)
+    return <Register lan={lan} facilityId={params.id} type={undefined} />;
 }
-export default LoginPage;
+export default RegisPage;

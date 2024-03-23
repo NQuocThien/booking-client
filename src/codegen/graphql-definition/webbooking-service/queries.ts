@@ -51,6 +51,23 @@ const checkLoginUser = gql`
     }
   }
 `;
+const getMedicalFacilityRegisInfoById = gql`
+  query getMedicalFacilityRegisInfoById($input: String!, $isClient: Boolean!) {
+    getMedicalFacilityById(id: $input) {
+      id
+      medicalFacilityName
+      address
+      typeOfFacility
+      status
+      dateOff
+      schedule
+      totalDoctors(isClient: $isClient)
+      totalPackages(isClient: $isClient)
+      totalSpecialties
+      totalVaccinations(isClient: $isClient)
+    }
+  }
+`;
 const getProfileByCustomerId = gql`
   query getProfileByCustomerId($input: String!) {
     getProfileByCustomerId(id: $input) {
@@ -156,5 +173,34 @@ const getAllMedicalFacility = gql`
 const getTotalFacilities = gql`
   query getTotalFacilitiesCount($search: String, $type: String) {
     getTotalFacilitiesCount(search: $search, type: $type)
+  }
+`;
+const getListMedicalSpecialtyRegisInfoByFacilityId = gql`
+  query getListMedicalSpecialtyRegisInfoByFacilityId(
+    $input: String!
+    $isClient: Boolean!
+  ) {
+    getMedicalFacilityById(id: $input) {
+      id
+      medicalSpecialties(isClient: $isClient) {
+        id
+        specialtyName
+        discription
+        price
+        medicalFactilityId
+        workSchedule {
+          dayOff
+          numberSlot
+          schedule {
+            dayOfWeek
+            sessions {
+              endTime
+              startTime
+            }
+          }
+          status
+        }
+      }
+    }
   }
 `;

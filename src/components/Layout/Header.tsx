@@ -109,22 +109,22 @@ function Header(props: IProps) {
                 </Link>
                 <ul>
                   <li className="nav-link">
-                    <Link href="medical-facility?type=public-hospital">
+                    <Link href="/medical-facility?type=public-hospital">
                       {lan.texNavPubFacility}
                     </Link>
                   </li>
                   <li className="nav-link">
-                    <Link href="medical-facility?type=private-hospital">
+                    <Link href="/medical-facility?type=private-hospital">
                       {lan.texNavPriFacility}
                     </Link>
                   </li>
                   <li className="nav-link">
-                    <Link href="medical-facility?type=clinic">
+                    <Link href="/medical-facility?type=clinic">
                       {lan.texNavClinic}
                     </Link>
                   </li>
                   <li className="nav-link">
-                    <Link href="medical-facility?type=vaccination">
+                    <Link href="/medical-facility?type=vaccination">
                       {lan.texNavVaccinationCenter}
                     </Link>
                   </li>

@@ -41,6 +41,7 @@ export const accountInforUs = {
 
 export const formCustomerUs = {
   titleCreate: "Create personal information",
+  subProfile: "Select a patient profile to register for an appointment",
   btnCreateProfile: "Create new profile",
   btnListProfile: "Profile list",
   btnUpdateProfile: "Update profile",
@@ -75,6 +76,9 @@ export const formCustomerUs = {
   messError: "An error occurred",
   messCreatedProfile: "Profile created successfully",
   messUpdatedProfile: "Profile updated successfully",
+  messRegisSuccess: "Appointment booking successful",
+  messRegisError: "Appointment booking error",
+
   askDeleteProfile: "Do you want to delete this profile?",
   messUpdateProfile: "Profile updated successfully",
   titleIndentity: "Identity card number",

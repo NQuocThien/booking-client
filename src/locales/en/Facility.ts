@@ -18,3 +18,33 @@ export const facilityUs = {
   btnRegis: "Book an appointment",
   btnDetail: "Details",
 };
+
+export const regisUs = {
+  bcHomePage: "Home",
+  bcTypeService: "Examination Type",
+  titleInforFacility: "Healthcare Facility Information",
+  titleTypeService: "Choose Registration Type",
+  subTypeService:
+    "Save time waiting in line or waiting with many healthcare facilities in An Giang province",
+  titleSrvDoctor: "Register for Doctor Consultation",
+  titleSrvSpecialty: "Register for Specialty Consultation",
+  titleSrvPackage: "Register for Examination Package",
+  titleSrvVaccine: "Register for Vaccination",
+
+  titleChooseSpecialty: "Choose Specialty",
+  titleChooseDoctor: "Choose Doctor",
+  titleChoosePackage: "Choose Examination Package",
+  titleChooseVaccine: "Choose Vaccine",
+  titleSession: "Appointment Sessions",
+  titleSpecialties: "Select Specialty for Consultation",
+
+  headServiceName: "Medical Services",
+  headPrice: "Fees",
+  lableSchedule: "Appointment Schedule",
+  titleChooseDate: "Choose Examination Date",
+  titleChooseSession: "Choose Examination Session",
+  messLogin: "Please log in to continue",
+  btnBack: "Back",
+  btnDetail: "Detail",
+  btnBooking: "Book Now",
+};
