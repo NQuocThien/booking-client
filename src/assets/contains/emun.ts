@@ -28,3 +28,10 @@ export enum GetETypeOfFacility {
   clinic = "Phòng khám",
   vaccinationCenter = "Trung tâm tiêm chủng",
 }
+
+export enum EtypeService {
+  Doctor = "bác sĩ",
+  Package = "gói khám",
+  Vaccine = "vaccine",
+  Specialty = " chuyên khoa",
+}

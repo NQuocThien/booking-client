@@ -36,7 +36,7 @@ function InforCustomerCpn({
     ethnic: "",
     gender: EGender.Male,
     dateOfBirth: "",
-    name: "",
+    fullname: "",
     numberPhone: "",
   });
   const [validated, setValidated] = useState(false);
@@ -61,7 +61,7 @@ function InforCustomerCpn({
         email: formData.email,
         ethnic: formData.ethnic,
         gender: formData.gender,
-        name: formData.name,
+        fullname: formData.fullname,
         numberPhone: formData.numberPhone,
       };
       await updateCustomer({
@@ -117,13 +117,13 @@ function InforCustomerCpn({
                     required
                     disabled={disable}
                     type="text"
-                    value={formData?.name}
+                    value={formData?.fullname}
                     onChange={(e) =>
                       setFormData(
                         (pre) =>
                           pre && {
                             ...pre,
-                            name: e.target.value,
+                            fullname: e.target.value,
                           }
                       )
                     }

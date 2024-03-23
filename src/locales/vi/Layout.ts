@@ -1,5 +1,9 @@
 export const headerVi = {
   texNavFacility: "Cơ sở y tế",
+  texNavPubFacility: "Bệnh viện công",
+  texNavPriFacility: "Bệnh viện tư",
+  texNavClinic: "Phòng khám",
+  texNavVaccinationCenter: "Trung tâm tiêm chủng",
   texNavSrv: "Dịch vụ khám",
   texNavSrvSpecialty: "Khám theo chuyên khoa",
   texNavSrvDoctor: "Khám theo bác sỉ",

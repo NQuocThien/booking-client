@@ -71,6 +71,7 @@ export const formCustomerUs = {
   btnSave: "Save",
   btnUpdate: "Update information",
   messUpdateSuccess: "Personal information updated successfully",
+  messCheckLogin: "Login Please!",
   messError: "An error occurred",
   messCreatedProfile: "Profile created successfully",
   messUpdatedProfile: "Profile updated successfully",
@@ -91,4 +92,5 @@ export const formCustomerUs = {
   messDeleteProfile: "Profile deleted successfully",
   modalClose: "Close",
   modalHeader: "Detailed Profile Information",
+  messCheckCutomer: "Create cutomer information please!",
 };

@@ -69,6 +69,7 @@ export const formCustomerVi = {
   btnSave: "Lưu",
   btnUpdate: "Sửa thông tin",
   messUpdateSuccess: "Đã sửa thông tin cá nhân",
+  messCheckCutomer: "Cần tạo thông tin khách hàng trước",
   messError: "Có lổi xảy ra",
   messCreatedProfile: "Đã thêm hồ sơ",
   messUpdatedProfile: "Đã sửa hồ sơ",

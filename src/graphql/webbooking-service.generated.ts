@@ -35,8 +35,8 @@ export type CreateCustomerInput = {
   dateOfBirth: Scalars['DateTime']['input'];
   email: Scalars['String']['input'];
   ethnic: Scalars['String']['input'];
+  fullname: Scalars['String']['input'];
   gender: EGender;
-  name: Scalars['String']['input'];
   numberPhone: Scalars['String']['input'];
   userId: Scalars['String']['input'];
 };
@@ -46,10 +46,10 @@ export type CreateDoctorInput = {
   avatar: LinkImageInput;
   degree: EDegree;
   discription: Scalars['String']['input'];
+  doctorName: Scalars['String']['input'];
   email: Scalars['String']['input'];
   gender: EGender;
   medicalFactilitiesId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
   numberPhone: Scalars['String']['input'];
   price: Scalars['Float']['input'];
   specialistId: Scalars['String']['input'];
@@ -88,8 +88,8 @@ export type CreateMedicalFacilityInput = {
 export type CreateMedicalSpecialtyInput = {
   discription: Scalars['String']['input'];
   medicalFactilityId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
   price: Scalars['Float']['input'];
+  specialtyName: Scalars['String']['input'];
   workSchedule?: InputMaybe<WorkScheduleInput>;
 };
 
@@ -97,10 +97,10 @@ export type CreateMedicalStaffInput = {
   email: Scalars['String']['input'];
   gender: EGender;
   medicalFacilityId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
   numberPhone: Scalars['String']['input'];
   permissions: Array<EPermission>;
   specialtyId?: InputMaybe<Array<Scalars['String']['input']>>;
+  staffName: Scalars['String']['input'];
   userId: Scalars['String']['input'];
 };
 
@@ -197,9 +197,9 @@ export type Customer = {
   dateOfBirth: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   ethnic: Scalars['String']['output'];
+  fullname: Scalars['String']['output'];
   gender: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
   numberPhone: Scalars['String']['output'];
   profiles?: Maybe<Array<Profile>>;
   userId: Scalars['String']['output'];
@@ -211,11 +211,11 @@ export type Doctor = {
   avatar: LinkImage;
   degree: Scalars['String']['output'];
   discription: Scalars['String']['output'];
+  doctorName: Scalars['String']['output'];
   email: Scalars['String']['output'];
   gender: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   medicalFactilitiesId: Scalars['String']['output'];
-  name: Scalars['String']['output'];
   numberPhone: Scalars['String']['output'];
   price: Scalars['Float']['output'];
   specialistId: Scalars['String']['output'];
@@ -300,8 +300,8 @@ export type Evaluate = {
 export type FilterDoctorInput = {
   academicTitle?: InputMaybe<EAcademicTitle>;
   degree?: InputMaybe<EDegree>;
+  doctorName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<EGender>;
-  name?: InputMaybe<Scalars['String']['input']>;
   specialistId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -400,13 +400,53 @@ export type MedicalFacilities = {
   vaccinations?: Maybe<Array<Vaccination>>;
 };
 
+
+export type MedicalFacilitiesDoctorsArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type MedicalFacilitiesMedicalSpecialtiesArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type MedicalFacilitiesPackagesArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type MedicalFacilitiesTotalDoctorsArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type MedicalFacilitiesTotalPackagesArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type MedicalFacilitiesTotalSpecialtiesArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type MedicalFacilitiesTotalVaccinationsArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type MedicalFacilitiesVaccinationsArgs = {
+  isClient?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type MedicalSpecialties = {
   __typename?: 'MedicalSpecialties';
   discription: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   medicalFactilityId: Scalars['String']['output'];
-  name: Scalars['String']['output'];
   price: Scalars['Float']['output'];
+  specialtyName: Scalars['String']['output'];
   workSchedule?: Maybe<WorkSchedule>;
 };
 
@@ -416,11 +456,11 @@ export type MedicalStaff = {
   gender: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   medicalFacilityId: Scalars['String']['output'];
-  name: Scalars['String']['output'];
   numberPhone: Scalars['String']['output'];
   permissions: Array<Scalars['String']['output']>;
   specialties?: Maybe<Array<MedicalSpecialties>>;
   specialtyId?: Maybe<Array<Scalars['String']['output']>>;
+  staffName: Scalars['String']['output'];
   userId: Scalars['String']['output'];
 };
 
@@ -850,6 +890,7 @@ export type QueryGetAllMedicalFacilityPaginationArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   sortField?: InputMaybe<Scalars['String']['input']>;
   sortOrder?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1055,6 +1096,7 @@ export type QueryGetTotalDoctorsCountArgs = {
 
 export type QueryGetTotalFacilitiesCountArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1145,8 +1187,7 @@ export enum Role {
   Customer = 'Customer',
   Doctor = 'Doctor',
   Facility = 'Facility',
-  Staff = 'Staff',
-  User = 'User'
+  Staff = 'Staff'
 }
 
 export type Schedule = {
@@ -1181,9 +1222,9 @@ export type UpdateCustomerInput = {
   dateOfBirth: Scalars['DateTime']['input'];
   email: Scalars['String']['input'];
   ethnic: Scalars['String']['input'];
+  fullname: Scalars['String']['input'];
   gender: EGender;
   id: Scalars['String']['input'];
-  name: Scalars['String']['input'];
   numberPhone: Scalars['String']['input'];
 };
 
@@ -1192,11 +1233,11 @@ export type UpdateDoctorInput = {
   avatar: LinkImageInput;
   degree: EDegree;
   discription: Scalars['String']['input'];
+  doctorName: Scalars['String']['input'];
   email: Scalars['String']['input'];
   gender: EGender;
   id: Scalars['String']['input'];
   medicalFactilitiesId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
   numberPhone: Scalars['String']['input'];
   price: Scalars['Float']['input'];
   specialistId: Scalars['String']['input'];
@@ -1238,8 +1279,8 @@ export type UpdateMedicalSpecialtyInput = {
   discription: Scalars['String']['input'];
   id: Scalars['String']['input'];
   medicalFactilityId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
   price: Scalars['Float']['input'];
+  specialtyName: Scalars['String']['input'];
   workSchedule?: InputMaybe<WorkScheduleInput>;
 };
 
@@ -1248,10 +1289,10 @@ export type UpdateMedicalStaffInput = {
   gender: EGender;
   id: Scalars['String']['input'];
   medicalFacilityId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
   numberPhone: Scalars['String']['input'];
   permissions: Array<EPermission>;
   specialtyId?: InputMaybe<Array<Scalars['String']['input']>>;
+  staffName: Scalars['String']['input'];
   userId: Scalars['String']['input'];
 };
 
@@ -1386,35 +1427,35 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type UpdateUserWithPassMutationVariables = Exact<{
   input: UpdateUserWithPassInput;
 }>;
 
 
-export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type CreateCustomerByUserIdMutationVariables = Exact<{
   input: CreateCustomerInput;
 }>;
 
 
-export type CreateCustomerByUserIdMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'Customer', id: string, userId: string, name: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
+export type CreateCustomerByUserIdMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'Customer', id: string, userId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
 
 export type LoginCustomerMutationVariables = Exact<{
   input: LoginUserInput;
 }>;
 
 
-export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } } };
+export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } } };
 
 export type UpdateCustomerMutationVariables = Exact<{
   input: UpdateCustomerInput;
 }>;
 
 
-export type UpdateCustomerMutation = { __typename?: 'Mutation', updateCustomer: { __typename?: 'Customer', id: string, userId: string, name: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
+export type UpdateCustomerMutation = { __typename?: 'Mutation', updateCustomer: { __typename?: 'Customer', id: string, userId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
 
 export type CreateProfileMutationVariables = Exact<{
   input: CreateProfileInput;
@@ -1452,7 +1493,7 @@ export type GetGeneralInforQuery = { __typename?: 'Query', getGeneralInfor: { __
 export type CheckloginCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, name: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type GetProfileByCustomerIdQueryVariables = Exact<{
   input: Scalars['String']['input'];
@@ -1468,6 +1509,26 @@ export type GetTopMedicalFacilitiesQueryVariables = Exact<{
 
 
 export type GetTopMedicalFacilitiesQuery = { __typename?: 'Query', getTopMedicalFacilities: Array<{ __typename?: 'MedicalFacilities', id: string, userId: string, medicalFacilityName: string, address: string, numberPhone: string, email: string, lat?: number | null, lng?: number | null, discription: string, introduce: string, typeOfFacility: string, operatingStatus: string, legalRepresentation: string, taxCode: string, status: string, dateOff?: Array<any> | null, schedule: string, logo: { __typename?: 'LinkImage', filename: string, type: string, url: string }, image: { __typename?: 'LinkImage', filename: string, type: string, url: string } }> };
+
+export type GetAllMedicalFacilityPaginationQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  page: Scalars['Float']['input'];
+  limit: Scalars['Float']['input'];
+  sortField?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
+  typeOfFacility?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetAllMedicalFacilityPaginationQuery = { __typename?: 'Query', getAllMedicalFacilityPagination: Array<{ __typename?: 'MedicalFacilities', id: string, userId: string, medicalFacilityName: string, address: string, numberPhone: string, email: string, lat?: number | null, lng?: number | null, discription: string, introduce: string, typeOfFacility: string, operatingStatus: string, legalRepresentation: string, taxCode: string, status: string, dateOff?: Array<any> | null, schedule: string, logo: { __typename?: 'LinkImage', filename: string, type: string, url: string }, image: { __typename?: 'LinkImage', filename: string, type: string, url: string } }> };
+
+export type GetTotalFacilitiesCountQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetTotalFacilitiesCountQuery = { __typename?: 'Query', getTotalFacilitiesCount: number };
 
 
 export const UpdateUserDocument = gql`
@@ -1485,7 +1546,7 @@ export const UpdateUserDocument = gql`
     roles
     customer {
       id
-      name
+      fullname
       gender
       email
       numberPhone
@@ -1538,7 +1599,7 @@ export const UpdateUserWithPassDocument = gql`
     roles
     customer {
       id
-      name
+      fullname
       gender
       email
       numberPhone
@@ -1581,7 +1642,7 @@ export const CreateCustomerByUserIdDocument = gql`
   createCustomer(input: $input) {
     id
     userId
-    name
+    fullname
     numberPhone
     email
     address
@@ -1635,7 +1696,7 @@ export const LoginCustomerDocument = gql`
       active
       customer {
         id
-        name
+        fullname
         gender
         email
         numberPhone
@@ -1679,7 +1740,7 @@ export const UpdateCustomerDocument = gql`
   updateCustomer(input: $input) {
     id
     userId
-    name
+    fullname
     numberPhone
     email
     address
@@ -1951,7 +2012,7 @@ export const CheckloginCustomerDocument = gql`
     roles
     customer {
       id
-      name
+      fullname
       gender
       email
       numberPhone
@@ -2114,30 +2175,147 @@ export type GetTopMedicalFacilitiesQueryHookResult = ReturnType<typeof useGetTop
 export type GetTopMedicalFacilitiesLazyQueryHookResult = ReturnType<typeof useGetTopMedicalFacilitiesLazyQuery>;
 export type GetTopMedicalFacilitiesSuspenseQueryHookResult = ReturnType<typeof useGetTopMedicalFacilitiesSuspenseQuery>;
 export type GetTopMedicalFacilitiesQueryResult = Apollo.QueryResult<GetTopMedicalFacilitiesQuery, GetTopMedicalFacilitiesQueryVariables>;
-export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'gender' | 'id' | 'name' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
+export const GetAllMedicalFacilityPaginationDocument = gql`
+    query getAllMedicalFacilityPagination($search: String, $page: Float!, $limit: Float!, $sortField: String, $sortOrder: String, $typeOfFacility: String) {
+  getAllMedicalFacilityPagination(
+    search: $search
+    page: $page
+    limit: $limit
+    sortField: $sortField
+    sortOrder: $sortOrder
+    type: $typeOfFacility
+  ) {
+    id
+    userId
+    medicalFacilityName
+    address
+    numberPhone
+    email
+    logo {
+      filename
+      type
+      url
+    }
+    image {
+      filename
+      type
+      url
+    }
+    lat
+    lng
+    discription
+    introduce
+    typeOfFacility
+    operatingStatus
+    legalRepresentation
+    taxCode
+    status
+    dateOff
+    schedule
+  }
+}
+    `;
+
+/**
+ * __useGetAllMedicalFacilityPaginationQuery__
+ *
+ * To run a query within a React component, call `useGetAllMedicalFacilityPaginationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllMedicalFacilityPaginationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllMedicalFacilityPaginationQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      sortField: // value for 'sortField'
+ *      sortOrder: // value for 'sortOrder'
+ *      typeOfFacility: // value for 'typeOfFacility'
+ *   },
+ * });
+ */
+export function useGetAllMedicalFacilityPaginationQuery(baseOptions: Apollo.QueryHookOptions<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables> & ({ variables: GetAllMedicalFacilityPaginationQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>(GetAllMedicalFacilityPaginationDocument, options);
+      }
+export function useGetAllMedicalFacilityPaginationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>(GetAllMedicalFacilityPaginationDocument, options);
+        }
+export function useGetAllMedicalFacilityPaginationSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>(GetAllMedicalFacilityPaginationDocument, options);
+        }
+export type GetAllMedicalFacilityPaginationQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationQuery>;
+export type GetAllMedicalFacilityPaginationLazyQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationLazyQuery>;
+export type GetAllMedicalFacilityPaginationSuspenseQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationSuspenseQuery>;
+export type GetAllMedicalFacilityPaginationQueryResult = Apollo.QueryResult<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>;
+export const GetTotalFacilitiesCountDocument = gql`
+    query getTotalFacilitiesCount($search: String, $type: String) {
+  getTotalFacilitiesCount(search: $search, type: $type)
+}
+    `;
+
+/**
+ * __useGetTotalFacilitiesCountQuery__
+ *
+ * To run a query within a React component, call `useGetTotalFacilitiesCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTotalFacilitiesCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTotalFacilitiesCountQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetTotalFacilitiesCountQuery(baseOptions?: Apollo.QueryHookOptions<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>(GetTotalFacilitiesCountDocument, options);
+      }
+export function useGetTotalFacilitiesCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>(GetTotalFacilitiesCountDocument, options);
+        }
+export function useGetTotalFacilitiesCountSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>(GetTotalFacilitiesCountDocument, options);
+        }
+export type GetTotalFacilitiesCountQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountQuery>;
+export type GetTotalFacilitiesCountLazyQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountLazyQuery>;
+export type GetTotalFacilitiesCountSuspenseQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountSuspenseQuery>;
+export type GetTotalFacilitiesCountQueryResult = Apollo.QueryResult<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>;
+export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	dateOfBirth?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	ethnic?: FieldPolicy<any> | FieldReadFunction<any>,
+	fullname?: FieldPolicy<any> | FieldReadFunction<any>,
 	gender?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
-	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	numberPhone?: FieldPolicy<any> | FieldReadFunction<any>,
 	profiles?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type DoctorKeySpecifier = ('academicTitle' | 'avatar' | 'degree' | 'discription' | 'email' | 'gender' | 'id' | 'medicalFactilitiesId' | 'name' | 'numberPhone' | 'price' | 'specialistId' | 'specialty' | 'userId' | 'workSchedule' | DoctorKeySpecifier)[];
+export type DoctorKeySpecifier = ('academicTitle' | 'avatar' | 'degree' | 'discription' | 'doctorName' | 'email' | 'gender' | 'id' | 'medicalFactilitiesId' | 'numberPhone' | 'price' | 'specialistId' | 'specialty' | 'userId' | 'workSchedule' | DoctorKeySpecifier)[];
 export type DoctorFieldPolicy = {
 	academicTitle?: FieldPolicy<any> | FieldReadFunction<any>,
 	avatar?: FieldPolicy<any> | FieldReadFunction<any>,
 	degree?: FieldPolicy<any> | FieldReadFunction<any>,
 	discription?: FieldPolicy<any> | FieldReadFunction<any>,
+	doctorName?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	gender?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	medicalFactilitiesId?: FieldPolicy<any> | FieldReadFunction<any>,
-	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	numberPhone?: FieldPolicy<any> | FieldReadFunction<any>,
 	price?: FieldPolicy<any> | FieldReadFunction<any>,
 	specialistId?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -2212,26 +2390,26 @@ export type MedicalFacilitiesFieldPolicy = {
 	userId?: FieldPolicy<any> | FieldReadFunction<any>,
 	vaccinations?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MedicalSpecialtiesKeySpecifier = ('discription' | 'id' | 'medicalFactilityId' | 'name' | 'price' | 'workSchedule' | MedicalSpecialtiesKeySpecifier)[];
+export type MedicalSpecialtiesKeySpecifier = ('discription' | 'id' | 'medicalFactilityId' | 'price' | 'specialtyName' | 'workSchedule' | MedicalSpecialtiesKeySpecifier)[];
 export type MedicalSpecialtiesFieldPolicy = {
 	discription?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	medicalFactilityId?: FieldPolicy<any> | FieldReadFunction<any>,
-	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	price?: FieldPolicy<any> | FieldReadFunction<any>,
+	specialtyName?: FieldPolicy<any> | FieldReadFunction<any>,
 	workSchedule?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MedicalStaffKeySpecifier = ('email' | 'gender' | 'id' | 'medicalFacilityId' | 'name' | 'numberPhone' | 'permissions' | 'specialties' | 'specialtyId' | 'userId' | MedicalStaffKeySpecifier)[];
+export type MedicalStaffKeySpecifier = ('email' | 'gender' | 'id' | 'medicalFacilityId' | 'numberPhone' | 'permissions' | 'specialties' | 'specialtyId' | 'staffName' | 'userId' | MedicalStaffKeySpecifier)[];
 export type MedicalStaffFieldPolicy = {
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	gender?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	medicalFacilityId?: FieldPolicy<any> | FieldReadFunction<any>,
-	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	numberPhone?: FieldPolicy<any> | FieldReadFunction<any>,
 	permissions?: FieldPolicy<any> | FieldReadFunction<any>,
 	specialties?: FieldPolicy<any> | FieldReadFunction<any>,
 	specialtyId?: FieldPolicy<any> | FieldReadFunction<any>,
+	staffName?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type MutationKeySpecifier = ('activeUser' | 'confirmRegister' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];

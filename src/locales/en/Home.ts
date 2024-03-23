@@ -15,4 +15,5 @@ export const homeUs = {
   vaccinationTopTitleBottom: "Vaccination centers in An Giang province area",
   btnRegis: "Book Appointment",
   btnDetail: "Details",
+  btnShowList: "Show more",
 };

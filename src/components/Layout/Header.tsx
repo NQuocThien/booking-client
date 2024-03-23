@@ -102,10 +102,33 @@ function Header(props: IProps) {
           </Link>
           <nav id="navbar" className="navbar order-last order-lg-0">
             <ul>
-              <li>
-                <a className="nav-link active" href="#hero">
-                  {lan.texNavFacility}
-                </a>
+              <li className="dropdown">
+                <Link className="nav-link active" href="/medical-facility">
+                  <span>{lan.texNavFacility}</span>
+                  <i className="bi bi-chevron-down"></i>
+                </Link>
+                <ul>
+                  <li className="nav-link">
+                    <Link href="medical-facility?type=public-hospital">
+                      {lan.texNavPubFacility}
+                    </Link>
+                  </li>
+                  <li className="nav-link">
+                    <Link href="medical-facility?type=private-hospital">
+                      {lan.texNavPriFacility}
+                    </Link>
+                  </li>
+                  <li className="nav-link">
+                    <Link href="medical-facility?type=clinic">
+                      {lan.texNavClinic}
+                    </Link>
+                  </li>
+                  <li className="nav-link">
+                    <Link href="medical-facility?type=vaccination">
+                      {lan.texNavVaccinationCenter}
+                    </Link>
+                  </li>
+                </ul>
               </li>
               <li className="dropdown">
                 <a href="#" className="nav-link">
@@ -197,7 +220,7 @@ function Header(props: IProps) {
                 id="dropdown-basic"
                 variant="outline-success">
                 <span className="d-none d-md-inline">
-                  {(isLogin && inforUser?.customer?.name) ||
+                  {(isLogin && inforUser?.customer?.fullname) ||
                     "Tài khoản" ||
                     lan.texNavLogin}
                 </span>

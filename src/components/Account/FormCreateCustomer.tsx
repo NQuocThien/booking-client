@@ -36,7 +36,7 @@ function FormCreateCustomer({
     ethnic: "",
     gender: EGender.Male,
     dateOfBirth: "",
-    name: "",
+    fullname: "",
     numberPhone: "",
     userId: "",
   });
@@ -94,13 +94,13 @@ function FormCreateCustomer({
                   <Form.Control
                     required
                     type="text"
-                    value={formData?.name}
+                    value={formData?.fullname}
                     onChange={(e) =>
                       setFormData(
                         (pre) =>
                           pre && {
                             ...pre,
-                            name: e.target.value,
+                            fullname: e.target.value,
                           }
                       )
                     }

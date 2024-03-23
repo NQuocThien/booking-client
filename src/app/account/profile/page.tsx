@@ -7,6 +7,7 @@ import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { redirect } from "next/navigation";
 import ManaProfile from "@/components/Account/ManaProfile";
+import Link from "next/link";
 
 function CustomerDetailPage() {
   // const dispath = useDispatch();
@@ -24,10 +25,18 @@ function CustomerDetailPage() {
   if (userInfo && !userInfo.customer) {
     return (
       // <FormCreateCustomer inforUser={userInfo} isloginIn={true} lan={lan} />
-      <p>Cần nhập thông tin các nhân trước</p>
+      <div className="container">
+        <Link href="/account/customer">
+          <strong>{lan.messCheckCutomer}</strong>
+        </Link>
+      </div>
     );
   } else if (userInfo && userInfo.customer) {
-    return <ManaProfile lan={lan} customerId={userInfo.customer.id} />;
+    return (
+      <div className="container">
+        <ManaProfile lan={lan} customerId={userInfo.customer.id} />;
+      </div>
+    );
   }
 }
 export default CustomerDetailPage;

@@ -14,7 +14,7 @@ const updateUser = gql`
       roles
       customer {
         id
-        name
+        fullname
         gender
         email
         numberPhone
@@ -42,7 +42,7 @@ const updateUserWithPass = gql`
       roles
       customer {
         id
-        name
+        fullname
         gender
         email
         numberPhone
@@ -59,7 +59,7 @@ const createCustomerByUserId = gql`
     createCustomer(input: $input) {
       id
       userId
-      name
+      fullname
       numberPhone
       email
       address
@@ -87,7 +87,7 @@ const loginCustomer = gql`
         active
         customer {
           id
-          name
+          fullname
           gender
           email
           numberPhone
@@ -105,7 +105,7 @@ const updateCustomer = gql`
     updateCustomer(input: $input) {
       id
       userId
-      name
+      fullname
       numberPhone
       email
       address

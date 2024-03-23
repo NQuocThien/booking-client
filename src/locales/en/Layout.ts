@@ -1,5 +1,9 @@
 export const headerUs = {
   texNavFacility: "Medical Facility",
+  texNavPubFacility: "Public hospital",
+  texNavPriFacility: "Private hospital",
+  texNavClinic: "Clinic",
+  texNavVaccinationCenter: "Vaccination center",
   texNavSrv: "Services",
   texNavSrvSpecialty: "Specialist examination service",
   texNavSrvDoctor: "Doctor examination service",

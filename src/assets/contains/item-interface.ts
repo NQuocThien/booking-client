@@ -1,3 +1,5 @@
+import { GetETypeOfFacility } from "./emun";
+
 export interface ICheckRoles {
   admin: boolean;
   customer: boolean;
@@ -40,11 +42,17 @@ export interface ISelectSpecial {
 }
 export type Sort = "asc" | "desc";
 
+export interface IFillter {
+  pagination: IPagination;
+  search: string;
+  type: GetETypeOfFacility | undefined;
+}
+
 export interface IPagination {
   total: number;
   current: number;
-  sort: Sort;
-  rowPerPage?: number;
+  // sort: Sort;
+  limit?: number;
 }
 
 export interface Language {

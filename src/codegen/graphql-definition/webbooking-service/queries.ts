@@ -39,7 +39,7 @@ const checkLoginUser = gql`
       roles
       customer {
         id
-        name
+        fullname
         gender
         email
         numberPhone
@@ -103,5 +103,58 @@ const getTopMedicalFacilities = gql`
       schedule
       typeOfFacility
     }
+  }
+`;
+const getAllMedicalFacility = gql`
+  query getAllMedicalFacilityPagination(
+    $search: String
+    $page: Float!
+    $limit: Float!
+    $sortField: String
+    $sortOrder: String
+    $typeOfFacility: String
+  ) {
+    getAllMedicalFacilityPagination(
+      search: $search
+      page: $page
+      limit: $limit
+      sortField: $sortField
+      sortOrder: $sortOrder
+      type: $typeOfFacility
+    ) {
+      id
+      userId
+      medicalFacilityName
+      address
+      numberPhone
+      email
+      logo {
+        filename
+        type
+        url
+      }
+
+      image {
+        filename
+        type
+        url
+      }
+      lat
+      lng
+      discription
+      introduce
+      typeOfFacility
+      operatingStatus
+      legalRepresentation
+      taxCode
+      status
+      dateOff
+      schedule
+    }
+  }
+`;
+const getTotalFacilities = gql`
+  query getTotalFacilitiesCount($search: String, $type: String) {
+    getTotalFacilitiesCount(search: $search, type: $type)
   }
 `;

@@ -9,12 +9,14 @@ import { Button, Card } from "react-bootstrap";
 import { GetETypeOfFacility } from "@/assets/contains/emun";
 import { useEffect, useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
+import Link from "next/link";
 
 interface IText {
   titleTop: string;
   titleSub: string;
   btnRegis: string;
   btnDetail: string;
+  btnShowList: string;
 }
 interface IProps {
   lan: IText;
@@ -71,6 +73,22 @@ function TopFacilitiesCpn(props: IProps) {
       return true;
     } catch (error) {
       return false;
+    }
+  }
+
+  function getNextRoute(): string {
+    switch (type) {
+      case GetETypeOfFacility.publicHospital:
+        return "public-hospital";
+      case GetETypeOfFacility.privateHospital:
+        return "private-hospital";
+      case GetETypeOfFacility.clinic:
+        return "clinic";
+      case GetETypeOfFacility.vaccinationCenter:
+        return "vaccination";
+
+      default:
+        return "";
     }
   }
 
@@ -148,6 +166,12 @@ function TopFacilitiesCpn(props: IProps) {
             </div>
           ))}
         </Slider>
+      </div>
+      <div className="text-center mt-5 pe-5">
+        <Link href={`/medical-facility?type=${getNextRoute()}`} className="">
+          <span className="">{lan.btnShowList}</span>
+          <i className="bi bi-arrow-right fs-6 ms-2"></i>
+        </Link>
       </div>
     </div>
   );

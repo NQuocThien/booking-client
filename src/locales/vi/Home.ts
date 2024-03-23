@@ -18,4 +18,5 @@ export const homeVi = {
     "Những trung tâm tiêm chủng trên địa bàn tỉnh An Giang",
   btnRegis: "Đặt khám",
   btnDetail: "Chi tiết",
+  btnShowList: "Xem thêm",
 };

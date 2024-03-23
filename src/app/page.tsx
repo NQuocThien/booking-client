@@ -28,6 +28,7 @@ export default function Home() {
         <div className="facility ">
           <TopFacilitiesCpn
             lan={{
+              btnShowList: lan.btnShowList,
               titleTop: lan.publicHospitalTopTitle,
               titleSub: lan.publicHospitalTopTitleBottom,
               btnDetail: lan.btnDetail,
@@ -39,6 +40,7 @@ export default function Home() {
         <div className="facility odd">
           <TopFacilitiesCpn
             lan={{
+              btnShowList: lan.btnShowList,
               titleTop: lan.privateHospitalTopTitle,
               titleSub: lan.privateHospitalTopTitleBottom,
               btnDetail: lan.btnDetail,
@@ -50,6 +52,7 @@ export default function Home() {
         <div className="facility">
           <TopFacilitiesCpn
             lan={{
+              btnShowList: lan.btnShowList,
               titleTop: lan.clinicTopTitle,
               titleSub: lan.clinicTopTitleBottom,
               btnDetail: lan.btnDetail,
@@ -61,6 +64,7 @@ export default function Home() {
         <div className="facility">
           <TopFacilitiesCpn
             lan={{
+              btnShowList: lan.btnShowList,
               titleTop: lan.vaccinationTopTitle,
               titleSub: lan.vaccinationTopTitleBottom,
               btnDetail: lan.btnDetail,
