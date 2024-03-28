@@ -1,5 +1,6 @@
 "use client";
 import { homeVi } from "@/locales/vi/Home";
+import Link from "next/link";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { CiSearch } from "react-icons/ci";
@@ -71,16 +72,16 @@ function PosterCpn(props: IProps) {
           />
         </Col>
       </Row>
-      <Row className="mt-3 g-2 justify-content-center">
+      <Row className="mt-3 g-2 ">
         <Col lg={3} md={4} sm={6} xs={6}>
-          <div className="service-item py-2">
+          <Link href={""} className="service-item py-2">
             <img
               className="img-icon mb-3"
               src="/imgs/icons/doctor-icon.png"
               alt="package"
             />
             <p className="text-dark text-center caption">{lan.srvDoctor}</p>
-          </div>
+          </Link>
         </Col>
         <Col lg={3} md={4} sm={6} xs={6}>
           <div className="service-item py-2">

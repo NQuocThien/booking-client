@@ -1,4 +1,8 @@
 function Loadgin() {
-  return <div>Loading........</div>;
+  return (
+    <div className="container">
+      <span className="text-info">Loading........</span>
+    </div>
+  );
 }
 export default Loadgin;

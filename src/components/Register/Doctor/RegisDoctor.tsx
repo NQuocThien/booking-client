@@ -3,18 +3,17 @@ import { regisVi } from "@/locales/vi/Facility";
 import {
   IActionRegis,
   IStateRegister,
+  handleChangeDoctor,
   handleChangeServiceState,
-  handleChangeSpecialty,
-  handleSetRegisSpecialty,
+  handleSetRegisDoctor,
 } from "../reducer";
-import ListRegisSpecialty from "./ListRegisSpcialty";
 import {
+  Doctor,
   EDayOfWeed,
-  MedicalSpecialties,
   Register,
   ScheduleInput,
   SessionInput,
-  useCreateRegisterMedicalSpecialtyMutation,
+  useCreateRegisterDoctorMutation,
   useGetAllRegisPendingLazyQuery,
 } from "@/graphql/webbooking-service.generated";
 import DateSession from "../DateSession/DateSession";
@@ -24,13 +23,15 @@ import { Session } from "@/graphql/webbooking-service.generated";
 import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
 import { useRouter } from "next/navigation";
-
+import ListRegisDoctor from "./ListRegisDoctor";
+import useNProgress from "@/hooks/useNProgress";
+import { format } from "date-fns";
 interface IProps {
   lan: typeof regisVi;
   state: IStateRegister;
   dispatch: React.Dispatch<IActionRegis>;
 }
-function RegisSpecialty(props: IProps) {
+function RegisDoctorCpn(props: IProps) {
   const { lan, state, dispatch } = props;
   const [schedule, setSchedule] = useState<ScheduleInput>();
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -40,22 +41,26 @@ function RegisSpecialty(props: IProps) {
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisPendingLazyQuery();
 
-  const [regisSpecialty, { loading: loadingRegisSpecialty }] =
-    useCreateRegisterMedicalSpecialtyMutation();
+  const [regisDoctor, { loading: loadingRegisDoctor }] =
+    useCreateRegisterDoctorMutation();
 
   // =================================================================
 
   useEffect(() => {
-    if (state.specialty?.workSchedule) {
+    useNProgress(loadingRegisDoctor || loadingRegis);
+  }, [loadingRegis, loadingRegisDoctor]);
+
+  useEffect(() => {
+    if (state.doctor?.workSchedule) {
       const schedulesInput: ScheduleInput[] =
-        state.specialty?.workSchedule.schedule.map((s) => ({
+        state.doctor?.workSchedule.schedule.map((s) => ({
           ...s,
           dayOfWeek: getEnumValueDayOfWeek(s.dayOfWeek),
         }));
 
       setListSchedule(schedulesInput);
     }
-  }, [state.specialty?.workSchedule]);
+  }, [state.doctor?.workSchedule]);
 
   useEffect(() => {
     if (dataRegis) {
@@ -67,9 +72,8 @@ function RegisSpecialty(props: IProps) {
           const count = sessionsExist.filter(
             (s) => s.startTime === ss.startTime && s.endTime === ss.endTime
           ).length;
-          const maxCount: number =
-            state.specialty?.workSchedule?.numberSlot || 10;
-          console.log("test: ", count, maxCount);
+          const maxCount: number = state.doctor?.workSchedule?.numberSlot || 10;
+          console.log("count regis: ", count, maxCount);
           return count <= maxCount;
         }) || [];
       setSessions(sessionFiltered);
@@ -77,17 +81,16 @@ function RegisSpecialty(props: IProps) {
   }, [dataRegis]);
   // =================================================================
   const filterWeekdays = (date: Date): boolean => {
-    // Kiểm tra xem ngày đó có phải là ngày trong quá khứ không
     const currentDate = new Date();
     const maxDate = new Date(currentDate.getTime() + 22 * 24 * 60 * 60 * 1000);
     if (date < currentDate || date > maxDate) {
-      return false; // Nếu là ngày trong quá khứ, trả về false để ẩn ngày đó
+      return false;
     }
 
     const day = date.getDay();
     const dayOfWeek = ["Chủ nhật", "2", "3", "4", "5", "6", "7"][day];
 
-    const workSchedule = state.specialty?.workSchedule;
+    const workSchedule = state.doctor?.workSchedule;
     const dayOffFacility = state.facility?.dateOff;
     const find = workSchedule?.schedule?.findIndex(
       (item) => item.dayOfWeek === dayOfWeek
@@ -110,17 +113,19 @@ function RegisSpecialty(props: IProps) {
   };
 
   const handleChangeDatePicker = (date: Date) => {
+    const formattedDate = format(date, "yyyy-MM-dd");
     dispatch(
-      handleSetRegisSpecialty({
-        ...state.regisSpecialty,
-        date: date,
+      handleSetRegisDoctor({
+        ...state.regisDoctor,
+        date: formattedDate,
       })
     );
+
     getRegisPending({
       variables: {
         input: {
-          date: date,
-          specialtyId: state.regisSpecialty.specialtyId,
+          date: formattedDate,
+          doctorId: state.regisDoctor.doctorId,
         },
       },
     });
@@ -151,40 +156,40 @@ function RegisSpecialty(props: IProps) {
     }
   };
   // =================================================================
-  const handleClickSpecialty = (specialty: MedicalSpecialties) => {
-    dispatch(handleChangeSpecialty(specialty));
+  const handleClickDoctor = (doctor: Doctor) => {
+    dispatch(handleChangeDoctor(doctor));
     dispatch(
-      handleSetRegisSpecialty({
-        ...state.regisSpecialty,
-        specialtyId: specialty.id,
+      handleSetRegisDoctor({
+        ...state.regisDoctor,
+        doctorId: doctor.id,
       })
     );
   };
 
-  if (state.regisSpecialty.specialtyId === "") {
+  if (state.regisDoctor.doctorId === "") {
     return (
       <div className="session px-2">
-        {state.regisSpecialty.specialtyId === "" && (
-          <ListRegisSpecialty
+        {state.regisDoctor.doctorId === "" && state.facility?.id && (
+          <ListRegisDoctor
             onBack={() =>
               dispatch(
                 handleChangeServiceState({
                   ...state.svrState,
-                  specialty: false,
+                  doctor: false,
                 })
               )
             }
-            onClick={handleClickSpecialty}
+            onClick={handleClickDoctor}
             lan={lan}
-            specialties={state.specialties}
+            facilityId={state.facility?.id}
           />
         )}
       </div>
     );
   } else if (
-    state.regisSpecialty.date === "" ||
-    state.regisSpecialty.session.startTime === "" ||
-    state.regisSpecialty.session.endTime === ""
+    state.regisDoctor.date === "" ||
+    state.regisDoctor.session.startTime === "" ||
+    state.regisDoctor.session.endTime === ""
   ) {
     return (
       <div className="session px-2">
@@ -195,8 +200,8 @@ function RegisSpecialty(props: IProps) {
           sessions={sessions}
           onClickSession={(session) => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisDoctor({
+                ...state.regisDoctor,
                 session: {
                   startTime: session.startTime,
                   endTime: session.endTime,
@@ -208,9 +213,10 @@ function RegisSpecialty(props: IProps) {
           onChangeDate={handleChangeDatePicker}
           onClickBack={() => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
-                specialtyId: "",
+              handleSetRegisDoctor({
+                ...state.regisDoctor,
+                doctorId: "",
+                date: "",
               })
             );
           }}
@@ -220,22 +226,22 @@ function RegisSpecialty(props: IProps) {
   }
   return (
     <div className="session px-2">
-      {state.regisSpecialty.specialtyId !== "" && (
+      {state.regisDoctor.doctorId !== "" && (
         <ListProfile
           state={state}
           onClickProfile={(profile) => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisDoctor({
+                ...state.regisDoctor,
                 profileId: profile.id,
               })
             );
           }}
           onRegis={async () => {
-            if (state.svrState.specialty === true) {
-              await regisSpecialty({
+            if (state.svrState.doctor === true) {
+              await regisDoctor({
                 variables: {
-                  input: state.regisSpecialty,
+                  input: state.regisDoctor,
                 },
               })
                 .then(() => {
@@ -250,8 +256,8 @@ function RegisSpecialty(props: IProps) {
           }}
           onBack={() => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisDoctor({
+                ...state.regisDoctor,
                 date: "",
                 session: {
                   endTime: "",
@@ -265,4 +271,4 @@ function RegisSpecialty(props: IProps) {
     </div>
   );
 }
-export default RegisSpecialty;
+export default RegisDoctorCpn;

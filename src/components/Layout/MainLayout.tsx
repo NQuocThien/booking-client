@@ -13,7 +13,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { checkExpirationToken, getToken } from "@/utils/tools";
 import ToastsPcn from "../subs/toast";
 import useNProgress from "../../hooks/useNProgress";
-
+import "react-toastify/dist/ReactToastify.css";
 function MainLayout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const { data, loading, error } = useGetGeneralInforQuery();
@@ -48,9 +48,9 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       <Header onLogout={handleLogout} data={generalData} />
       <div id="main" className="main">
         {children}
+        <ToastsPcn />
       </div>
       <Footer data={generalData} />
-      <ToastsPcn />
     </div>
   );
 }

@@ -3,18 +3,17 @@ import { regisVi } from "@/locales/vi/Facility";
 import {
   IActionRegis,
   IStateRegister,
+  handleChangePackage,
   handleChangeServiceState,
-  handleChangeSpecialty,
-  handleSetRegisSpecialty,
+  handleSetRegisPackage,
 } from "../reducer";
-import ListRegisSpecialty from "./ListRegisSpcialty";
 import {
   EDayOfWeed,
-  MedicalSpecialties,
+  Package,
   Register,
   ScheduleInput,
   SessionInput,
-  useCreateRegisterMedicalSpecialtyMutation,
+  useCreateRegisterPackageMutation,
   useGetAllRegisPendingLazyQuery,
 } from "@/graphql/webbooking-service.generated";
 import DateSession from "../DateSession/DateSession";
@@ -24,13 +23,15 @@ import { Session } from "@/graphql/webbooking-service.generated";
 import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
 import { useRouter } from "next/navigation";
+import ListRegisPackage from "./ListRegisPackage";
+import useNProgress from "@/hooks/useNProgress";
 
 interface IProps {
   lan: typeof regisVi;
   state: IStateRegister;
   dispatch: React.Dispatch<IActionRegis>;
 }
-function RegisSpecialty(props: IProps) {
+function RegisPackageCpn(props: IProps) {
   const { lan, state, dispatch } = props;
   const [schedule, setSchedule] = useState<ScheduleInput>();
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -40,22 +41,27 @@ function RegisSpecialty(props: IProps) {
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisPendingLazyQuery();
 
-  const [regisSpecialty, { loading: loadingRegisSpecialty }] =
-    useCreateRegisterMedicalSpecialtyMutation();
+  const [regisPackage, { loading: loadingRegisPackage }] =
+    useCreateRegisterPackageMutation();
 
   // =================================================================
 
   useEffect(() => {
-    if (state.specialty?.workSchedule) {
+    // set list schedule khi chọn dịch vụ
+    useNProgress(loadingRegisPackage || loadingRegis);
+  }, [loadingRegis, loadingRegisPackage]);
+
+  useEffect(() => {
+    if (state.package?.workSchedule) {
       const schedulesInput: ScheduleInput[] =
-        state.specialty?.workSchedule.schedule.map((s) => ({
+        state.package?.workSchedule.schedule.map((s) => ({
           ...s,
           dayOfWeek: getEnumValueDayOfWeek(s.dayOfWeek),
         }));
 
       setListSchedule(schedulesInput);
     }
-  }, [state.specialty?.workSchedule]);
+  }, [state.package?.workSchedule]);
 
   useEffect(() => {
     if (dataRegis) {
@@ -68,8 +74,8 @@ function RegisSpecialty(props: IProps) {
             (s) => s.startTime === ss.startTime && s.endTime === ss.endTime
           ).length;
           const maxCount: number =
-            state.specialty?.workSchedule?.numberSlot || 10;
-          console.log("test: ", count, maxCount);
+            state.package?.workSchedule?.numberSlot || 10;
+          console.log("count regis: ", count, maxCount);
           return count <= maxCount;
         }) || [];
       setSessions(sessionFiltered);
@@ -77,17 +83,16 @@ function RegisSpecialty(props: IProps) {
   }, [dataRegis]);
   // =================================================================
   const filterWeekdays = (date: Date): boolean => {
-    // Kiểm tra xem ngày đó có phải là ngày trong quá khứ không
     const currentDate = new Date();
     const maxDate = new Date(currentDate.getTime() + 22 * 24 * 60 * 60 * 1000);
     if (date < currentDate || date > maxDate) {
-      return false; // Nếu là ngày trong quá khứ, trả về false để ẩn ngày đó
+      return false;
     }
 
     const day = date.getDay();
     const dayOfWeek = ["Chủ nhật", "2", "3", "4", "5", "6", "7"][day];
 
-    const workSchedule = state.specialty?.workSchedule;
+    const workSchedule = state.package?.workSchedule;
     const dayOffFacility = state.facility?.dateOff;
     const find = workSchedule?.schedule?.findIndex(
       (item) => item.dayOfWeek === dayOfWeek
@@ -111,8 +116,8 @@ function RegisSpecialty(props: IProps) {
 
   const handleChangeDatePicker = (date: Date) => {
     dispatch(
-      handleSetRegisSpecialty({
-        ...state.regisSpecialty,
+      handleSetRegisPackage({
+        ...state.regisPackage,
         date: date,
       })
     );
@@ -120,7 +125,7 @@ function RegisSpecialty(props: IProps) {
       variables: {
         input: {
           date: date,
-          specialtyId: state.regisSpecialty.specialtyId,
+          packageId: state.regisPackage.packageId,
         },
       },
     });
@@ -151,40 +156,40 @@ function RegisSpecialty(props: IProps) {
     }
   };
   // =================================================================
-  const handleClickSpecialty = (specialty: MedicalSpecialties) => {
-    dispatch(handleChangeSpecialty(specialty));
+  const handleClickPackage = (p: Package) => {
+    dispatch(handleChangePackage(p));
     dispatch(
-      handleSetRegisSpecialty({
-        ...state.regisSpecialty,
-        specialtyId: specialty.id,
+      handleSetRegisPackage({
+        ...state.regisPackage,
+        packageId: p.id,
       })
     );
   };
 
-  if (state.regisSpecialty.specialtyId === "") {
+  if (state.regisPackage.packageId === "") {
     return (
       <div className="session px-2">
-        {state.regisSpecialty.specialtyId === "" && (
-          <ListRegisSpecialty
+        {state.regisPackage.packageId === "" && (
+          <ListRegisPackage
             onBack={() =>
               dispatch(
                 handleChangeServiceState({
                   ...state.svrState,
-                  specialty: false,
+                  package: false,
                 })
               )
             }
-            onClick={handleClickSpecialty}
+            onClick={handleClickPackage}
             lan={lan}
-            specialties={state.specialties}
+            packages={state.packages}
           />
         )}
       </div>
     );
   } else if (
-    state.regisSpecialty.date === "" ||
-    state.regisSpecialty.session.startTime === "" ||
-    state.regisSpecialty.session.endTime === ""
+    state.regisPackage.date === "" ||
+    state.regisPackage.session.startTime === "" ||
+    state.regisPackage.session.endTime === ""
   ) {
     return (
       <div className="session px-2">
@@ -195,8 +200,8 @@ function RegisSpecialty(props: IProps) {
           sessions={sessions}
           onClickSession={(session) => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisPackage({
+                ...state.regisPackage,
                 session: {
                   startTime: session.startTime,
                   endTime: session.endTime,
@@ -208,9 +213,9 @@ function RegisSpecialty(props: IProps) {
           onChangeDate={handleChangeDatePicker}
           onClickBack={() => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
-                specialtyId: "",
+              handleSetRegisPackage({
+                ...state.regisPackage,
+                packageId: "",
               })
             );
           }}
@@ -220,22 +225,22 @@ function RegisSpecialty(props: IProps) {
   }
   return (
     <div className="session px-2">
-      {state.regisSpecialty.specialtyId !== "" && (
+      {state.regisPackage.packageId !== "" && (
         <ListProfile
           state={state}
           onClickProfile={(profile) => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisPackage({
+                ...state.regisPackage,
                 profileId: profile.id,
               })
             );
           }}
           onRegis={async () => {
-            if (state.svrState.specialty === true) {
-              await regisSpecialty({
+            if (state.svrState.package === true) {
+              await regisPackage({
                 variables: {
-                  input: state.regisSpecialty,
+                  input: state.regisPackage,
                 },
               })
                 .then(() => {
@@ -250,8 +255,8 @@ function RegisSpecialty(props: IProps) {
           }}
           onBack={() => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisPackage({
+                ...state.regisPackage,
                 date: "",
                 session: {
                   endTime: "",
@@ -265,4 +270,4 @@ function RegisSpecialty(props: IProps) {
     </div>
   );
 }
-export default RegisSpecialty;
+export default RegisPackageCpn;

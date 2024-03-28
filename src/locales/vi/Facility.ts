@@ -31,6 +31,11 @@ export const regisVi = {
   titleSrvPackage: "Đăng ký khám theo gói khám",
   titleSrvVaccine: "Đăng ký tiêm chủng",
 
+  svrDoctor: "Khám theo bác sỉ",
+  svrSpecialty: "Khám theo chuyên khoa",
+  svrPackage: "Khám theo gói khám",
+  svrVaccine: "Tiêm chủng",
+
   titleChooseSpecialty: "Đăng ký khám theo chuyên khoa",
   titleChooseDoctor: "Đăng ký khám theo bác sỉ",
   titleChoosePackage: "Đăng ký khám theo gói khám",
@@ -40,13 +45,37 @@ export const regisVi = {
   titleChooseSession: "Chọn khung giờ khám",
   titleSession: "Các phiên khám",
   titleSpecialties: "Chọn chuyên khoa khám",
+  titleDoctors: "Chọn bác sỉ",
+  labelDayOfWeek: "Thứ ",
 
   headServiceName: " Dịch vụ y tế",
   headPrice: "Giá khám",
+  headSpecialty: "Chuyên khoa",
   lableSchedule: "Lịch khám",
   messLogin: "Cần đăng nhập để tiếp tục",
+  messRegisSuccess: "Đăng  ký khám thành công",
+  messRegisError: "Lỗi đăng ký ",
 
   btnBack: "Trở lại",
   btnDetail: "Chi tiết",
   btnBooking: "Đăng ký ngay",
+};
+
+export const filterVi = {
+  holderDoctorName: "Tên bác sỉ...",
+  optDegree: "Học vị",
+  optAcademicTitle: "Học hàm",
+  optGender: "Giới tính",
+  optGenderMale: "Nam",
+  optGenderFemale: "Nữ",
+
+  otpSpecialty: "Chuyên khoa",
+
+  optDoctorate: "Tiến sỉ Bác sỉ",
+  optMasterDoctor: "Thạch sỉ Bác sỉ",
+  optDoctor: "Bác sỉ",
+  optDoctorS1: "Bác sỉ chuyên khoa I",
+  optDoctorS2: "Bác sỉ chuyên khoa II",
+  optProfessor: "Giáo sư",
+  optAssociateProfesso: "Phó giáo sư",
 };

@@ -246,9 +246,9 @@ function Header(props: IProps) {
                   <i className="text-primary me-1 bi bi-person-badge"></i>
                   {lan.texBtnProfile}
                 </Dropdown.Item>
-                <Dropdown.Item href="#/action-3">
+                <Dropdown.Item as={Link} href="/account/ticket">
                   <i className="text-primary me-1 bi bi-ticket-perforated"></i>
-                  {lan.texBtnTiked}
+                  {lan.texBtnTiket}
                 </Dropdown.Item>
                 <Dropdown.Item href="#/action-3">
                   <i className="text-primary me-1 bi bi-bell-fill"></i>

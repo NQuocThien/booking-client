@@ -17,7 +17,7 @@ export const headerUs = {
   texBtnInfo: "Personal information",
   texBtnAccout: "Account",
   texBtnProfile: "Profile",
-  texBtnTiked: "Medical examination form",
+  texBtnTiket: "Medical examination form",
   texBtnNotification: "Announcement",
   texBtnLogout: "Log out",
 };

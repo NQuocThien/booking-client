@@ -61,9 +61,30 @@ const getMedicalFacilityRegisInfoById = gql`
       status
       dateOff
       schedule
+      image {
+        filename
+        type
+        url
+      }
+      numberPhone
+      email
+      discription
+      introduce
+      lat
+      lng
+      userId
+      taxCode
+      legalRepresentation
+      logo {
+        filename
+        type
+        url
+      }
+      typeOfFacility
+      operatingStatus
       totalDoctors(isClient: $isClient)
       totalPackages(isClient: $isClient)
-      totalSpecialties
+      totalSpecialties(isClient: $isClient)
       totalVaccinations(isClient: $isClient)
     }
   }
@@ -202,5 +223,276 @@ const getListMedicalSpecialtyRegisInfoByFacilityId = gql`
         }
       }
     }
+  }
+`;
+const getListDoctorRegisInfoByFacilityId = gql`
+  query getListDoctorRegisInfoByFacilityId(
+    $input: String!
+    $isClient: Boolean!
+  ) {
+    getMedicalFacilityById(id: $input) {
+      id
+      doctors(isClient: $isClient) {
+        id
+        medicalFactilitiesId
+        doctorName
+        gender
+        email
+        numberPhone
+        degree
+        academicTitle
+        specialistId
+        avatar {
+          filename
+          type
+          url
+        }
+        specialty {
+          id
+          specialtyName
+          discription
+          price
+          medicalFactilityId
+        }
+        userId
+        price
+        discription
+        workSchedule {
+          dayOff
+          status
+          numberSlot
+          schedule {
+            dayOfWeek
+            sessions {
+              endTime
+              startTime
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+const getListPackageRegisInfoByFacilityId = gql`
+  query getListPackageRegisInfoByFacilityId(
+    $input: String!
+    $isClient: Boolean!
+  ) {
+    getMedicalFacilityById(id: $input) {
+      id
+      packages(isClient: $isClient) {
+        id
+        packageName
+        gender
+        examinationDetails
+        price
+        medicalFactilitiesId
+        image {
+          filename
+          type
+          url
+        }
+
+        workSchedule {
+          dayOff
+          status
+          numberSlot
+          schedule {
+            dayOfWeek
+            sessions {
+              endTime
+              startTime
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+const getListVaccinationRegisInfoByFacilityId = gql`
+  query getListVaccinationRegisInfoByFacilityId(
+    $input: String!
+    $isClient: Boolean!
+  ) {
+    getMedicalFacilityById(id: $input) {
+      id
+      vaccinations(isClient: $isClient) {
+        id
+        vaccineName
+        countryOfOrigin
+        indication
+        medicalFactilitiesId
+        price
+        note
+        prophylactic
+
+        workSchedule {
+          dayOff
+          status
+          numberSlot
+          schedule {
+            dayOfWeek
+            sessions {
+              endTime
+              startTime
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+const getAllRegisPending = gql`
+  query getAllRegisPending($input: GetRegisterByOptionInput!) {
+    getAllRegisPending(input: $input) {
+      id
+      date
+      doctorId
+      session {
+        endTime
+        startTime
+      }
+      cancel
+      packageId
+      specialtyId
+      vaccineId
+      typeOfService
+      packageId
+      state
+      profileId
+    }
+  }
+`;
+const getProfileTicketByCustomerId = gql`
+  query getProfileTicketByCustomerId($input: String!) {
+    getProfileByCustomerId(id: $input) {
+      id
+      customerId
+      fullname
+      numberPhone
+      email
+      address
+      gender
+      dataOfBirth
+      ethnic
+      identity
+      relationship
+      job
+      register {
+        id
+        date
+        typeOfService
+        state
+        session {
+          endTime
+          startTime
+        }
+        doctorId
+        vaccineId
+        packageId
+        specialtyId
+        doctor {
+          id
+          doctorName
+          specialty {
+            specialtyName
+          }
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+        specialty {
+          specialtyName
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+        vaccination {
+          vaccineName
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+        package {
+          packageName
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+      }
+    }
+  }
+`;
+const getAllDoctorPaginationOfFacilityForClient = gql`
+  query getAllDoctorPaginationOfFacilityForClient(
+    $filter: FilterDoctorInput!
+    $page: Float
+    $limit: Float
+    $facilityId: String!
+    $sortField: String
+    $sortOrder: String
+  ) {
+    getAllDoctorPaginationOfFacilityForClient(
+      filter: $filter
+      page: $page
+      limit: $limit
+      facilityId: $facilityId
+      sortField: $sortField
+      sortOrder: $sortOrder
+    ) {
+      id
+      medicalFactilitiesId
+      userId
+      doctorName
+      gender
+      email
+      numberPhone
+      specialistId
+      academicTitle
+      degree
+      price
+      specialty {
+        id
+        discription
+        medicalFactilityId
+        price
+        specialtyName
+      }
+      discription
+      avatar {
+        filename
+        type
+        url
+      }
+      workSchedule {
+        dayOff
+        numberSlot
+        status
+        schedule {
+          dayOfWeek
+          sessions {
+            endTime
+            startTime
+          }
+        }
+      }
+    }
+  }
+`;
+
+const getTotalDoctorsCountForClient = gql`
+  query getTotalDoctorsCountForClient(
+    $filter: FilterDoctorInput!
+    $facilityId: String!
+  ) {
+    getTotalDoctorsCountForClient(filter: $filter, facilityId: $facilityId)
   }
 `;

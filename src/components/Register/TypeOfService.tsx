@@ -76,11 +76,16 @@ function TypeOfServive(props: IProps) {
       </Row>
       <Row className="text-center title">
         <h3 className="text-primary mb-2">{lan.titleTypeService}</h3>
-        <h5>{lan.subTypeService}</h5>
+        <h5 className="sub-title">{lan.subTypeService}</h5>
       </Row>
       <Row className="mt-3 service">
         {srvState.doctor !== undefined && (
-          <Col lg={6} md={6} sm={6} xs={6} onClick={() => handleClickDoctor()}>
+          <Col
+            lg={6}
+            md={6}
+            sm={12}
+            xs={12}
+            onClick={() => handleClickDoctor()}>
             <div className="service-item py-3">
               <img
                 className="img-icon mb-3"
@@ -97,8 +102,8 @@ function TypeOfServive(props: IProps) {
           <Col
             lg={6}
             md={6}
-            sm={6}
-            xs={6}
+            sm={12}
+            xs={12}
             onClick={() => handleClickSpecialty()}>
             <div className="service-item py-3">
               <img
@@ -113,7 +118,12 @@ function TypeOfServive(props: IProps) {
           </Col>
         )}
         {srvState.package !== undefined && (
-          <Col lg={6} md={6} sm={6} xs={6} onClick={() => handleClickPackage()}>
+          <Col
+            lg={6}
+            md={6}
+            sm={12}
+            xs={12}
+            onClick={() => handleClickPackage()}>
             <div className="service-item py-3">
               <img
                 className="img-icon mb-3"
@@ -130,8 +140,8 @@ function TypeOfServive(props: IProps) {
           <Col
             lg={6}
             md={6}
-            sm={6}
-            xs={6}
+            sm={12}
+            xs={12}
             onClick={() => handleClickVaccination()}>
             <div className="service-item py-3">
               <img

@@ -39,6 +39,7 @@ const clientSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<User>) => {
       state.inforUser = action.payload;
     },
+
     checkExpToken: (state) => {
       if (!checkExToken()) {
         logout();

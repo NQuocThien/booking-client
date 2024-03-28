@@ -10,7 +10,7 @@ import { GetETypeOfFacility } from "@/assets/contains/emun";
 import { useEffect, useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 interface IText {
   titleTop: string;
   titleSub: string;
@@ -92,8 +92,14 @@ function TopFacilitiesCpn(props: IProps) {
     }
   }
 
+  const router = useRouter();
+
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="container">
+        <p className="">Loading...</p>;
+      </div>
+    );
   }
   if (items.length === 0) return null;
   if (items.length === 1) {
@@ -116,9 +122,11 @@ function TopFacilitiesCpn(props: IProps) {
                 <Card.Text>
                   <CiLocationOn />: {item.address}
                 </Card.Text>
-                <Button variant="primary" className="me-2" size="sm">
+                <Link
+                  className="me-2 btn btn-primary btn-sm"
+                  href={`/medical-facility/regis/${item.id}`}>
                   {lan.btnRegis}
-                </Button>
+                </Link>
                 <Button variant="outline-primary" size="sm">
                   {lan.btnDetail}
                 </Button>
@@ -155,9 +163,11 @@ function TopFacilitiesCpn(props: IProps) {
                   <Card.Text>
                     <CiLocationOn />: {item.address}
                   </Card.Text>
-                  <Button variant="primary" className="me-2" size="sm">
+                  <Link
+                    className="me-2 btn btn-primary btn-sm"
+                    href={`/medical-facility/regis/${item.id}`}>
                     {lan.btnRegis}
-                  </Button>
+                  </Link>
                   <Button variant="outline-primary" size="sm">
                     {lan.btnDetail}
                   </Button>

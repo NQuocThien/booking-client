@@ -1,13 +1,12 @@
 #main .poster {
   background-image: url("/imgs/poster-home.png");
-  background-size: cover; /* Hiển thị ảnh nền mà không làm biến dạng nó */
-  background-position: center; /* Hiển thị ảnh nền ở giữa trang */
-  height: 100vh; /* Đặt chiều cao của container là 100% của viewport */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
   display: flex;
   justify-content: start;
   align-items: start;
-  color: $white; /* Màu chữ trắng để tương phản với ảnh nền */
-  // text-align: center;
+  color: $white;
   @include respond(sm) {
     height: 90vh;
   }

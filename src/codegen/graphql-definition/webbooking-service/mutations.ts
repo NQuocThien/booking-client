@@ -185,3 +185,24 @@ const createRegisterSpecialt = gql`
     }
   }
 `;
+const createRegisDoctor = gql`
+  mutation createRegisterDoctor($input: CreateRegisterDoctorInput!) {
+    createRegisterDoctor(input: $input) {
+      id
+    }
+  }
+`;
+const createRegisterPackage = gql`
+  mutation createRegisterPackage($input: CreateRegisterPackageInput!) {
+    createRegisterPackage(input: $input) {
+      id
+    }
+  }
+`;
+const createRegisterVaccination = gql`
+  mutation createRegisterVaccination($input: CreateRegisterVaccineInput!) {
+    createRegisterVaccine(input: $input) {
+      id
+    }
+  }
+`;

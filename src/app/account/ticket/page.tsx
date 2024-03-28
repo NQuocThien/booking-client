@@ -3,11 +3,11 @@
 import { formCustomerUs } from "@/locales/en/Account";
 import { formCustomerVi } from "@/locales/vi/Account";
 import { RootState } from "@/redux/store/store";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { redirect } from "next/navigation";
-import ManaProfile from "@/components/Account/ManaProfile";
 import Link from "next/link";
+import ManagerTicked from "@/components/Account/ManagerTicked";
 
 function CustomerDetailPage() {
   // const dispath = useDispatch();
@@ -15,18 +15,13 @@ function CustomerDetailPage() {
   const currentLan = useSelector((state: RootState) => state.client.language);
   const userInfo = useSelector((state: RootState) => state.client.inforUser);
   const isloginIn = useSelector((state: RootState) => state.client.isLogin);
-  const [login, setLogin] = useState<boolean>(isloginIn);
-
   useLayoutEffect(() => {
     if (currentLan.code === "us") {
       setLan(formCustomerUs);
     } else setLan(formCustomerVi);
   }, [currentLan]);
-  useEffect(() => {
-    setLogin(isloginIn);
-  }, [isloginIn]);
-  isloginIn;
-  if (!login)
+
+  if (!isloginIn)
     return (
       <div className="contaner">
         <Link href={"/account/login"}>
@@ -46,7 +41,7 @@ function CustomerDetailPage() {
   } else if (userInfo && userInfo.customer) {
     return (
       <div className="container">
-        <ManaProfile lan={lan} customerId={userInfo.customer.id} />;
+        <ManagerTicked lan={lan} customerId={userInfo.customer.id} />;
       </div>
     );
   }

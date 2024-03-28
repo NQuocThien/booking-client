@@ -39,8 +39,15 @@ export const accountInforVi = {
 };
 
 export const formCustomerVi = {
+  titleProfileOfRegis: "Thông tin hồ sơ",
+  titleFacilityName: "Cơ sở y tế",
+  titleTictet: "Các phiếu khám",
+
+  titleTicketInfor: "Thông tin phiếu khám",
   titleCreate: "Tạo thông tin cá nhân",
   titleProfile: "Danh sách hồ sơ của bạn",
+  titleGeneralRegis: "Chi tiết đăng ký",
+  titleProfileDetail: "Chi tiết hồ sơ đăng ký",
   subProfile: "Chọn hồ sơ bệnh nhân đăng ký khám",
   titleProfileNone: "Danh sách hồ sơ Trống",
   titleProfileSay: "Hãy tạo hồ sơ",
@@ -70,6 +77,7 @@ export const formCustomerVi = {
   btnSave: "Lưu",
   btnUpdate: "Sửa thông tin",
   messUpdateSuccess: "Đã sửa thông tin cá nhân",
+  mesLogin: "Cần đăng nhập để tiếp tục",
   messCheckCutomer: "Cần tạo thông tin khách hàng trước",
   messError: "Có lổi xảy ra",
   messCreatedProfile: "Đã thêm hồ sơ",
@@ -92,5 +100,8 @@ export const formCustomerVi = {
   askDeleteProfile: "Bạn có muốn xóa hồ sơ này không?",
   messDeletePropfile: "Đã xóa hồ sơ",
   modalClose: "Đống",
-  modalHeader: "Thông tin hố sơ chi tiết",
+  modalbtnCancel: "Hủy",
+  modalBtnRegis: "Đăng ký",
+  modalHeader: "Thông tin hồ sơ chi tiết",
+  modalHeaderRegis: "Thông tin đăng ký khám bệnh",
 };

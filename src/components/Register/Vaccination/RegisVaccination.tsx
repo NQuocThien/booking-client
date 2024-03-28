@@ -4,17 +4,16 @@ import {
   IActionRegis,
   IStateRegister,
   handleChangeServiceState,
-  handleChangeSpecialty,
-  handleSetRegisSpecialty,
+  handleChangeVaccination,
+  handleSetRegisVaccination,
 } from "../reducer";
-import ListRegisSpecialty from "./ListRegisSpcialty";
 import {
   EDayOfWeed,
-  MedicalSpecialties,
   Register,
   ScheduleInput,
   SessionInput,
-  useCreateRegisterMedicalSpecialtyMutation,
+  Vaccination,
+  useCreateRegisterVaccinationMutation,
   useGetAllRegisPendingLazyQuery,
 } from "@/graphql/webbooking-service.generated";
 import DateSession from "../DateSession/DateSession";
@@ -24,13 +23,15 @@ import { Session } from "@/graphql/webbooking-service.generated";
 import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
 import { useRouter } from "next/navigation";
+import ListRegisVaccination from "./ListRegisVaccination";
+import useNProgress from "@/hooks/useNProgress";
 
 interface IProps {
   lan: typeof regisVi;
   state: IStateRegister;
   dispatch: React.Dispatch<IActionRegis>;
 }
-function RegisSpecialty(props: IProps) {
+function RegisVaccinationCpn(props: IProps) {
   const { lan, state, dispatch } = props;
   const [schedule, setSchedule] = useState<ScheduleInput>();
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -40,22 +41,27 @@ function RegisSpecialty(props: IProps) {
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisPendingLazyQuery();
 
-  const [regisSpecialty, { loading: loadingRegisSpecialty }] =
-    useCreateRegisterMedicalSpecialtyMutation();
+  const [regisVaccination, { loading: loadingRegisVaccination }] =
+    useCreateRegisterVaccinationMutation();
 
   // =================================================================
 
   useEffect(() => {
-    if (state.specialty?.workSchedule) {
+    // set list schedule khi chọn dịch vụ
+    useNProgress(loadingRegisVaccination || loadingRegis);
+  }, [loadingRegis, loadingRegisVaccination]);
+
+  useEffect(() => {
+    if (state.vaccination?.workSchedule) {
       const schedulesInput: ScheduleInput[] =
-        state.specialty?.workSchedule.schedule.map((s) => ({
+        state.vaccination?.workSchedule.schedule.map((s) => ({
           ...s,
           dayOfWeek: getEnumValueDayOfWeek(s.dayOfWeek),
         }));
 
       setListSchedule(schedulesInput);
     }
-  }, [state.specialty?.workSchedule]);
+  }, [state.vaccination?.workSchedule]);
 
   useEffect(() => {
     if (dataRegis) {
@@ -68,8 +74,8 @@ function RegisSpecialty(props: IProps) {
             (s) => s.startTime === ss.startTime && s.endTime === ss.endTime
           ).length;
           const maxCount: number =
-            state.specialty?.workSchedule?.numberSlot || 10;
-          console.log("test: ", count, maxCount);
+            state.vaccination?.workSchedule?.numberSlot || 10;
+          console.log("count regis: ", count, maxCount);
           return count <= maxCount;
         }) || [];
       setSessions(sessionFiltered);
@@ -77,17 +83,16 @@ function RegisSpecialty(props: IProps) {
   }, [dataRegis]);
   // =================================================================
   const filterWeekdays = (date: Date): boolean => {
-    // Kiểm tra xem ngày đó có phải là ngày trong quá khứ không
     const currentDate = new Date();
     const maxDate = new Date(currentDate.getTime() + 22 * 24 * 60 * 60 * 1000);
     if (date < currentDate || date > maxDate) {
-      return false; // Nếu là ngày trong quá khứ, trả về false để ẩn ngày đó
+      return false;
     }
 
     const day = date.getDay();
     const dayOfWeek = ["Chủ nhật", "2", "3", "4", "5", "6", "7"][day];
 
-    const workSchedule = state.specialty?.workSchedule;
+    const workSchedule = state.vaccination?.workSchedule;
     const dayOffFacility = state.facility?.dateOff;
     const find = workSchedule?.schedule?.findIndex(
       (item) => item.dayOfWeek === dayOfWeek
@@ -111,8 +116,8 @@ function RegisSpecialty(props: IProps) {
 
   const handleChangeDatePicker = (date: Date) => {
     dispatch(
-      handleSetRegisSpecialty({
-        ...state.regisSpecialty,
+      handleSetRegisVaccination({
+        ...state.regisVaccination,
         date: date,
       })
     );
@@ -120,7 +125,7 @@ function RegisSpecialty(props: IProps) {
       variables: {
         input: {
           date: date,
-          specialtyId: state.regisSpecialty.specialtyId,
+          vaccineId: state.regisVaccination.vaccineId,
         },
       },
     });
@@ -151,40 +156,38 @@ function RegisSpecialty(props: IProps) {
     }
   };
   // =================================================================
-  const handleClickSpecialty = (specialty: MedicalSpecialties) => {
-    dispatch(handleChangeSpecialty(specialty));
+  const handleClickVaccine = (vaccine: Vaccination) => {
+    dispatch(handleChangeVaccination(vaccine));
     dispatch(
-      handleSetRegisSpecialty({
-        ...state.regisSpecialty,
-        specialtyId: specialty.id,
+      handleSetRegisVaccination({
+        ...state.regisVaccination,
+        vaccineId: vaccine.id,
       })
     );
   };
 
-  if (state.regisSpecialty.specialtyId === "") {
+  if (state.regisVaccination.vaccineId === "") {
     return (
       <div className="session px-2">
-        {state.regisSpecialty.specialtyId === "" && (
-          <ListRegisSpecialty
-            onBack={() =>
-              dispatch(
-                handleChangeServiceState({
-                  ...state.svrState,
-                  specialty: false,
-                })
-              )
-            }
-            onClick={handleClickSpecialty}
-            lan={lan}
-            specialties={state.specialties}
-          />
-        )}
+        <ListRegisVaccination
+          onBack={() =>
+            dispatch(
+              handleChangeServiceState({
+                ...state.svrState,
+                vaccination: false,
+              })
+            )
+          }
+          onClick={handleClickVaccine}
+          lan={lan}
+          vaccinations={state.vaccinations}
+        />
       </div>
     );
   } else if (
-    state.regisSpecialty.date === "" ||
-    state.regisSpecialty.session.startTime === "" ||
-    state.regisSpecialty.session.endTime === ""
+    state.regisVaccination.date === "" ||
+    state.regisVaccination.session.startTime === "" ||
+    state.regisVaccination.session.endTime === ""
   ) {
     return (
       <div className="session px-2">
@@ -195,8 +198,8 @@ function RegisSpecialty(props: IProps) {
           sessions={sessions}
           onClickSession={(session) => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisVaccination({
+                ...state.regisVaccination,
                 session: {
                   startTime: session.startTime,
                   endTime: session.endTime,
@@ -208,9 +211,9 @@ function RegisSpecialty(props: IProps) {
           onChangeDate={handleChangeDatePicker}
           onClickBack={() => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
-                specialtyId: "",
+              handleSetRegisVaccination({
+                ...state.regisVaccination,
+                vaccineId: "",
               })
             );
           }}
@@ -220,22 +223,22 @@ function RegisSpecialty(props: IProps) {
   }
   return (
     <div className="session px-2">
-      {state.regisSpecialty.specialtyId !== "" && (
+      {state.regisVaccination.vaccineId !== "" && (
         <ListProfile
           state={state}
           onClickProfile={(profile) => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisVaccination({
+                ...state.regisVaccination,
                 profileId: profile.id,
               })
             );
           }}
           onRegis={async () => {
-            if (state.svrState.specialty === true) {
-              await regisSpecialty({
+            if (state.svrState.vaccination === true) {
+              await regisVaccination({
                 variables: {
-                  input: state.regisSpecialty,
+                  input: state.regisVaccination,
                 },
               })
                 .then(() => {
@@ -250,8 +253,8 @@ function RegisSpecialty(props: IProps) {
           }}
           onBack={() => {
             dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
+              handleSetRegisVaccination({
+                ...state.regisVaccination,
                 date: "",
                 session: {
                   endTime: "",
@@ -265,4 +268,4 @@ function RegisSpecialty(props: IProps) {
     </div>
   );
 }
-export default RegisSpecialty;
+export default RegisVaccinationCpn;

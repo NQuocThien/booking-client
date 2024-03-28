@@ -17,7 +17,7 @@ export const headerVi = {
   texBtnAccout: "Tài khoản",
   texBtnInfo: "Thông tin cá nhân",
   texBtnProfile: "Hồ sơ bệnh nhân",
-  texBtnTiked: "Phiếu khám bệnh",
+  texBtnTiket: "Phiếu khám bệnh",
   texBtnNotification: "Thông báo",
   texBtnLogout: "Đăng xuất",
 };

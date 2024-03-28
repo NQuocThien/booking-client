@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Ticket",
+  title: "Profile",
 };
 export default function Layout({
   children,

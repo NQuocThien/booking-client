@@ -30,7 +30,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (isloginIn) {
-      router.push("./");
+      router.back();
     }
   }, [isloginIn]);
 

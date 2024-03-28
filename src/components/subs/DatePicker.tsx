@@ -18,7 +18,7 @@ const DatePickerCpn: React.FC<IPorps> = (props) => {
         selected={selectedDate}
         onChange={(date: Date) => {
           if (date) {
-            // const formattedDate = format(date, "yyyy-MM-dd");
+            const formattedDate = format(date, "yyyy-MM-dd");
             onChange(date);
           }
           setSelectedDate(date);

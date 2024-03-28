@@ -41,7 +41,13 @@ export const accountInforUs = {
 
 export const formCustomerUs = {
   titleCreate: "Create personal information",
+  titleFacilityName: "Medical Facility",
+  titleTictet: "Tickets",
+  titleTicketInfor: "Ticket Information",
+  titleProfileOfRegis: "Proflie infor",
   subProfile: "Select a patient profile to register for an appointment",
+  titleGeneralRegis: "Registration Details",
+  titleProfileDetail: "Registration Profile Details",
   btnCreateProfile: "Create new profile",
   btnListProfile: "Profile list",
   btnUpdateProfile: "Update profile",
@@ -73,6 +79,7 @@ export const formCustomerUs = {
   btnUpdate: "Update information",
   messUpdateSuccess: "Personal information updated successfully",
   messCheckLogin: "Login Please!",
+  mesLogin: "Login Please!",
   messError: "An error occurred",
   messCreatedProfile: "Profile created successfully",
   messUpdatedProfile: "Profile updated successfully",
@@ -95,6 +102,9 @@ export const formCustomerUs = {
   labelSon: "Son",
   messDeleteProfile: "Profile deleted successfully",
   modalClose: "Close",
+  modalbtnCancel: "Cancel",
+  modalBtnRegis: "Register",
   modalHeader: "Detailed Profile Information",
   messCheckCutomer: "Create cutomer information please!",
+  modalHeaderRegis: "Registration Information",
 };

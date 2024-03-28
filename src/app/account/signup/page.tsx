@@ -1,20 +1,15 @@
 "use client";
-import FormLogin from "@/components/Account/FormLogin";
 import {
   CreateUserInput,
-  User,
   useSignupMutation,
 } from "@/graphql/webbooking-service.generated";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
-import { login, setUserInfo } from "@/redux/store/client";
 import { showToast } from "@/components/subs/toast";
-import { setToken } from "@/utils/tools";
 import { useRouter } from "next/navigation";
 import { accountVi } from "@/locales/vi/Account";
 import { accountUs } from "@/locales/en/Account";
-import { ErrorMes } from "@/assets/contains/emun";
 import FormSignUp from "@/components/Account/FormSignUp";
 function LoginPage() {
   const [signUpUser, { data, loading, error }] = useSignupMutation();

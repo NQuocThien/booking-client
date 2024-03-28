@@ -2,26 +2,34 @@
 import { Col, Container, Row } from "react-bootstrap";
 import TypeOfServive from "./TypeOfService";
 import { useEffect, useLayoutEffect, useReducer } from "react";
-import { EtypeService } from "@/assets/contains/emun";
 import {
+  useGetListDoctorRegisInfoByFacilityIdLazyQuery,
   useGetListMedicalSpecialtyRegisInfoByFacilityIdLazyQuery,
+  useGetListPackageRegisInfoByFacilityIdLazyQuery,
+  useGetListVaccinationRegisInfoByFacilityIdLazyQuery,
   useGetMedicalFacilityRegisInfoByIdQuery,
 } from "@/graphql/webbooking-service.generated";
 import { regisVi } from "@/locales/vi/Facility";
 // import RegisSpecialty from "./Spcialty/ListRegisSpcialty";
 import {
   handleChangeServiceState,
-  handleSetRegisSpecialty,
+  handleSetDoctors,
+  handleSetFacility,
+  handleSetPackages,
   handleSetSpecialties,
+  handleSetVaccinations,
   initState,
   reducer,
 } from "./reducer";
 import InforRegis from "./InforRegis";
 import RegisSpecialty from "./Spcialty/RegisSpecialty";
+import useNProgress from "@/hooks/useNProgress";
+import RegisDoctorCpn from "./Doctor/RegisDoctor";
+import RegisPackageCpn from "./Package/RegisPackage";
+import RegisVaccinationCpn from "./Vaccination/RegisVaccination";
 
 interface IProps {
   facilityId: string;
-  type: EtypeService | undefined;
   lan: typeof regisVi;
 }
 interface EServiceState {
@@ -32,7 +40,7 @@ interface EServiceState {
 }
 
 function Register(props: IProps) {
-  const { facilityId, type, lan } = props;
+  const { facilityId, lan } = props;
 
   const [state, dispatch] = useReducer(reducer, initState);
 
@@ -46,12 +54,26 @@ function Register(props: IProps) {
         input: facilityId,
         isClient: true,
       },
-    });
+    }); // thông tin tổng quan về csyt
+
   const [getDataSpecialty, { data: dataSpecialty, loading: loadingSpecialty }] =
-    useGetListMedicalSpecialtyRegisInfoByFacilityIdLazyQuery();
+    useGetListMedicalSpecialtyRegisInfoByFacilityIdLazyQuery(); //thông tin chuyên khoa của csyt
+
+  const [getDataDoctor, { data: dataDoctors, loading: loadingDoctors }] =
+    useGetListDoctorRegisInfoByFacilityIdLazyQuery(); //thông tin bác sỉ
+
+  const [getDataPackage, { data: dataPackages, loading: loadingPackages }] =
+    useGetListPackageRegisInfoByFacilityIdLazyQuery(); //thông tin gói khám
+
+  const [
+    getDataVaccinations,
+    { data: dataVaccination, loading: loadingVaccination },
+  ] = useGetListVaccinationRegisInfoByFacilityIdLazyQuery(); //thông tin gói khám
+
   // =================================================================
   useLayoutEffect(() => {
     if (dataFacility) {
+      dispatch(handleSetFacility(dataFacility.getMedicalFacilityById));
       var serviceState: EServiceState = {
         doctor: undefined,
         specialty: undefined,
@@ -75,6 +97,23 @@ function Register(props: IProps) {
   }, [dataFacility]);
 
   useEffect(() => {
+    useNProgress(
+      loading ||
+        loadingSpecialty ||
+        loadingDoctors ||
+        loadingPackages ||
+        loadingVaccination
+    );
+  }, [
+    loading,
+    loadingSpecialty,
+    loadingDoctors,
+    loadingPackages,
+    loadingVaccination,
+  ]);
+  // ================== LOAD DATA =================
+  useEffect(() => {
+    // load thông tin theo trạng thái từ srvState
     if (state.svrState.specialty === true) {
       getDataSpecialty({
         variables: {
@@ -82,14 +121,61 @@ function Register(props: IProps) {
           isClient: true,
         },
       });
+    } else if (state.svrState.doctor === true) {
+      getDataDoctor({
+        variables: {
+          input: facilityId,
+          isClient: true,
+        },
+      });
+    } else if (state.svrState.package === true) {
+      getDataPackage({
+        variables: {
+          input: facilityId,
+          isClient: true,
+        },
+      });
+    } else if (state.svrState.vaccination === true) {
+      getDataVaccinations({
+        variables: {
+          input: facilityId,
+          isClient: true,
+        },
+      });
     }
   }, [state.svrState]);
+
+  // ================== SET DATA =================
+  useEffect(() => {
+    if (dataDoctors && dataDoctors.getMedicalFacilityById.doctors) {
+      dispatch(handleSetDoctors(dataDoctors.getMedicalFacilityById.doctors));
+    }
+  }, [dataDoctors]);
+
+  useEffect(() => {
+    if (dataPackages && dataPackages.getMedicalFacilityById.packages) {
+      dispatch(handleSetPackages(dataPackages.getMedicalFacilityById.packages));
+    }
+  }, [dataPackages]);
+
+  useEffect(() => {
+    if (
+      dataVaccination &&
+      dataVaccination.getMedicalFacilityById.vaccinations
+    ) {
+      dispatch(
+        handleSetVaccinations(
+          dataVaccination.getMedicalFacilityById.vaccinations
+        )
+      );
+    }
+  }, [dataVaccination]);
+
   useEffect(() => {
     if (
       dataSpecialty &&
       dataSpecialty.getMedicalFacilityById.medicalSpecialties
     ) {
-      console.log("Chang Specifically", dataSpecialty.getMedicalFacilityById);
       dispatch(
         handleSetSpecialties(
           dataSpecialty.getMedicalFacilityById.medicalSpecialties
@@ -97,17 +183,9 @@ function Register(props: IProps) {
       );
     }
   }, [dataSpecialty]);
-  // =================================================================
 
-  const handleClickSpecialty = (specialtyId: string) => {
-    dispatch(
-      handleSetRegisSpecialty({
-        ...state.regisSpecialty,
-        specialtyId: specialtyId,
-      })
-    );
-  };
-  console.log("==> test State: ", state.svrState);
+  // =================================================================
+  console.log("test State: ", state);
   return (
     <Container>
       {!(
@@ -118,9 +196,7 @@ function Register(props: IProps) {
       ) && (
         <TypeOfServive
           onClick={(state) => {
-            console.log("click: ", state);
             dispatch(handleChangeServiceState(state));
-            // setSvrState(state);
           }}
           srvState={state.svrState}
           lan={lan}
@@ -131,24 +207,26 @@ function Register(props: IProps) {
         state.svrState.vaccination ||
         state.svrState.specialty) && (
         <Row className="service-main">
-          <Col lg={2} md={2} className="infor p-2">
-            <InforRegis
-              lan={lan}
-              facilityAddress={
-                dataFacility?.getMedicalFacilityById.address || ""
-              }
-              facilityName={
-                dataFacility?.getMedicalFacilityById.medicalFacilityName || ""
-              }
-            />
+          <Col lg={2} md={12} className="infor p-2">
+            <InforRegis lan={lan} state={state} />
           </Col>
-          <Col lg={10} md={10} className="option py-2">
-            {state.svrState.doctor && <p>Bác sỉ</p>}
+          <Col lg={10} md={12} className="option py-2">
+            {state.svrState.doctor && (
+              <RegisDoctorCpn lan={lan} state={state} dispatch={dispatch} />
+            )}
             {state.svrState.specialty && (
               <RegisSpecialty dispatch={dispatch} lan={lan} state={state} />
             )}
-            {state.svrState.package && <h1>Gói khám</h1>}
-            {state.svrState.vaccination && <h1>Vaccine</h1>}
+            {state.svrState.package && (
+              <RegisPackageCpn dispatch={dispatch} lan={lan} state={state} />
+            )}
+            {state.svrState.vaccination && (
+              <RegisVaccinationCpn
+                dispatch={dispatch}
+                lan={lan}
+                state={state}
+              />
+            )}
           </Col>
         </Row>
       )}
