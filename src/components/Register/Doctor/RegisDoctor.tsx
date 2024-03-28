@@ -198,6 +198,7 @@ function RegisDoctorCpn(props: IProps) {
           state={state}
           dispatch={dispatch}
           sessions={sessions}
+          regisLoading={loadingRegis}
           onClickSession={(session) => {
             dispatch(
               handleSetRegisDoctor({
@@ -219,6 +220,7 @@ function RegisDoctorCpn(props: IProps) {
                 date: "",
               })
             );
+            setSessions([]);
           }}
         />
       </div>
@@ -265,6 +267,7 @@ function RegisDoctorCpn(props: IProps) {
                 },
               })
             );
+            setSessions([]);
           }}
         />
       )}

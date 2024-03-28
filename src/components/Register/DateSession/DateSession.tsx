@@ -1,11 +1,12 @@
 import DatePickerCpn from "@/components/subs/DatePicker";
 import { regisVi } from "@/locales/vi/Facility";
-import { Button, Row } from "react-bootstrap";
+import { Button, Row, Spinner } from "react-bootstrap";
 import { IActionRegis, IStateRegister } from "../reducer";
 import { Session } from "@/graphql/webbooking-service.generated";
 interface IProps {
   lan: typeof regisVi;
   state: IStateRegister;
+  regisLoading: boolean;
   dispatch: React.Dispatch<IActionRegis>;
   filterDatePicker: (date: Date) => boolean;
   sessions: Session[];
@@ -17,6 +18,7 @@ function DateSession(props: IProps) {
   const {
     lan,
     sessions,
+    regisLoading,
     filterDatePicker,
     onChangeDate,
     onClickSession,
@@ -31,21 +33,24 @@ function DateSession(props: IProps) {
       </div>
       <div className="">
         <h4 className="text-primary p-2">{lan.titleSession}</h4>
-        <Row>
-          <div className="px-5 my-3">
-            {sessions.map((ss, i) => (
-              <Button
-                variant="outline-success"
-                className="m-1"
-                key={i}
-                onClick={() => {
-                  onClickSession(ss);
-                }}>
-                {ss.startTime} - {ss.endTime}
-              </Button>
-            ))}
-          </div>
-        </Row>
+        {!regisLoading && (
+          <Row>
+            <div className="px-5 my-3">
+              {sessions.map((ss, i) => (
+                <Button
+                  variant="outline-success"
+                  className="m-1"
+                  key={i}
+                  onClick={() => {
+                    onClickSession(ss);
+                  }}>
+                  {ss.startTime} - {ss.endTime}
+                </Button>
+              ))}
+            </div>
+          </Row>
+        )}
+        {regisLoading && <Spinner variant="primary" />}
       </div>
       <div>
         <Button

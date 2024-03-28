@@ -496,3 +496,52 @@ const getTotalDoctorsCountForClient = gql`
     getTotalDoctorsCountForClient(filter: $filter, facilityId: $facilityId)
   }
 `;
+
+const getTotalPackagesCountForClient = gql`
+  query getTotalPackagesCountForClient($search: String, $facilityId: String!) {
+    getTotalPackagesCountForClient(search: $search, facilityId: $facilityId)
+  }
+`;
+const getAllPackagePaginationOfFacilityForClient = gql`
+  query getAllPackagePaginationOfFacilityForClient(
+    $search: String
+    $page: Float!
+    $limit: Float!
+    $sortField: String
+    $sortOrder: String
+    $facilityId: String!
+  ) {
+    getAllPackagePaginationOfFacilityForClient(
+      search: $search
+      page: $page
+      limit: $limit
+      sortField: $sortField
+      sortOrder: $sortOrder
+      facilityId: $facilityId
+    ) {
+      id
+      medicalFactilitiesId
+      packageName
+      gender
+      price
+      image {
+        filename
+        type
+        url
+      }
+      examinationDetails
+      workSchedule {
+        dayOff
+        status
+        numberSlot
+        schedule {
+          dayOfWeek
+          sessions {
+            startTime
+            endTime
+          }
+        }
+      }
+    }
+  }
+`;

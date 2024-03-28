@@ -6,7 +6,12 @@ import {
 } from "@/graphql/webbooking-service.generated";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { formatDate } from "@/utils/tools";
-import { FaBuilding, FaCheck, FaPhone } from "react-icons/fa";
+import {
+  FaBriefcaseMedical,
+  FaBuilding,
+  FaCheck,
+  FaPhone,
+} from "react-icons/fa";
 import {
   MdAddLocation,
   MdOutlineEmail,
@@ -200,6 +205,17 @@ function ListProfile(props: IProps) {
                     <IoLocationOutline />
                   </span>
                   {state.facility?.address}
+                </h6>
+                <h6>
+                  <span className="text-primary me-2">
+                    <FaBriefcaseMedical />
+                  </span>
+
+                  {state.svrState.specialty && state.specialty?.specialtyName}
+                  {state.svrState.doctor &&
+                    `${lan.subInfoDoctor}. ${state.doctor?.doctorName}`}
+                  {state.svrState.vaccination && state.vaccination?.vaccineName}
+                  {state.svrState.package && state.package?.packageName}
                 </h6>
                 <h6>
                   <span className="text-primary me-2">

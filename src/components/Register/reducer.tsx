@@ -26,7 +26,7 @@ export interface IStateRegister {
   regisSpecialty: CreateRegisterSpecialtyInput;
   // ----- DOCTOR -----
   doctors: Doctor[];
-  doctor: MedicalSpecialties | undefined;
+  doctor: Doctor | undefined;
   regisDoctor: CreateRegisterDoctorInput;
 
   // ----- PACKAGE -----

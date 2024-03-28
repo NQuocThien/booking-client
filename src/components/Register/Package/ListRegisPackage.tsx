@@ -1,21 +1,82 @@
-import { Package } from "@/graphql/webbooking-service.generated";
+import { IPagination } from "@/assets/contains/item-interface";
+import PaginationCpn from "@/components/subs/Pagination";
+import {
+  Package,
+  useGetAllPackagePaginationOfFacilityForClientQuery,
+  useGetTotalPackagesCountForClientQuery,
+} from "@/graphql/webbooking-service.generated";
+import useNProgress from "@/hooks/useNProgress";
 import { regisVi } from "@/locales/vi/Facility";
 import { formatter } from "@/utils/tools";
+import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 
 interface IProps {
-  packages: Package[];
+  facilityId: string | undefined;
   lan: typeof regisVi;
   onClick: (p: Package) => void;
   onBack: () => void;
 }
-
+interface IFilter {
+  pagination: IPagination;
+  search: string;
+}
 function ListRegisPackage(props: IProps) {
-  const { packages, lan, onClick, onBack } = props;
+  const { facilityId, lan, onClick, onBack } = props;
+
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [filter, setFilter] = useState<IFilter>({
+    pagination: {
+      current: 1,
+      total: 1,
+      limit: 10,
+    },
+    search: "",
+  });
+  // =================================================================
+  const { data, loading } = useGetAllPackagePaginationOfFacilityForClientQuery({
+    variables: {
+      facilityId: facilityId || "",
+      limit: filter.pagination.limit || 10,
+      page: filter.pagination.current,
+      search: filter.search,
+    },
+  });
+
+  const { data: dataTotal, loading: loadTotalData } =
+    useGetTotalPackagesCountForClientQuery({
+      variables: {
+        facilityId: facilityId || "",
+        search: filter.search,
+      },
+    });
+  // =================================================================
+
+  useEffect(() => {
+    if (data) {
+      setPackages(data.getAllPackagePaginationOfFacilityForClient);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (dataTotal) {
+      setFilter((pre) => ({
+        ...pre,
+        pagination: {
+          ...pre.pagination,
+          total: dataTotal.getTotalPackagesCountForClient,
+        },
+      }));
+    }
+  }, [dataTotal]);
+
+  useEffect(() => {
+    useNProgress(loading || loadTotalData);
+  }, [loading, loadTotalData]);
 
   return (
     <div>
-      <h4 className="text-primary text-center">{lan.titleSpecialties}</h4>
+      <h4 className="text-primary text-center pt-3">{lan.titlePackage}</h4>
       {packages && (
         <Table hover size="sm">
           <thead>
@@ -65,6 +126,24 @@ function ListRegisPackage(props: IProps) {
           </tbody>
         </Table>
       )}
+      <div className="d-flex justify-content-center">
+        <PaginationCpn
+          setPageActive={(page) => {
+            setFilter((pre) => ({
+              ...pre,
+              pagination: {
+                ...pre.pagination,
+                current: page,
+              },
+            }));
+          }}
+          totalPage={
+            (filter.pagination.limit &&
+              Math.ceil(filter.pagination.total / filter.pagination.limit)) ||
+            Math.ceil(filter.pagination.total / 10)
+          }
+        />
+      </div>
       <div>
         <Button
           variant="light"

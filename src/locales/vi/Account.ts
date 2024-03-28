@@ -48,6 +48,7 @@ export const formCustomerVi = {
   titleProfile: "Danh sách hồ sơ của bạn",
   titleGeneralRegis: "Chi tiết đăng ký",
   titleProfileDetail: "Chi tiết hồ sơ đăng ký",
+  subInfoDoctor: "BS",
   subProfile: "Chọn hồ sơ bệnh nhân đăng ký khám",
   titleProfileNone: "Danh sách hồ sơ Trống",
   titleProfileSay: "Hãy tạo hồ sơ",

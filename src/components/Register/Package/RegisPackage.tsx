@@ -181,7 +181,7 @@ function RegisPackageCpn(props: IProps) {
             }
             onClick={handleClickPackage}
             lan={lan}
-            packages={state.packages}
+            facilityId={state.facility?.id}
           />
         )}
       </div>
@@ -198,6 +198,7 @@ function RegisPackageCpn(props: IProps) {
           state={state}
           dispatch={dispatch}
           sessions={sessions}
+          regisLoading={loadingRegis}
           onClickSession={(session) => {
             dispatch(
               handleSetRegisPackage({

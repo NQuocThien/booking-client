@@ -4,7 +4,6 @@ import PaginationCpn from "@/components/subs/Pagination";
 import {
   Doctor,
   FilterDoctorInput,
-  MedicalSpecialties,
   useGetAllDoctorPaginationOfFacilityForClientQuery,
   useGetTotalDoctorsCountForClientQuery,
 } from "@/graphql/webbooking-service.generated";
@@ -130,6 +129,14 @@ function ListRegisDoctor(props: IProps) {
                     <h6 className="text-primary">
                       <strong>{doctor.doctorName}</strong>
                     </h6>
+                    <div>
+                      {" "}
+                      <i>
+                        {doctor.academicTitle && `${doctor.academicTitle} /`}{" "}
+                        {doctor.degree}
+                      </i>{" "}
+                    </div>
+
                     <p className="mb-1">
                       {lan.lableSchedule}: {lan.labelDayOfWeek}{" "}
                       {doctor.workSchedule?.schedule.map((s, i) => (
@@ -164,10 +171,10 @@ function ListRegisDoctor(props: IProps) {
                     </div>
                   </div>
                 </td>
-                <td className="d-none d-md-table-cell">
+                <td className="d-none d-md-table-cell align-middle ">
                   {formatter.format(doctor.price)}
                 </td>
-                <td className="">
+                <td className="align-middle">
                   <Button
                     size="sm"
                     className="me-3 mb-2"

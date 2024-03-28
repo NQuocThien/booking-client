@@ -52,6 +52,7 @@ export const formCustomerUs = {
   btnListProfile: "Profile list",
   btnUpdateProfile: "Update profile",
   titleProfile: "Your profile list",
+  subInfoDoctor: "Doctor",
   titleProfileNone: "Empty profile list",
   titleProfileSay: "Create a profile",
   titleJob: "Occupation",

@@ -803,6 +803,7 @@ export type Query = {
   getAllPackageByFacilityId: Array<Package>;
   getAllPackagePaginationByStaff: Array<Package>;
   getAllPackagePaginationOfFacility: Array<Package>;
+  getAllPackagePaginationOfFacilityForClient: Array<Package>;
   getAllPackageSelect: Array<Package>;
   getAllProfile: Array<Profile>;
   getAllRegisPending: Array<Register>;
@@ -837,6 +838,7 @@ export type Query = {
   getTotalFacilitiesCount: Scalars['Float']['output'];
   getTotalMedicalSpecialtiesCount: Scalars['Float']['output'];
   getTotalPackagesCount: Scalars['Float']['output'];
+  getTotalPackagesCountForClient: Scalars['Float']['output'];
   getTotalVaccinationsCount: Scalars['Float']['output'];
   getUser: User;
   getUserDoctorPending: Array<User>;
@@ -961,6 +963,16 @@ export type QueryGetAllPackagePaginationOfFacilityArgs = {
   sortOrder?: InputMaybe<Scalars['String']['input']>;
   staffId?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetAllPackagePaginationOfFacilityForClientArgs = {
+  facilityId: Scalars['String']['input'];
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
+  sortField?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1140,6 +1152,12 @@ export type QueryGetTotalPackagesCountArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   staffId?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetTotalPackagesCountForClientArgs = {
+  facilityId?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1671,6 +1689,26 @@ export type GetTotalDoctorsCountForClientQueryVariables = Exact<{
 
 
 export type GetTotalDoctorsCountForClientQuery = { __typename?: 'Query', getTotalDoctorsCountForClient: number };
+
+export type GetTotalPackagesCountForClientQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  facilityId: Scalars['String']['input'];
+}>;
+
+
+export type GetTotalPackagesCountForClientQuery = { __typename?: 'Query', getTotalPackagesCountForClient: number };
+
+export type GetAllPackagePaginationOfFacilityForClientQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  page: Scalars['Float']['input'];
+  limit: Scalars['Float']['input'];
+  sortField?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
+  facilityId: Scalars['String']['input'];
+}>;
+
+
+export type GetAllPackagePaginationOfFacilityForClientQuery = { __typename?: 'Query', getAllPackagePaginationOfFacilityForClient: Array<{ __typename?: 'Package', id: string, medicalFactilitiesId: string, packageName: string, gender: string, price: number, examinationDetails: string, image: { __typename?: 'LinkImage', filename: string, type: string, url: string }, workSchedule: { __typename?: 'WorkSchedule', dayOff: Array<any>, status: string, numberSlot: number, schedule: Array<{ __typename?: 'Schedule', dayOfWeek: string, sessions: Array<{ __typename?: 'Session', startTime: string, endTime: string }> }> } }> };
 
 
 export const UpdateUserDocument = gql`
@@ -3187,6 +3225,119 @@ export type GetTotalDoctorsCountForClientQueryHookResult = ReturnType<typeof use
 export type GetTotalDoctorsCountForClientLazyQueryHookResult = ReturnType<typeof useGetTotalDoctorsCountForClientLazyQuery>;
 export type GetTotalDoctorsCountForClientSuspenseQueryHookResult = ReturnType<typeof useGetTotalDoctorsCountForClientSuspenseQuery>;
 export type GetTotalDoctorsCountForClientQueryResult = Apollo.QueryResult<GetTotalDoctorsCountForClientQuery, GetTotalDoctorsCountForClientQueryVariables>;
+export const GetTotalPackagesCountForClientDocument = gql`
+    query getTotalPackagesCountForClient($search: String, $facilityId: String!) {
+  getTotalPackagesCountForClient(search: $search, facilityId: $facilityId)
+}
+    `;
+
+/**
+ * __useGetTotalPackagesCountForClientQuery__
+ *
+ * To run a query within a React component, call `useGetTotalPackagesCountForClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTotalPackagesCountForClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTotalPackagesCountForClientQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      facilityId: // value for 'facilityId'
+ *   },
+ * });
+ */
+export function useGetTotalPackagesCountForClientQuery(baseOptions: Apollo.QueryHookOptions<GetTotalPackagesCountForClientQuery, GetTotalPackagesCountForClientQueryVariables> & ({ variables: GetTotalPackagesCountForClientQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTotalPackagesCountForClientQuery, GetTotalPackagesCountForClientQueryVariables>(GetTotalPackagesCountForClientDocument, options);
+      }
+export function useGetTotalPackagesCountForClientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTotalPackagesCountForClientQuery, GetTotalPackagesCountForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTotalPackagesCountForClientQuery, GetTotalPackagesCountForClientQueryVariables>(GetTotalPackagesCountForClientDocument, options);
+        }
+export function useGetTotalPackagesCountForClientSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTotalPackagesCountForClientQuery, GetTotalPackagesCountForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTotalPackagesCountForClientQuery, GetTotalPackagesCountForClientQueryVariables>(GetTotalPackagesCountForClientDocument, options);
+        }
+export type GetTotalPackagesCountForClientQueryHookResult = ReturnType<typeof useGetTotalPackagesCountForClientQuery>;
+export type GetTotalPackagesCountForClientLazyQueryHookResult = ReturnType<typeof useGetTotalPackagesCountForClientLazyQuery>;
+export type GetTotalPackagesCountForClientSuspenseQueryHookResult = ReturnType<typeof useGetTotalPackagesCountForClientSuspenseQuery>;
+export type GetTotalPackagesCountForClientQueryResult = Apollo.QueryResult<GetTotalPackagesCountForClientQuery, GetTotalPackagesCountForClientQueryVariables>;
+export const GetAllPackagePaginationOfFacilityForClientDocument = gql`
+    query getAllPackagePaginationOfFacilityForClient($search: String, $page: Float!, $limit: Float!, $sortField: String, $sortOrder: String, $facilityId: String!) {
+  getAllPackagePaginationOfFacilityForClient(
+    search: $search
+    page: $page
+    limit: $limit
+    sortField: $sortField
+    sortOrder: $sortOrder
+    facilityId: $facilityId
+  ) {
+    id
+    medicalFactilitiesId
+    packageName
+    gender
+    price
+    image {
+      filename
+      type
+      url
+    }
+    examinationDetails
+    workSchedule {
+      dayOff
+      status
+      numberSlot
+      schedule {
+        dayOfWeek
+        sessions {
+          startTime
+          endTime
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAllPackagePaginationOfFacilityForClientQuery__
+ *
+ * To run a query within a React component, call `useGetAllPackagePaginationOfFacilityForClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllPackagePaginationOfFacilityForClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllPackagePaginationOfFacilityForClientQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      sortField: // value for 'sortField'
+ *      sortOrder: // value for 'sortOrder'
+ *      facilityId: // value for 'facilityId'
+ *   },
+ * });
+ */
+export function useGetAllPackagePaginationOfFacilityForClientQuery(baseOptions: Apollo.QueryHookOptions<GetAllPackagePaginationOfFacilityForClientQuery, GetAllPackagePaginationOfFacilityForClientQueryVariables> & ({ variables: GetAllPackagePaginationOfFacilityForClientQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllPackagePaginationOfFacilityForClientQuery, GetAllPackagePaginationOfFacilityForClientQueryVariables>(GetAllPackagePaginationOfFacilityForClientDocument, options);
+      }
+export function useGetAllPackagePaginationOfFacilityForClientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllPackagePaginationOfFacilityForClientQuery, GetAllPackagePaginationOfFacilityForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllPackagePaginationOfFacilityForClientQuery, GetAllPackagePaginationOfFacilityForClientQueryVariables>(GetAllPackagePaginationOfFacilityForClientDocument, options);
+        }
+export function useGetAllPackagePaginationOfFacilityForClientSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllPackagePaginationOfFacilityForClientQuery, GetAllPackagePaginationOfFacilityForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllPackagePaginationOfFacilityForClientQuery, GetAllPackagePaginationOfFacilityForClientQueryVariables>(GetAllPackagePaginationOfFacilityForClientDocument, options);
+        }
+export type GetAllPackagePaginationOfFacilityForClientQueryHookResult = ReturnType<typeof useGetAllPackagePaginationOfFacilityForClientQuery>;
+export type GetAllPackagePaginationOfFacilityForClientLazyQueryHookResult = ReturnType<typeof useGetAllPackagePaginationOfFacilityForClientLazyQuery>;
+export type GetAllPackagePaginationOfFacilityForClientSuspenseQueryHookResult = ReturnType<typeof useGetAllPackagePaginationOfFacilityForClientSuspenseQuery>;
+export type GetAllPackagePaginationOfFacilityForClientQueryResult = Apollo.QueryResult<GetAllPackagePaginationOfFacilityForClientQuery, GetAllPackagePaginationOfFacilityForClientQueryVariables>;
 export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -3396,7 +3547,7 @@ export type ProfileFieldPolicy = {
 	register?: FieldPolicy<any> | FieldReadFunction<any>,
 	relationship?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityPagination' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationSelect' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfiles' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalMedicalSpecialtiesCount' | 'getTotalPackagesCount' | 'getTotalVaccinationsCount' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityPagination' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationSelect' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfiles' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalMedicalSpecialtiesCount' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	checklogin?: FieldPolicy<any> | FieldReadFunction<any>,
 	checkloginCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -3421,6 +3572,7 @@ export type QueryFieldPolicy = {
 	getAllPackageByFacilityId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackagePaginationByStaff?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackagePaginationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllPackagePaginationOfFacilityForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackageSelect?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllProfile?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllRegisPending?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -3455,6 +3607,7 @@ export type QueryFieldPolicy = {
 	getTotalFacilitiesCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalMedicalSpecialtiesCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalPackagesCount?: FieldPolicy<any> | FieldReadFunction<any>,
+	getTotalPackagesCountForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalVaccinationsCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	getUserDoctorPending?: FieldPolicy<any> | FieldReadFunction<any>,
