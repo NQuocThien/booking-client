@@ -1,5 +1,28 @@
 export const asscessKey =
   process.env.NEXT_PUBLIC_ACCESS_TOKEN || "access_token";
+export const setLocalStorage = (key: string, value: string | object | []) => {
+  if (typeof value === "string") {
+    window.localStorage.setItem(key, value);
+  } else {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }
+};
+
+export const getLocalStorage = (key: string): string | undefined => {
+  try {
+    const isBrowser = typeof window !== "undefined";
+    if (isBrowser) {
+      const storedValue = localStorage.getItem(key);
+      if (storedValue) return storedValue;
+    }
+    return undefined;
+  } catch (error) {
+    // Xử lý lỗi nếu có
+    console.error("Lỗi khi truy xuất từ localStorage:");
+    return undefined;
+  }
+};
+
 export function setCookie(name: string, value: string, days: number) {
   let expires: string = "";
   if (days) {

@@ -3,17 +3,18 @@
 import Footer from "./Footer";
 import Header from "./Header";
 import { useDispatch } from "react-redux";
-import { login, setUserInfo, logout } from "@/redux/store/client";
+import { login, setUserInfo, logout, setLanguage } from "@/redux/store/client";
 import {
   GeneralInfor,
   useCheckloginCustomerLazyQuery,
   useGetGeneralInforQuery,
 } from "@/graphql/webbooking-service.generated";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { checkExpirationToken, getToken } from "@/utils/tools";
+import { checkExpirationToken, getLocalStorage, getToken } from "@/utils/tools";
 import ToastsPcn from "../subs/toast";
 import useNProgress from "../../hooks/useNProgress";
 import "react-toastify/dist/ReactToastify.css";
+import { languages } from "@/assets/contains/emun";
 function MainLayout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const { data, loading, error } = useGetGeneralInforQuery();
@@ -42,6 +43,19 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  const languageJson = getLocalStorage(
+    process.env.NEXT_PUBLIC_LANGUAGE || "language"
+  );
+
+  useEffect(() => {
+    if (languageJson) {
+      // console.log("test Lan: ", languageJson);
+      if (languageJson === "us") {
+        dispatch(setLanguage(languages[1]));
+      }
+    }
+  }, [languageJson]);
 
   return (
     <div className="">

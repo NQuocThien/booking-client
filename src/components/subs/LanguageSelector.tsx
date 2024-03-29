@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Flag from "react-world-flags";
 import { Dropdown } from "react-bootstrap";
 import { languages } from "@/assets/contains/emun";
@@ -21,6 +21,10 @@ const LanguageSelector: React.FC<IProps> = ({
     // Perform other actions when a language is selected
   };
 
+  useEffect(() => {
+    if (selectedLanguage) setSelectedLanguage(currentLanguage);
+  }, [currentLanguage]);
+
   return (
     <Dropdown>
       <Dropdown.Toggle variant="transparent" id="language-dropdown">
@@ -36,6 +40,7 @@ const LanguageSelector: React.FC<IProps> = ({
       <Dropdown.Menu>
         {languages.map((language) => (
           <Dropdown.Item
+            active={language.code === selectedLanguage.code}
             key={language.code}
             onClick={() => handleLanguageChange(language)}>
             <Flag code={language.code} height="20" />

@@ -42,6 +42,7 @@ export const regisUs = {
   titleChooseVaccine: "Choose Vaccine",
   titleSession: "Appointment Sessions",
   titleSpecialties: "Select Specialty for Consultation",
+  titleVaccination: "Select Vaccine for Consultation",
   titlePackage: "Choose Package",
 
   labelDayOfWeek: "",

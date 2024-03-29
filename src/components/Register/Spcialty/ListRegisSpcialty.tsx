@@ -1,56 +1,146 @@
-import { MedicalSpecialties } from "@/graphql/webbooking-service.generated";
+import { IPagination } from "@/assets/contains/item-interface";
+import SearchInputCpn from "@/components/Filter/FilterSearch";
+import PaginationCpn from "@/components/subs/Pagination";
+import {
+  MedicalSpecialties,
+  useGetAllMedicalSpecialtiesPaginationOfFacilityForClientQuery,
+  useGetTotalMedicalSpecialtiesCountForClientQuery,
+} from "@/graphql/webbooking-service.generated";
+import useNProgress from "@/hooks/useNProgress";
 import { regisVi } from "@/locales/vi/Facility";
+import { store } from "@/redux/store/store";
+import { getLabelDayOfWeek } from "@/utils/getData";
 import { formatter } from "@/utils/tools";
+import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 
 interface IProps {
-  specialties: MedicalSpecialties[];
+  facilityId: string | undefined;
   lan: typeof regisVi;
   onClick: (specialty: MedicalSpecialties) => void;
   onBack: () => void;
 }
-
+interface IFilter {
+  pagination: IPagination;
+  search: string;
+}
 function ListRegisSpecialty(props: IProps) {
-  const { specialties, lan, onClick, onBack } = props;
+  const { lan, facilityId, onClick, onBack } = props;
+
+  const [specialties, setSpecialties] = useState<MedicalSpecialties[]>([]);
+  const [filter, setFilter] = useState<IFilter>({
+    pagination: {
+      current: 1,
+      total: 1,
+      limit: 10,
+    },
+    search: "",
+  });
+  //================================================================
+
+  const { data, loading, error } =
+    useGetAllMedicalSpecialtiesPaginationOfFacilityForClientQuery({
+      variables: {
+        facilityId: facilityId || "",
+        limit: filter.pagination.limit || 10,
+        page: filter.pagination.current,
+        search: filter.search,
+      },
+    });
+
+  const { data: dataTotal, loading: loadTotalData } =
+    useGetTotalMedicalSpecialtiesCountForClientQuery({
+      variables: {
+        facilityId: facilityId || "",
+        search: filter.search,
+      },
+    });
+  //================================================================
+
+  useEffect(() => {
+    if (data) {
+      setSpecialties(
+        data.getAllMedicalSpecialtiesPaginationOfFacilityForClient
+      );
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (dataTotal) {
+      setFilter((pre) => ({
+        ...pre,
+        pagination: {
+          ...pre.pagination,
+          total: dataTotal.getTotalMedicalSpecialtiesCountForClient,
+        },
+      }));
+    }
+  }, [dataTotal]);
+
+  useEffect(() => {
+    useNProgress(loading || loadTotalData);
+  }, [loading, loadTotalData]);
+
+  //================================================================
 
   return (
     <div>
       <h4 className="text-primary text-center">{lan.titleSpecialties}</h4>
+      <SearchInputCpn
+        onSearch={(s) => {
+          setFilter((pre) => ({ ...pre, search: s }));
+        }}
+      />
       {specialties && (
         <Table hover size="sm">
           <thead>
             <tr>
-              <th>#</th>
+              <th className="d-none d-md-table-cell">#</th>
               <th>{lan.headServiceName}</th>
-              <th>{lan.headPrice}</th>
+              <th className="d-none d-md-table-cell">{lan.headPrice}</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {specialties.map((specialty, i) => (
               <tr key={i}>
-                <td>{i + 1}</td>
+                <td className="d-none d-md-table-cell">{i + 1}</td>
                 <td>
                   <div>
                     <h6 className="text-primary">{specialty.specialtyName}</h6>
                     <p>
-                      {lan.lableSchedule}: Thứ{" "}
+                      {lan.lableSchedule}: {lan.labelDayOfWeek}{" "}
                       {specialty.workSchedule?.schedule.map((s, i) => (
                         <span key={i}>
                           {(specialty.workSchedule?.schedule &&
                             specialty.workSchedule?.schedule.length - 1 === i &&
-                            s.dayOfWeek) ||
-                            `${s.dayOfWeek}, `}
+                            getLabelDayOfWeek(
+                              s.dayOfWeek,
+                              store.getState().client.language.code as
+                                | "vn"
+                                | "us"
+                            )) ||
+                            `${getLabelDayOfWeek(
+                              s.dayOfWeek,
+                              store.getState().client.language.code as
+                                | "vn"
+                                | "us"
+                            )}, `}
                         </span>
                       ))}
                     </p>
+                    <div className="d-block d-md-none">
+                      {lan.headPrice}: {formatter.format(specialty.price)}
+                    </div>
                   </div>
                 </td>
-                <td>{formatter.format(specialty.price)}</td>
-                <td className="p-3">
+                <td className="align-middle d-none d-md-table-cell">
+                  {formatter.format(specialty.price)}
+                </td>
+                <td className="p-3 align-middle">
                   <Button
                     size="sm"
-                    className="me-3"
+                    className="me-3 mb-1"
                     onClick={() => {
                       onClick(specialty);
                     }}>
@@ -65,6 +155,24 @@ function ListRegisSpecialty(props: IProps) {
           </tbody>
         </Table>
       )}
+      <div className="d-flex justify-content-center ">
+        <PaginationCpn
+          setPageActive={(page) => {
+            setFilter((pre) => ({
+              ...pre,
+              pagination: {
+                ...pre.pagination,
+                current: page,
+              },
+            }));
+          }}
+          totalPage={
+            (filter.pagination.limit &&
+              Math.ceil(filter.pagination.total / filter.pagination.limit)) ||
+            Math.ceil(filter.pagination.total / 10)
+          }
+        />
+      </div>
       <div>
         <Button
           variant="light"

@@ -174,9 +174,9 @@ function RegisSpecialty(props: IProps) {
                 })
               )
             }
+            facilityId={state.facility?.id}
             onClick={handleClickSpecialty}
             lan={lan}
-            specialties={state.specialties}
           />
         )}
       </div>
@@ -193,6 +193,7 @@ function RegisSpecialty(props: IProps) {
           state={state}
           dispatch={dispatch}
           sessions={sessions}
+          regisLoading={loadingRegis}
           onClickSession={(session) => {
             dispatch(
               handleSetRegisSpecialty({

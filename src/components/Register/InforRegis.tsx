@@ -1,21 +1,11 @@
 import { regisVi } from "@/locales/vi/Facility";
-import { EServiceState } from "./TypeOfService";
-import { Session } from "inspector";
-import { SessionInput } from "@/graphql/webbooking-service.generated";
 import { IStateRegister } from "./reducer";
 import { GiTargeted } from "react-icons/gi";
-import { SlCalender } from "react-icons/sl";
 import { CiMedicalCross } from "react-icons/ci";
 import { formatDate } from "@/utils/tools";
 import { FaCalendarAlt, FaRegClock } from "react-icons/fa";
 
 interface IProps {
-  // facilityName: string;
-  // facilityAddress: string;
-  // type?: EServiceState;
-  // serviceName?: string | undefined;
-  // date?: string | undefined;
-  // sessions?: SessionInput | undefined;
   state: IStateRegister;
   lan: typeof regisVi;
 }

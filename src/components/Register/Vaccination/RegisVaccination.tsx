@@ -180,7 +180,7 @@ function RegisVaccinationCpn(props: IProps) {
           }
           onClick={handleClickVaccine}
           lan={lan}
-          vaccinations={state.vaccinations}
+          facilityId={state.facility?.id}
         />
       </div>
     );
@@ -196,6 +196,7 @@ function RegisVaccinationCpn(props: IProps) {
           state={state}
           dispatch={dispatch}
           sessions={sessions}
+          regisLoading={loadingRegis}
           onClickSession={(session) => {
             dispatch(
               handleSetRegisVaccination({

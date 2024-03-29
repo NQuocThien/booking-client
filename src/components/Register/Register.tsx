@@ -55,21 +55,6 @@ function Register(props: IProps) {
         isClient: true,
       },
     }); // thông tin tổng quan về csyt
-
-  const [getDataSpecialty, { data: dataSpecialty, loading: loadingSpecialty }] =
-    useGetListMedicalSpecialtyRegisInfoByFacilityIdLazyQuery(); //thông tin chuyên khoa của csyt
-
-  const [getDataDoctor, { data: dataDoctors, loading: loadingDoctors }] =
-    useGetListDoctorRegisInfoByFacilityIdLazyQuery(); //thông tin bác sỉ
-
-  const [getDataPackage, { data: dataPackages, loading: loadingPackages }] =
-    useGetListPackageRegisInfoByFacilityIdLazyQuery(); //thông tin gói khám
-
-  const [
-    getDataVaccinations,
-    { data: dataVaccination, loading: loadingVaccination },
-  ] = useGetListVaccinationRegisInfoByFacilityIdLazyQuery(); //thông tin gói khám
-
   // =================================================================
   useLayoutEffect(() => {
     if (dataFacility) {
@@ -97,92 +82,8 @@ function Register(props: IProps) {
   }, [dataFacility]);
 
   useEffect(() => {
-    useNProgress(
-      loading ||
-        loadingSpecialty ||
-        loadingDoctors ||
-        loadingPackages ||
-        loadingVaccination
-    );
-  }, [
-    loading,
-    loadingSpecialty,
-    loadingDoctors,
-    loadingPackages,
-    loadingVaccination,
-  ]);
-  // ================== LOAD DATA =================
-  useEffect(() => {
-    // load thông tin theo trạng thái từ srvState
-    if (state.svrState.specialty === true) {
-      getDataSpecialty({
-        variables: {
-          input: facilityId,
-          isClient: true,
-        },
-      });
-    } else if (state.svrState.doctor === true) {
-      getDataDoctor({
-        variables: {
-          input: facilityId,
-          isClient: true,
-        },
-      });
-    } else if (state.svrState.package === true) {
-      getDataPackage({
-        variables: {
-          input: facilityId,
-          isClient: true,
-        },
-      });
-    } else if (state.svrState.vaccination === true) {
-      getDataVaccinations({
-        variables: {
-          input: facilityId,
-          isClient: true,
-        },
-      });
-    }
-  }, [state.svrState]);
-
-  // ================== SET DATA =================
-  useEffect(() => {
-    if (dataDoctors && dataDoctors.getMedicalFacilityById.doctors) {
-      dispatch(handleSetDoctors(dataDoctors.getMedicalFacilityById.doctors));
-    }
-  }, [dataDoctors]);
-
-  useEffect(() => {
-    if (dataPackages && dataPackages.getMedicalFacilityById.packages) {
-      dispatch(handleSetPackages(dataPackages.getMedicalFacilityById.packages));
-    }
-  }, [dataPackages]);
-
-  useEffect(() => {
-    if (
-      dataVaccination &&
-      dataVaccination.getMedicalFacilityById.vaccinations
-    ) {
-      dispatch(
-        handleSetVaccinations(
-          dataVaccination.getMedicalFacilityById.vaccinations
-        )
-      );
-    }
-  }, [dataVaccination]);
-
-  useEffect(() => {
-    if (
-      dataSpecialty &&
-      dataSpecialty.getMedicalFacilityById.medicalSpecialties
-    ) {
-      dispatch(
-        handleSetSpecialties(
-          dataSpecialty.getMedicalFacilityById.medicalSpecialties
-        )
-      );
-    }
-  }, [dataSpecialty]);
+    useNProgress(loading);
+  }, [loading]);
 
   // =================================================================
   console.log("test State: ", state);

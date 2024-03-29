@@ -150,7 +150,7 @@ function TypeOfServive(props: IProps) {
                 alt="package"
               />
               <p className="text-dark text-center caption">
-                {lan.titleChoosePackage}
+                {lan.titleChooseVaccine}
               </p>
             </div>
           </Col>

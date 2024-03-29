@@ -12,7 +12,7 @@ export enum Evariant {
 }
 
 export const languages: Language[] = [
-  { code: "vn", name: "Tiếng việt" },
+  { code: "vn", name: "Tiếng Việt" },
   { code: "us", name: "English" },
   // Add more languages as needed
 ];

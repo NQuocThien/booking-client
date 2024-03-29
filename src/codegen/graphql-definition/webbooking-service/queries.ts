@@ -545,3 +545,101 @@ const getAllPackagePaginationOfFacilityForClient = gql`
     }
   }
 `;
+const getTotalMedicalSpecialtiesCountForClient = gql`
+  query getTotalMedicalSpecialtiesCountForClient(
+    $search: String
+    $facilityId: String!
+  ) {
+    getTotalMedicalSpecialtiesCountForClient(
+      search: $search
+      facilityId: $facilityId
+    )
+  }
+`;
+const getAllMedicalSpecialtiesPaginationOfFacilityForClient = gql`
+  query getAllMedicalSpecialtiesPaginationOfFacilityForClient(
+    $search: String
+    $page: Float!
+    $limit: Float!
+    $sortField: String
+    $sortOrder: String
+    $facilityId: String!
+  ) {
+    getAllMedicalSpecialtiesPaginationOfFacilityForClient(
+      search: $search
+      page: $page
+      limit: $limit
+      sortField: $sortField
+      sortOrder: $sortOrder
+      facilityId: $facilityId
+    ) {
+      id
+      medicalFactilityId
+      specialtyName
+      price
+      discription
+      workSchedule {
+        dayOff
+        numberSlot
+        status
+        schedule {
+          dayOfWeek
+          sessions {
+            endTime
+            startTime
+          }
+        }
+      }
+    }
+  }
+`;
+
+const getAllVaccinationPaginationOfFacilityForClient = gql`
+  query getAllVaccinationPaginationOfFacilityForClient(
+    $search: String
+    $page: Float!
+    $limit: Float!
+    $sortField: String
+    $sortOrder: String
+    $facilityId: String!
+  ) {
+    getAllVaccinationPaginationOfFacilityForClient(
+      search: $search
+      page: $page
+      limit: $limit
+      sortField: $sortField
+      sortOrder: $sortOrder
+      facilityId: $facilityId
+    ) {
+      id
+      medicalFactilitiesId
+      vaccineName
+      price
+      countryOfOrigin
+      prophylactic
+      indication
+      note
+      workSchedule {
+        dayOff
+        numberSlot
+        schedule {
+          dayOfWeek
+          sessions {
+            startTime
+            endTime
+          }
+        }
+        status
+      }
+    }
+  }
+`;
+
+const getTotalVaccinationsCountForClient = gql`
+  query getTotalVaccinationsCountForClient(
+    $search: String
+    $facilityId: String!
+  ) {
+    getTotalVaccinationsCountForClient(search: $search, facilityId: $facilityId)
+  }
+`;

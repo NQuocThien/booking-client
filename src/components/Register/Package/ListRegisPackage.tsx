@@ -1,4 +1,5 @@
 import { IPagination } from "@/assets/contains/item-interface";
+import SearchInputCpn from "@/components/Filter/FilterSearch";
 import PaginationCpn from "@/components/subs/Pagination";
 import {
   Package,
@@ -77,6 +78,11 @@ function ListRegisPackage(props: IProps) {
   return (
     <div>
       <h4 className="text-primary text-center pt-3">{lan.titlePackage}</h4>
+      <SearchInputCpn
+        onSearch={(s) => {
+          setFilter((pre) => ({ ...pre, search: s }));
+        }}
+      />
       {packages && (
         <Table hover size="sm">
           <thead>

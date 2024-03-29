@@ -1,31 +1,27 @@
 // clientReduce.ts
+"use client";
+import { languages } from "@/assets/contains/emun";
 import { Language } from "@/assets/contains/item-interface";
 import { User } from "@/graphql/webbooking-service.generated";
-import { checkExToken, removeToken } from "@/utils/tools";
+import { checkExToken, removeToken, setLocalStorage } from "@/utils/tools";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ClientState {
-  // Định nghĩa kiểu của trạng thái
   isLogin: boolean;
   language: Language;
   inforUser: User | undefined;
 }
 
 const initialState: ClientState = {
-  // Khởi tạo trạng thái ban đầu
   isLogin: false,
   inforUser: undefined,
-  language: {
-    code: "vn",
-    name: "Tiếng Việt",
-  },
+  language: languages[0],
 };
 
 const clientSlice = createSlice({
   name: "client",
   initialState,
   reducers: {
-    // Định nghĩa các reducers
     login: (state) => {
       state.isLogin = true;
     },
@@ -35,6 +31,10 @@ const clientSlice = createSlice({
     },
     setLanguage: (state, action: PayloadAction<Language>) => {
       state.language = action.payload;
+      setLocalStorage(
+        process.env.NEXT_PUBLIC_LANGUAGE || "language",
+        action.payload.code
+      );
     },
     setUserInfo: (state, action: PayloadAction<User>) => {
       state.inforUser = action.payload;
@@ -48,13 +48,7 @@ const clientSlice = createSlice({
   },
 });
 
-export const {
-  /* Tên các reducers */
-  login,
-  logout,
-  setLanguage,
-  setUserInfo,
-  checkExpToken,
-} = clientSlice.actions;
+export const { login, logout, setLanguage, setUserInfo, checkExpToken } =
+  clientSlice.actions;
 
 export default clientSlice.reducer;
