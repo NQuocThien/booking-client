@@ -1,5 +1,6 @@
 import { IPagination } from "@/assets/contains/item-interface";
 import SearchInputCpn from "@/components/Filter/FilterSearch";
+import VaccinationDetailModal from "@/components/Vaccination/VaccinationDetailModal";
 import PaginationCpn from "@/components/subs/Pagination";
 import {
   Vaccination,
@@ -28,6 +29,7 @@ function ListRegisVaccination(props: IProps) {
   const { facilityId, lan, onClick, onBack } = props;
 
   const [vaccines, setvaccines] = useState<Vaccination[]>([]);
+  const [vaccine, setVaccine] = useState<Vaccination>();
   const [filter, setFilter] = useState<IFilter>({
     pagination: {
       current: 1,
@@ -36,6 +38,8 @@ function ListRegisVaccination(props: IProps) {
     },
     search: "",
   });
+
+  const [modal, setModal] = useState(false);
   // =================================================================
   const { data, loading } =
     useGetAllVaccinationPaginationOfFacilityForClientQuery({
@@ -78,7 +82,11 @@ function ListRegisVaccination(props: IProps) {
     useNProgress(loading || loadTotalData);
   }, [loading, loadTotalData]);
 
-  console.log(vaccines);
+  // =================================================================
+  const handleClickDDetail = (vaccine: Vaccination) => {
+    setVaccine(vaccine);
+    setModal(true);
+  };
   return (
     <div>
       <h4 className="text-primary text-center pt-3">{lan.titleVaccination}</h4>
@@ -132,7 +140,10 @@ function ListRegisVaccination(props: IProps) {
                     }}>
                     {lan.btnBooking}
                   </Button>
-                  <Button size="sm" variant="outline-info">
+                  <Button
+                    size="sm"
+                    variant="outline-info"
+                    onClick={() => handleClickDDetail(vaccine)}>
                     {lan.btnDetail}
                   </Button>
                 </td>
@@ -172,6 +183,14 @@ function ListRegisVaccination(props: IProps) {
           {lan.btnBack}
         </Button>
       </div>
+      <VaccinationDetailModal
+        lan={lan}
+        onClose={() => {
+          setModal(false);
+        }}
+        open={modal}
+        vaccine={vaccine}
+      />
     </div>
   );
 }

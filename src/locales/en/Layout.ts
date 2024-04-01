@@ -9,6 +9,7 @@ export const headerUs = {
   texNavSrvDoctor: "Doctor examination service",
   texNavSrvPackage: "Package examination service",
   texNavSrvVaccination: "Vaccination service",
+  texNavLoginLoading: "Sign in...",
   texNavBlog: "Blogs",
   texNavAboutUs: "About Us",
   texNavLogin: "Sign in",

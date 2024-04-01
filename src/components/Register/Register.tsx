@@ -2,22 +2,12 @@
 import { Col, Container, Row } from "react-bootstrap";
 import TypeOfServive from "./TypeOfService";
 import { useEffect, useLayoutEffect, useReducer } from "react";
-import {
-  useGetListDoctorRegisInfoByFacilityIdLazyQuery,
-  useGetListMedicalSpecialtyRegisInfoByFacilityIdLazyQuery,
-  useGetListPackageRegisInfoByFacilityIdLazyQuery,
-  useGetListVaccinationRegisInfoByFacilityIdLazyQuery,
-  useGetMedicalFacilityRegisInfoByIdQuery,
-} from "@/graphql/webbooking-service.generated";
+import { useGetMedicalFacilityRegisInfoByIdQuery } from "@/graphql/webbooking-service.generated";
 import { regisVi } from "@/locales/vi/Facility";
 // import RegisSpecialty from "./Spcialty/ListRegisSpcialty";
 import {
   handleChangeServiceState,
-  handleSetDoctors,
   handleSetFacility,
-  handleSetPackages,
-  handleSetSpecialties,
-  handleSetVaccinations,
   initState,
   reducer,
 } from "./reducer";
@@ -27,10 +17,12 @@ import useNProgress from "@/hooks/useNProgress";
 import RegisDoctorCpn from "./Doctor/RegisDoctor";
 import RegisPackageCpn from "./Package/RegisPackage";
 import RegisVaccinationCpn from "./Vaccination/RegisVaccination";
+import { ETypeOfService } from "@/assets/contains/emun";
 
 interface IProps {
   facilityId: string;
   lan: typeof regisVi;
+  typeOfService?: ETypeOfService;
 }
 interface EServiceState {
   doctor: boolean | undefined;
@@ -40,7 +32,7 @@ interface EServiceState {
 }
 
 function Register(props: IProps) {
-  const { facilityId, lan } = props;
+  const { facilityId, lan, typeOfService = undefined } = props;
 
   const [state, dispatch] = useReducer(reducer, initState);
 
@@ -55,38 +47,56 @@ function Register(props: IProps) {
         isClient: true,
       },
     }); // thông tin tổng quan về csyt
-  // =================================================================
   useLayoutEffect(() => {
     if (dataFacility) {
       dispatch(handleSetFacility(dataFacility.getMedicalFacilityById));
-      var serviceState: EServiceState = {
-        doctor: undefined,
-        specialty: undefined,
-        package: undefined,
-        vaccination: undefined,
-      };
-      if (dataFacility.getMedicalFacilityById.totalDoctors !== 0) {
-        serviceState.doctor = false;
+      if (typeOfService === undefined) {
+        var serviceState: EServiceState = {
+          doctor: undefined,
+          specialty: undefined,
+          package: undefined,
+          vaccination: undefined,
+        };
+        if (dataFacility.getMedicalFacilityById.totalDoctors !== 0) {
+          serviceState.doctor = false;
+        }
+        if (dataFacility.getMedicalFacilityById.totalPackages !== 0) {
+          serviceState.package = false;
+        }
+        if (dataFacility.getMedicalFacilityById.totalSpecialties !== 0) {
+          serviceState.specialty = false;
+        }
+        if (dataFacility.getMedicalFacilityById.totalVaccinations !== 0) {
+          serviceState.vaccination = false;
+        }
+        dispatch(handleChangeServiceState(serviceState));
+      } else {
+        var serviceState: EServiceState = {
+          doctor: undefined,
+          specialty: undefined,
+          package: undefined,
+          vaccination: undefined,
+        };
+        if (typeOfService === ETypeOfService.Doctor) {
+          serviceState.doctor = true;
+        } else if (typeOfService === ETypeOfService.Package) {
+          serviceState.package = true;
+        } else if (typeOfService === ETypeOfService.Specialty) {
+          serviceState.specialty = true;
+        } else if (typeOfService === ETypeOfService.Vaccine) {
+          serviceState.vaccination = true;
+        }
+        dispatch(handleChangeServiceState(serviceState));
       }
-      if (dataFacility.getMedicalFacilityById.totalPackages !== 0) {
-        serviceState.package = false;
-      }
-      if (dataFacility.getMedicalFacilityById.totalSpecialties !== 0) {
-        serviceState.specialty = false;
-      }
-      if (dataFacility.getMedicalFacilityById.totalVaccinations !== 0) {
-        serviceState.vaccination = false;
-      }
-      dispatch(handleChangeServiceState(serviceState));
     }
   }, [dataFacility]);
+  // =================================================================
 
   useEffect(() => {
     useNProgress(loading);
   }, [loading]);
 
   // =================================================================
-  console.log("test State: ", state);
   return (
     <Container>
       {!(

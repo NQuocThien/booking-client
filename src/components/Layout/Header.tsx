@@ -11,12 +11,15 @@ import { headerVi } from "@/locales/vi/Layout";
 import { headerUs } from "@/locales/en/Layout";
 import { Dropdown } from "react-bootstrap";
 import Link from "next/link";
+import { ETypeOfServiceParameters } from "@/assets/contains/emun";
+import { usePathname } from "next/navigation";
 interface IProps {
   data: GeneralInfor | undefined;
+  loginLoading: boolean;
   onLogout: () => void;
 }
 function Header(props: IProps) {
-  const { data, onLogout } = props;
+  const { data, onLogout, loginLoading } = props;
   const isLogin = useSelector((state: RootState) => state.client.isLogin);
   const currentLan = useSelector((state: RootState) => state.client.language);
   const inforUser = useSelector((state: RootState) => state.client.inforUser);
@@ -28,7 +31,12 @@ function Header(props: IProps) {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lan, setLan] = useState(headerVi);
+  const pathname = usePathname();
+  const [path, setPath] = useState<string>("");
 
+  useEffect(() => {
+    setPath(pathname);
+  }, [pathname]);
   useEffect(() => {
     if (currentLan.code === "us") {
       setLan(headerUs);
@@ -55,7 +63,6 @@ function Header(props: IProps) {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
   return (
     <div>
       <div
@@ -103,7 +110,11 @@ function Header(props: IProps) {
           <nav id="navbar" className="navbar order-last order-lg-0">
             <ul>
               <li className="dropdown">
-                <Link className="nav-link active" href="/medical-facility">
+                <Link
+                  className={`nav-link ${
+                    path.search("/medical-facility") !== -1 ? "active" : ""
+                  }`}
+                  href="/medical-facility">
                   <span>{lan.texNavFacility}</span>
                   <i className="bi bi-chevron-down"></i>
                 </Link>
@@ -131,31 +142,43 @@ function Header(props: IProps) {
                 </ul>
               </li>
               <li className="dropdown">
-                <a href="#" className="nav-link">
+                <Link
+                  href="/regis-services"
+                  className={`nav-link ${
+                    path.search("/regis-services") !== -1 ? "active" : ""
+                  }`}>
                   <span>{lan.texNavSrv}</span>{" "}
                   <i className="bi bi-chevron-down"></i>
-                </a>
+                </Link>
                 <ul>
                   <li>
-                    <a href="#" className="nav-link">
+                    <Link
+                      href={`/regis-services?type=${ETypeOfServiceParameters.Specialty}`}
+                      className="nav-link">
                       {lan.texNavSrvSpecialty}
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a href="#" className="nav-link">
+                    <Link
+                      href={`/regis-services?type=${ETypeOfServiceParameters.Doctor}`}
+                      className="nav-link">
                       {lan.texNavSrvDoctor}
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="nav-link">
+                    <Link
+                      href={`/regis-services?type=${ETypeOfServiceParameters.Package}`}
+                      className="nav-link">
                       {lan.texNavSrvPackage}
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="nav-link">
+                    <Link
+                      href={`/regis-services?type=${ETypeOfServiceParameters.Vaccine}`}
+                      className="nav-link">
                       {lan.texNavSrvVaccination}
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
@@ -212,7 +235,7 @@ function Header(props: IProps) {
               <i className="bi bi-list mobile-nav-toggle"></i>
             </div>
           </nav>
-          {(isLogin && (
+          {isLogin && !loginLoading && (
             <Dropdown>
               <Dropdown.Toggle
                 as="div"
@@ -262,11 +285,21 @@ function Header(props: IProps) {
                 <Dropdown.Divider />
               </Dropdown.Menu>
             </Dropdown>
-          )) || (
+          )}
+          {!isLogin && !loginLoading && (
             <div className="dropdown">
               <Link href="/account/login" className="user-btn 56786 ">
                 <span className="d-none d-md-inline">{lan.texNavLogin}</span>
               </Link>
+            </div>
+          )}
+          {loginLoading && (
+            <div className="dropdown">
+              <div className="user-btn 56786 ">
+                <span className="d-none d-md-inline">
+                  {lan.texNavLoginLoading}
+                </span>
+              </div>
             </div>
           )}
           <LanguageSelector

@@ -48,3 +48,16 @@ export enum GetEAcademicTitle { // học hàm
   Professor = "GS",
   AssociateProfesso = "PGS",
 }
+export enum ETypeOfService {
+  Doctor = "Khám theo Bác sỉ",
+  Specialty = "Khám theo Chuyên khoa",
+  Package = "Khám theo gói",
+  Vaccine = "Tiêm chủng",
+}
+
+export enum ETypeOfServiceParameters {
+  Doctor = "service-doctor",
+  Specialty = "service-specialty",
+  Package = "service-package",
+  Vaccine = "service-vaccine",
+}

@@ -22,10 +22,11 @@ import { useEffect, useState } from "react";
 import { Session } from "@/graphql/webbooking-service.generated";
 import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ListRegisDoctor from "./ListRegisDoctor";
 import useNProgress from "@/hooks/useNProgress";
 import { format } from "date-fns";
+import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 interface IProps {
   lan: typeof regisVi;
   state: IStateRegister;
@@ -36,6 +37,7 @@ function RegisDoctorCpn(props: IProps) {
   const [schedule, setSchedule] = useState<ScheduleInput>();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [listSchedule, setListSchedule] = useState<ScheduleInput[]>([]);
+  const params = useSearchParams();
   const router = useRouter();
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
@@ -171,14 +173,17 @@ function RegisDoctorCpn(props: IProps) {
       <div className="session px-2">
         {state.regisDoctor.doctorId === "" && state.facility?.id && (
           <ListRegisDoctor
-            onBack={() =>
+            onBack={() => {
+              if (params.get("type") === ETypeOfServiceParameters.Doctor) {
+                router.back();
+              }
               dispatch(
                 handleChangeServiceState({
                   ...state.svrState,
                   doctor: false,
                 })
-              )
-            }
+              );
+            }}
             onClick={handleClickDoctor}
             lan={lan}
             facilityId={state.facility?.id}

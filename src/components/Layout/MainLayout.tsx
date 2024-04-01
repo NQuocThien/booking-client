@@ -59,7 +59,11 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="">
-      <Header onLogout={handleLogout} data={generalData} />
+      <Header
+        loginLoading={loading}
+        onLogout={handleLogout}
+        data={generalData}
+      />
       <div id="main" className="main">
         {children}
         <ToastsPcn />

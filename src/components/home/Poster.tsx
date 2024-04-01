@@ -1,4 +1,5 @@
 "use client";
+import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 import { homeVi } from "@/locales/vi/Home";
 import Link from "next/link";
 import { useState } from "react";
@@ -74,7 +75,9 @@ function PosterCpn(props: IProps) {
       </Row>
       <Row className="mt-3 g-2 ">
         <Col lg={3} md={4} sm={6} xs={6}>
-          <Link href={""} className="service-item py-2">
+          <Link
+            href={`/regis-services?type=${ETypeOfServiceParameters.Doctor}`}
+            className="service-item py-2">
             <img
               className="img-icon mb-3"
               src="/imgs/icons/doctor-icon.png"
@@ -84,36 +87,40 @@ function PosterCpn(props: IProps) {
           </Link>
         </Col>
         <Col lg={3} md={4} sm={6} xs={6}>
-          <div className="service-item py-2">
+          <Link
+            className="service-item py-2"
+            href={`/regis-services?type=${ETypeOfServiceParameters.Specialty}`}>
             <img
               className="img-icon mb-3"
               src="/imgs/icons/specialty-icon.png"
               alt="package"
             />
             <p className="text-dark text-center caption">{lan.srvSpecialty}</p>
-          </div>
+          </Link>
         </Col>
         <Col lg={3} md={4} sm={6} xs={6}>
-          <div className="service-item py-2">
+          <Link
+            className="service-item py-2"
+            href={`/regis-services?type=${ETypeOfServiceParameters.Package}`}>
             <img
               className="img-icon mb-3"
               src="/imgs/icons/package-icon.png"
               alt="package"
             />
             <p className="text-dark text-center caption">{lan.srvPackage}</p>
-          </div>
+          </Link>
         </Col>
         <Col lg={3} md={4} sm={6} xs={6}>
-          <div className="service-item py-2">
+          <Link className="service-item py-2" href={`/regis-services?type=${ETypeOfServiceParameters.Vaccine}`}>
             <img
               className="img-icon mb-3"
               src="/imgs/icons/vaccination-icon.png"
-              alt="package"
+              alt="vaccination"
             />
             <p className="text-dark text-center caption">
               {lan.srvVaccination}
             </p>
-          </div>
+          </Link>
         </Col>
       </Row>
     </Row>

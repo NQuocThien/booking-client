@@ -13,6 +13,7 @@ import { IFillter } from "@/assets/contains/item-interface";
 import useNProgress from "@/hooks/useNProgress";
 import PaginationCpn from "../subs/Pagination";
 import { useRouter } from "next/navigation";
+import FacilityDetailModal from "./FacilityModalDetail";
 interface IProps {
   type: GetETypeOfFacility;
   lan: typeof facilityVi;
@@ -32,6 +33,7 @@ function MedicalFacilities(props: IProps) {
     search: "",
     type: type,
   });
+  const [modal, setModal] = useState<boolean>(false);
   // =================================================================
 
   const { data, loading, error } = useGetAllMedicalFacilityPaginationQuery({
@@ -76,14 +78,18 @@ function MedicalFacilities(props: IProps) {
     }
   }, [data]);
   useEffect(() => {
-    useNProgress(loading);
-  }, [loading]);
+    useNProgress(loading || loadingTotal);
+  }, [loading, loadingTotal]);
 
   // =================================================================
 
   const handleClickRegis = (facility: MedicalFacilities): void => {
     const currentPath = window.location.pathname;
     router.push(`${currentPath}/regis/${facility.id}`);
+  };
+  const handleClickDetail = (facility: MedicalFacilities) => {
+    setFacily(facility);
+    setModal(true);
   };
 
   return (
@@ -152,7 +158,10 @@ function MedicalFacilities(props: IProps) {
                     <Button
                       size="sm"
                       variant="outline-success"
-                      className="ms-3 btn btn-detail">
+                      className="ms-3 btn btn-detail"
+                      onClick={() => {
+                        handleClickDetail(f);
+                      }}>
                       {lan.btnDetail}
                     </Button>
                   </div>
@@ -201,6 +210,12 @@ function MedicalFacilities(props: IProps) {
           )}
         </Col>
       </Row>
+      <FacilityDetailModal
+        facility={facility}
+        lan={lan}
+        onClose={() => setModal(false)}
+        open={modal}
+      />
     </Container>
   );
 }

@@ -1,0 +1,55 @@
+.facility-detail {
+  .detail {
+    .general-info {
+      background-color: $white;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+
+      .deliver {
+        height: 2px;
+        border-radius: 1px;
+        background-color: rgb(46, 97, 163);
+      }
+      .logo {
+        border: 2px solid $item-hover;
+        width: 80%;
+        height: auto;
+      }
+    }
+    .discription {
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
+    .map {
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      height: 80vh;
+      margin-top: 10px;
+      padding: 1px;
+      border: 1px solid $item-hover;
+      border-radius: 10px;
+    }
+    .main-info {
+      .poster {
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        .image {
+          width: 90%;
+          height: auto;
+        }
+      }
+      .deliver {
+        height: 2px;
+        border-radius: 1px;
+        background-color: rgb(46, 97, 163);
+      }
+      .introduce {
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        * {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+}

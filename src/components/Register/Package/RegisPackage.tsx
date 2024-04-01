@@ -22,9 +22,10 @@ import { useEffect, useState } from "react";
 import { Session } from "@/graphql/webbooking-service.generated";
 import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ListRegisPackage from "./ListRegisPackage";
 import useNProgress from "@/hooks/useNProgress";
+import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 
 interface IProps {
   lan: typeof regisVi;
@@ -37,6 +38,7 @@ function RegisPackageCpn(props: IProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [listSchedule, setListSchedule] = useState<ScheduleInput[]>([]);
   const router = useRouter();
+  const params = useSearchParams();
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisPendingLazyQuery();
@@ -94,6 +96,7 @@ function RegisPackageCpn(props: IProps) {
 
     const workSchedule = state.package?.workSchedule;
     const dayOffFacility = state.facility?.dateOff;
+
     const find = workSchedule?.schedule?.findIndex(
       (item) => item.dayOfWeek === dayOfWeek
     );
@@ -171,14 +174,17 @@ function RegisPackageCpn(props: IProps) {
       <div className="session px-2">
         {state.regisPackage.packageId === "" && (
           <ListRegisPackage
-            onBack={() =>
+            onBack={() => {
+              if (params.get("type") === ETypeOfServiceParameters.Package) {
+                router.back();
+              }
               dispatch(
                 handleChangeServiceState({
                   ...state.svrState,
                   package: false,
                 })
-              )
-            }
+              );
+            }}
             onClick={handleClickPackage}
             lan={lan}
             facilityId={state.facility?.id}

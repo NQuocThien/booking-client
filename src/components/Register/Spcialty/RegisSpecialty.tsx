@@ -23,7 +23,8 @@ import { useEffect, useState } from "react";
 import { Session } from "@/graphql/webbooking-service.generated";
 import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 
 interface IProps {
   lan: typeof regisVi;
@@ -36,6 +37,7 @@ function RegisSpecialty(props: IProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [listSchedule, setListSchedule] = useState<ScheduleInput[]>([]);
   const router = useRouter();
+  const params = useSearchParams();
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisPendingLazyQuery();
@@ -166,14 +168,17 @@ function RegisSpecialty(props: IProps) {
       <div className="session px-2">
         {state.regisSpecialty.specialtyId === "" && (
           <ListRegisSpecialty
-            onBack={() =>
+            onBack={() => {
+              if (params.get("type") === ETypeOfServiceParameters.Specialty) {
+                router.back();
+              }
               dispatch(
                 handleChangeServiceState({
                   ...state.svrState,
                   specialty: false,
                 })
-              )
-            }
+              );
+            }}
             facilityId={state.facility?.id}
             onClick={handleClickSpecialty}
             lan={lan}

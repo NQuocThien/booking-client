@@ -12,6 +12,7 @@ export const headerVi = {
   texNavBlog: "Cẩm nang",
   texNavAboutUs: "Về chúng tôi",
   texNavLogin: "Đăng nhập",
+  texNavLoginLoading: "Đang đăng nhập...",
   texNavTopMess: "Đăng ký khám chữa bệnh",
   texBtnUserHello: "Xin chào",
   texBtnAccout: "Tài khoản",

@@ -1,5 +1,6 @@
 import { IPagination } from "@/assets/contains/item-interface";
 import SearchInputCpn from "@/components/Filter/FilterSearch";
+import SpecialtyDetailModal from "@/components/Specialty/SpecialtyDetailModal";
 import PaginationCpn from "@/components/subs/Pagination";
 import {
   MedicalSpecialties,
@@ -28,6 +29,7 @@ function ListRegisSpecialty(props: IProps) {
   const { lan, facilityId, onClick, onBack } = props;
 
   const [specialties, setSpecialties] = useState<MedicalSpecialties[]>([]);
+  const [specialty, setSpecialty] = useState<MedicalSpecialties>();
   const [filter, setFilter] = useState<IFilter>({
     pagination: {
       current: 1,
@@ -36,6 +38,7 @@ function ListRegisSpecialty(props: IProps) {
     },
     search: "",
   });
+  const [modal, setModal] = useState(false);
   //================================================================
 
   const { data, loading, error } =
@@ -83,6 +86,10 @@ function ListRegisSpecialty(props: IProps) {
 
   //================================================================
 
+  const handleClickDetail = (specialty: MedicalSpecialties) => {
+    setSpecialty(specialty);
+    setModal(true);
+  };
   return (
     <div>
       <h4 className="text-primary text-center">{lan.titleSpecialties}</h4>
@@ -146,7 +153,10 @@ function ListRegisSpecialty(props: IProps) {
                     }}>
                     {lan.btnBooking}
                   </Button>
-                  <Button size="sm" variant="outline-info">
+                  <Button
+                    onClick={() => handleClickDetail(specialty)}
+                    size="sm"
+                    variant="outline-info">
                     {lan.btnDetail}
                   </Button>
                 </td>
@@ -186,6 +196,12 @@ function ListRegisSpecialty(props: IProps) {
           {lan.btnBack}
         </Button>
       </div>
+      <SpecialtyDetailModal
+        open={modal}
+        lan={lan}
+        onClose={() => setModal(false)}
+        specialty={specialty}
+      />
     </div>
   );
 }

@@ -22,9 +22,10 @@ import { useEffect, useState } from "react";
 import { Session } from "@/graphql/webbooking-service.generated";
 import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ListRegisVaccination from "./ListRegisVaccination";
 import useNProgress from "@/hooks/useNProgress";
+import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 
 interface IProps {
   lan: typeof regisVi;
@@ -37,6 +38,7 @@ function RegisVaccinationCpn(props: IProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [listSchedule, setListSchedule] = useState<ScheduleInput[]>([]);
   const router = useRouter();
+  const params = useSearchParams();
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisPendingLazyQuery();
@@ -170,14 +172,17 @@ function RegisVaccinationCpn(props: IProps) {
     return (
       <div className="session px-2">
         <ListRegisVaccination
-          onBack={() =>
+          onBack={() => {
+            if (params.get("type") === ETypeOfServiceParameters.Vaccine) {
+              router.back();
+            }
             dispatch(
               handleChangeServiceState({
                 ...state.svrState,
                 vaccination: false,
               })
-            )
-          }
+            );
+          }}
           onClick={handleClickVaccine}
           lan={lan}
           facilityId={state.facility?.id}

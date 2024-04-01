@@ -1,5 +1,6 @@
 import { IPagination } from "@/assets/contains/item-interface";
 import SearchInputCpn from "@/components/Filter/FilterSearch";
+import PackageDetailModal from "@/components/Package/PackageDetailModal";
 import PaginationCpn from "@/components/subs/Pagination";
 import {
   Package,
@@ -26,6 +27,8 @@ function ListRegisPackage(props: IProps) {
   const { facilityId, lan, onClick, onBack } = props;
 
   const [packages, setPackages] = useState<Package[]>([]);
+  const [packageCare, setPackage] = useState<Package>();
+  const [modal, setModal] = useState(false);
   const [filter, setFilter] = useState<IFilter>({
     pagination: {
       current: 1,
@@ -74,7 +77,11 @@ function ListRegisPackage(props: IProps) {
   useEffect(() => {
     useNProgress(loading || loadTotalData);
   }, [loading, loadTotalData]);
-
+  // =================================================================
+  const handleClickDetail = (p: Package) => {
+    setPackage(p);
+    setModal(true);
+  };
   return (
     <div>
       <h4 className="text-primary text-center pt-3">{lan.titlePackage}</h4>
@@ -123,7 +130,10 @@ function ListRegisPackage(props: IProps) {
                     }}>
                     {lan.btnBooking}
                   </Button>
-                  <Button size="sm" variant="outline-info">
+                  <Button
+                    onClick={() => handleClickDetail(p)}
+                    size="sm"
+                    variant="outline-info">
                     {lan.btnDetail}
                   </Button>
                 </td>
@@ -163,6 +173,12 @@ function ListRegisPackage(props: IProps) {
           {lan.btnBack}
         </Button>
       </div>
+      <PackageDetailModal
+        open={modal}
+        lan={lan}
+        onClose={() => setModal(false)}
+        packageCare={packageCare}
+      />
     </div>
   );
 }

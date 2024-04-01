@@ -1,4 +1,5 @@
 import { IPagination } from "@/assets/contains/item-interface";
+import DoctorDetailModal from "@/components/Doctor/DoctorDetailModal";
 import FilterDoctorShort from "@/components/Filter/FilterDoctorShort";
 import PaginationCpn from "@/components/subs/Pagination";
 import {
@@ -16,7 +17,6 @@ import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 
 interface IProps {
-  // doctors: Doctor[];
   facilityId: string;
   lan: typeof regisVi;
   onClick: (doctor: Doctor) => void;
@@ -32,6 +32,7 @@ function ListRegisDoctor(props: IProps) {
   const { lan, onClick, onBack, facilityId } = props;
 
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [doctor, setDoctor] = useState<Doctor>();
   const [filter, setFilter] = useState<IFilter>({
     filterDoctor: {
       academicTitle: undefined,
@@ -46,6 +47,8 @@ function ListRegisDoctor(props: IProps) {
       limit: 10,
     },
   });
+  const [modal, setModal] = useState<boolean>(false);
+
   // =================================================================
   const { data, loading, error } =
     useGetAllDoctorPaginationOfFacilityForClientQuery({
@@ -100,6 +103,12 @@ function ListRegisDoctor(props: IProps) {
     });
     return specialties;
   };
+  const handleClickDetail = (doctor: Doctor) => {
+    setDoctor(doctor);
+    setModal(true);
+  };
+  // =================================================================
+
   return (
     <div>
       <h4 className="text-primary text-center pt-3">{lan.titleDoctors}</h4>
@@ -183,7 +192,12 @@ function ListRegisDoctor(props: IProps) {
                     }}>
                     {lan.btnBooking}
                   </Button>
-                  <Button size="sm" variant="outline-info">
+                  <Button
+                    onClick={() => {
+                      handleClickDetail(doctor);
+                    }}
+                    size="sm"
+                    variant="outline-info">
                     {lan.btnDetail}
                   </Button>
                 </td>
@@ -223,6 +237,13 @@ function ListRegisDoctor(props: IProps) {
           {lan.btnBack}
         </Button>
       </div>
+
+      <DoctorDetailModal
+        doctor={doctor}
+        lan={lan}
+        open={modal}
+        onClose={() => setModal(false)}
+      />
     </div>
   );
 }

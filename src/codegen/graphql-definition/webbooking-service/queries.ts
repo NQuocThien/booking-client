@@ -643,3 +643,61 @@ const getTotalVaccinationsCountForClient = gql`
     getTotalVaccinationsCountForClient(search: $search, facilityId: $facilityId)
   }
 `;
+
+const getAllMedicalFacilityHaveSrvPaginationForClient = gql`
+  query getAllMedicalFacilityHaveServicePagination(
+    $search: String
+    $page: Float!
+    $limit: Float!
+    $sortField: String
+    $sortOrder: String
+    $type: String
+  ) {
+    getAllMedicalFacilityHaveSrvPaginationForClient(
+      search: $search
+      page: $page
+      limit: $limit
+      sortField: $sortField
+      sortOrder: $sortOrder
+      type: $type
+    ) {
+      id
+      userId
+      medicalFacilityName
+      address
+      numberPhone
+      email
+      logo {
+        filename
+        type
+        url
+      }
+
+      image {
+        filename
+        type
+        url
+      }
+      lat
+      lng
+      discription
+      introduce
+      typeOfFacility
+      operatingStatus
+      legalRepresentation
+      taxCode
+      status
+      dateOff
+      schedule
+    }
+  }
+`;
+
+const getTotalFacilitiesHaveSrvCountForClient = gql`
+  query getTotalFacilitiesHaveSrvCountForClient(
+    $search: String
+    $type: String
+  ) {
+    getTotalFacilitiesHaveSrvCountForClient(search: $search, type: $type)
+  }
+`;

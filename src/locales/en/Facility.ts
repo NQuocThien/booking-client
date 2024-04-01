@@ -1,5 +1,9 @@
 export const facilityUs = {
   labelfillter: "Type of medical facility",
+  subSrvDoctor: "Doctor Consultation",
+  subSrvPackage: "Examination Package",
+  subSrvSpecialty: "Specialty Consultation",
+  subSrvVaccination: "Vaccination",
   subLabelFillter: "Healthcare facilities within An Giang province",
   holderSearchName: "search facility name ...",
   holderSearchAddress: "search address ...",
@@ -15,8 +19,10 @@ export const facilityUs = {
   subClinic: "Clinic",
   titleVaccination: "Vaccination Center",
   subVaccination: "Vaccination centers within An Giang province",
-  btnRegis: "Book an appointment",
+  btnRegis: "Register",
   btnDetail: "Details",
+  titlDiscription: "Discription",
+  modalHead: "Healthcare Facility Information",
 };
 
 export const regisUs = {
@@ -58,6 +64,15 @@ export const regisUs = {
   btnBack: "Back",
   btnDetail: "Detail",
   btnBooking: "Book Now",
+
+  modalVaccineHead: "Vaccine Information",
+  modalPackageHead: "Package care information",
+  modalSpecialtyHead: "Specialty Information",
+  modalVaccineNote: "Note",
+  modalDoctorHead: "Doctor Information",
+  modalVaccineProphylactic: "Preventive",
+  modalSchedule: " Schedule",
+  modalSpecialtyDiscription: "Specialty Description",
 };
 
 export const filterUs = {

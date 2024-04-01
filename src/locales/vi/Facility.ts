@@ -1,5 +1,9 @@
 export const facilityVi = {
   labelfillter: "Cơ sở y tế",
+  subSrvDoctor: "Khám theo bác sỉ",
+  subSrvPackage: "Khám theo gói khám",
+  subSrvSpecialty: "Khám theo chuyên khoa",
+  subSrvVaccination: "Tim Chủng Vaccine",
   subLabelFillter: "Các cơ sở y tế trong địa bàn tỉnh An Giang",
   holderSearchName: "Tìm kiếm tên ...",
   holderSearchAddress: "Tìm kiếm địa chỉ ...",
@@ -17,6 +21,9 @@ export const facilityVi = {
   subVaccination: "Các trung tâm tiêm chủng trong địa bàn tỉnh An Giang",
   btnRegis: "Đặt khám",
   btnDetail: "Chi tiết",
+  titlDiscription: "Mô tả",
+
+  modalHead: "Thông tin cơ sở  y tế",
 };
 
 export const regisVi = {
@@ -61,6 +68,16 @@ export const regisVi = {
   btnBack: "Trở lại",
   btnDetail: "Chi tiết",
   btnBooking: "Đăng ký ngay",
+
+  modalVaccineHead: "Thông tin vaccine",
+  modalSpecialtyHead: "Thông tin chuyên khoa",
+  modalDoctorHead: "Thông tin Bác sỉ",
+  modalPackageHead: "Thông tin gói khám",
+
+  modalVaccineNote: "Chú ý",
+  modalSpecialtyDiscription: "Mô tả chuyên khoa",
+  modalVaccineProphylactic: "Ngừa bệnh",
+  modalSchedule: "Lịch làm việc",
 };
 
 export const filterVi = {
