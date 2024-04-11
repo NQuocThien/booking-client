@@ -1,7 +1,7 @@
 export const homeVi = {
   title1: "Cổng thông tin đăng ký khám chữa bệnh",
   title2: "Tìm kiếm thông tin cơ cở y tế và bác sĩ tại đây",
-  srvDoctor: "Khám theo bác sỉ",
+  srvDoctor: "Khám theo bác sĩ",
   srvSpecialty: "Khám chuyên khoa",
   srvPackage: "Khám gói khám",
   srvVaccination: "Tiêm chủng",

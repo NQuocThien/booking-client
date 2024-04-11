@@ -4,11 +4,12 @@ import ModalCpn from "../subs/Modal";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { MdEmail, MdOutlineLocationOn, MdPerson } from "react-icons/md";
 import { AiOutlineSchedule } from "react-icons/ai";
-import { FaMapMarkerAlt, FaPhone } from "react-icons/fa";
-import ReactDOMServer from "react-dom/server";
-import { useRef, useEffect } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import MapAddressCpn from "../subs/MapAddressCpn";
+import { FaPhone } from "react-icons/fa";
+import MapComponent from "../subs/Map";
+import MapLeaflet from "../subs/MapV2";
+import MapboxMap from "../subs/MapV2";
+import BingMap from "../subs/MapV2";
 interface IProp {
   lan: typeof facilityVi;
   open: boolean;
@@ -19,42 +20,6 @@ function FacilityDetailModal(props: IProp) {
   const { lan, facility, onClose, open } = props;
 
   // =================================================================
-  const mapRef = useRef<L.Map | null>(null);
-  const markerRef = useRef<L.Marker | null>(null);
-  useEffect(() => {
-    if (open && !mapRef.current) {
-      setTimeout(() => {
-        mapRef.current = L.map("map-modal", {
-          center: [facility?.lat || 1, facility?.lng || 1],
-          zoom: 11,
-        });
-
-        // Thêm layer OpenStreetMap
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution:
-            'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-        }).addTo(mapRef.current);
-        const markerIcon = L.divIcon({
-          className: "custom-marker-icon",
-          html: ReactDOMServer.renderToString(
-            <FaMapMarkerAlt className="text-danger fs-3 " />
-          ),
-        });
-        markerRef.current = L.marker([facility?.lat || 1, facility?.lng || 1], {
-          icon: markerIcon,
-        }).addTo(mapRef.current);
-      }, 100);
-    }
-    // Clean up khi modal bị ẩn
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        markerRef.current?.remove();
-        markerRef.current = null;
-        mapRef.current = null;
-      }
-    };
-  }, [open]);
 
   return (
     <ModalCpn
@@ -102,13 +67,22 @@ function FacilityDetailModal(props: IProp) {
                 <span>{facility?.legalRepresentation}</span>
               </div>
             </div>
-
             <div className="discription mt-3 p-2">
               <h5>{lan.titlDiscription}</h5>
               <p> {facility?.discription}</p>
             </div>
-
-            <div id="map-modal" className="map"></div>
+            {/* <div id="" className="map">
+              <MapAddressCpn lat={10.275796634253519} lng={105.298391156358} />
+            </div> */}
+            {facility && facility.lat && facility.lng && (
+              <div id="leaflet" className="map">
+                <BingMap
+                  lat={facility.lat}
+                  lng={facility.lng}
+                  title={facility?.medicalFacilityName}
+                />
+              </div>
+            )}
           </Col>
           <Col lg={8} md={8} sm={12} xs={12} className="main-info p-2">
             <div className="px-2 poster d-flex justify-content-center py-1">

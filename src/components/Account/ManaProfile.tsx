@@ -345,7 +345,7 @@ function ManaProfile({ customerId, lan }: IProps) {
             </Col>
           )}
           {state === Estate.add && (
-            <Col className="col-12">
+            <Col className="col-12 form-add px-3 py-2">
               <Form validated={validated} onSubmit={handleCreateProfile}>
                 <h4 className="text-center py-3">{lan.titleCreateProfile}</h4>
                 <Row>

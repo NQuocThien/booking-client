@@ -25,9 +25,41 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Blog = {
+  __typename?: 'Blog';
+  content: Scalars['String']['output'];
+  createdAt: Scalars['Float']['output'];
+  createdBy: UserSlimEntity;
+  deletedAt?: Maybe<Scalars['Float']['output']>;
+  deletedBy?: Maybe<UserSlimEntity>;
+  id: Scalars['ID']['output'];
+  keywords: Scalars['String']['output'];
+  mainPhoto: LinkImage;
+  priority: Scalars['Float']['output'];
+  shortContent: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['Float']['output']>;
+  updatedBy?: Maybe<UserSlimEntity>;
+};
+
 export type ConfirmRegisterInput = {
   registerId: Scalars['String']['input'];
   state: EStateRegister;
+};
+
+export type CreateBlogInput = {
+  content: Scalars['String']['input'];
+  keywords: Scalars['String']['input'];
+  mainPhoto: LinkImageInput;
+  priority: Scalars['Float']['input'];
+  shortContent: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
+  status: EnumBlogStatus;
+  title: Scalars['String']['input'];
+  type: EnumBlogType;
 };
 
 export type CreateCustomerInput = {
@@ -285,6 +317,18 @@ export enum ETypeOfNotification {
   Seen = 'Seen'
 }
 
+export enum EnumBlogStatus {
+  Deleted = 'Deleted',
+  NotPublic = 'NotPublic',
+  Public = 'Public'
+}
+
+export enum EnumBlogType {
+  Health = 'Health',
+  Medical = 'Medical',
+  Service = 'Service'
+}
+
 export type Evaluate = {
   __typename?: 'Evaluate';
   comment: Scalars['String']['output'];
@@ -466,6 +510,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   activeUser: User;
   confirmRegister: Register;
+  createBlog: Blog;
   createCustomer: Customer;
   createDoctor: Doctor;
   createEvaluate: Evaluate;
@@ -488,12 +533,14 @@ export type Mutation = {
   deleteNotification: Notification;
   deletePackage: Package;
   deleteProfile: Profile;
+  deleteUnDeleteBlog: Blog;
   deleteUser: User;
   deleteVaccination: Vaccination;
   login: LoginRespone;
   logout: LogoutUser;
   signup: User;
   signupUser: User;
+  updateBlog: Blog;
   updateCustomer: Customer;
   updateDoctor: Doctor;
   updateEvaluate: Evaluate;
@@ -520,6 +567,11 @@ export type MutationActiveUserArgs = {
 
 export type MutationConfirmRegisterArgs = {
   input: ConfirmRegisterInput;
+};
+
+
+export type MutationCreateBlogArgs = {
+  input: CreateBlogInput;
 };
 
 
@@ -633,6 +685,11 @@ export type MutationDeleteProfileArgs = {
 };
 
 
+export type MutationDeleteUnDeleteBlogArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationDeleteUserArgs = {
   id: Scalars['String']['input'];
 };
@@ -655,6 +712,11 @@ export type MutationSignupArgs = {
 
 export type MutationSignupUserArgs = {
   createUserInput: CreateUserByAdminInput;
+};
+
+
+export type MutationUpdateBlogArgs = {
+  input: UpdateBlogInput;
 };
 
 
@@ -782,6 +844,8 @@ export type Query = {
   __typename?: 'Query';
   checklogin: User;
   checkloginCustomer: User;
+  getAllBlogPagination: Array<Blog>;
+  getAllBlogPaginationForClient: Array<Blog>;
   getAllCustomer: Array<Customer>;
   getAllCustomerPagination: Array<Customer>;
   getAllDoctor: Array<Doctor>;
@@ -818,6 +882,7 @@ export type Query = {
   getAllVaccinationPaginationOfFacility: Array<Vaccination>;
   getAllVaccinationPaginationOfFacilityForClient: Array<Vaccination>;
   getAllVaccinationSelect: Array<Vaccination>;
+  getBlogBySlug: Blog;
   getDoctorbyId: Doctor;
   getDoctorbyUserId: Doctor;
   getEvaluateById: Evaluate;
@@ -835,6 +900,8 @@ export type Query = {
   getProfiles: Profile;
   getSetting: Setting;
   getTopMedicalFacilities: Array<MedicalFacilities>;
+  getTotalBlogsCount: Scalars['Float']['output'];
+  getTotalBlogsCountForClient: Scalars['Float']['output'];
   getTotalCustomersCount: Scalars['Float']['output'];
   getTotalDoctorsCount: Scalars['Float']['output'];
   getTotalDoctorsCountForClient: Scalars['Float']['output'];
@@ -858,6 +925,26 @@ export type Query = {
   totalStaffsCount: Scalars['Float']['output'];
   totalUsersCount: Scalars['Float']['output'];
   users: Array<User>;
+};
+
+
+export type QueryGetAllBlogPaginationArgs = {
+  isDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
+  sortField?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetAllBlogPaginationForClientArgs = {
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
+  sortField?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1076,6 +1163,11 @@ export type QueryGetAllVaccinationSelectArgs = {
 };
 
 
+export type QueryGetBlogBySlugArgs = {
+  slug: Scalars['String']['input'];
+};
+
+
 export type QueryGetDoctorbyIdArgs = {
   id: Scalars['String']['input'];
 };
@@ -1150,6 +1242,18 @@ export type QueryGetProfilesArgs = {
 export type QueryGetTopMedicalFacilitiesArgs = {
   limit?: Scalars['Float']['input'];
   typeFacility: Scalars['String']['input'];
+};
+
+
+export type QueryGetTotalBlogsCountArgs = {
+  isDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetTotalBlogsCountForClientArgs = {
+  search?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1325,6 +1429,38 @@ export type Setting = {
 export type Subscription = {
   __typename?: 'Subscription';
   registerCreated: Register;
+  registerDoctorCreated: Register;
+  registerPackageCreated: Register;
+  registerSpecialtyCreated: Register;
+  registerVaccinationCreated: Register;
+};
+
+
+export type SubscriptionRegisterCreatedArgs = {
+  option: GetRegisterByOptionInput;
+};
+
+
+export type SubscriptionRegisterDoctorCreatedArgs = {
+  date: Scalars['String']['input'];
+  doctorId: Scalars['String']['input'];
+};
+
+export type UpdateBlogInput = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  deletedAt?: InputMaybe<Scalars['Float']['input']>;
+  deletedBy?: InputMaybe<UserSlimInput>;
+  id: Scalars['ID']['input'];
+  keywords?: InputMaybe<Scalars['String']['input']>;
+  mainPhoto?: InputMaybe<LinkImageInput>;
+  priority?: InputMaybe<Scalars['Float']['input']>;
+  shortContent: Scalars['String']['input'];
+  slug?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<EnumBlogStatus>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<EnumBlogType>;
+  updatedAt?: InputMaybe<Scalars['Float']['input']>;
+  updatedBy?: InputMaybe<UserSlimInput>;
 };
 
 export type UpdateCustomerInput = {
@@ -1459,17 +1595,17 @@ export type UpdateSettingInput = {
 
 export type UpdateUserInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
+  avatar?: InputMaybe<LinkImageInput>;
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
-  linkImage?: InputMaybe<LinkImageInput>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserWithPassInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
+  avatar?: InputMaybe<LinkImageInput>;
   email: Scalars['String']['input'];
   id: Scalars['String']['input'];
-  linkImage?: InputMaybe<LinkImageInput>;
   password: Scalars['String']['input'];
   passwordNew: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -1490,11 +1626,11 @@ export type UpdateVaccineInput = {
 export type User = {
   __typename?: 'User';
   active?: Maybe<Scalars['Boolean']['output']>;
+  avatar?: Maybe<LinkImage>;
   customer?: Maybe<Customer>;
   doctor?: Maybe<Doctor>;
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  linkImage?: Maybe<LinkImage>;
   medicalFacilities?: Maybe<MedicalFacilities>;
   password: Scalars['String']['output'];
   roles?: Maybe<Array<Scalars['String']['output']>>;
@@ -1503,6 +1639,19 @@ export type User = {
 
 export type UserSelectInput = {
   role: Role;
+};
+
+export type UserSlimEntity = {
+  __typename?: 'UserSlimEntity';
+  role: Scalars['String']['output'];
+  showName: Scalars['String']['output'];
+  username: Scalars['String']['output'];
+};
+
+export type UserSlimInput = {
+  role: Scalars['String']['input'];
+  showName: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type Vaccination = {
@@ -1539,14 +1688,14 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type UpdateUserWithPassMutationVariables = Exact<{
   input: UpdateUserWithPassInput;
 }>;
 
 
-export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type CreateCustomerByUserIdMutationVariables = Exact<{
   input: CreateCustomerInput;
@@ -1560,7 +1709,7 @@ export type LoginCustomerMutationVariables = Exact<{
 }>;
 
 
-export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } } };
+export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } } };
 
 export type UpdateCustomerMutationVariables = Exact<{
   input: UpdateCustomerInput;
@@ -1633,7 +1782,7 @@ export type GetGeneralInforQuery = { __typename?: 'Query', getGeneralInfor: { __
 export type CheckloginCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, linkImage?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type GetMedicalFacilityRegisInfoByIdQueryVariables = Exact<{
   input: Scalars['String']['input'];
@@ -1824,12 +1973,38 @@ export type GetTotalFacilitiesHaveSrvCountForClientQueryVariables = Exact<{
 
 export type GetTotalFacilitiesHaveSrvCountForClientQuery = { __typename?: 'Query', getTotalFacilitiesHaveSrvCountForClient: number };
 
+export type GetAllBlogPaginationForClientQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  page: Scalars['Float']['input'];
+  limit: Scalars['Float']['input'];
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetAllBlogPaginationForClientQuery = { __typename?: 'Query', getAllBlogPaginationForClient: Array<{ __typename?: 'Blog', id: string, slug: string, title: string, status: string, content: string, shortContent: string, priority: number, type: string, keywords: string, createdAt: number, updatedAt?: number | null, deletedAt?: number | null, mainPhoto: { __typename?: 'LinkImage', filename: string, type: string, url: string }, createdBy: { __typename?: 'UserSlimEntity', username: string, showName: string, role: string }, updatedBy?: { __typename?: 'UserSlimEntity', username: string, showName: string, role: string } | null, deletedBy?: { __typename?: 'UserSlimEntity', role: string, showName: string, username: string } | null }> };
+
+export type GetTotalBlogsCountForClientQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetTotalBlogsCountForClientQuery = { __typename?: 'Query', getTotalBlogsCountForClient: number };
+
+export type GetBlogBySlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type GetBlogBySlugQuery = { __typename?: 'Query', getBlogBySlug: { __typename?: 'Blog', id: string, slug: string, title: string, content: string, shortContent: string, priority: number, type: string, keywords: string, status: string, createdAt: number, updatedAt?: number | null, deletedAt?: number | null, mainPhoto: { __typename?: 'LinkImage', filename: string, type: string, url: string }, createdBy: { __typename?: 'UserSlimEntity', username: string, showName: string, role: string }, updatedBy?: { __typename?: 'UserSlimEntity', username: string, showName: string, role: string } | null, deletedBy?: { __typename?: 'UserSlimEntity', role: string, showName: string, username: string } | null } };
+
 
 export const UpdateUserDocument = gql`
     mutation updateUser($input: UpdateUserInput!) {
   updateUser(updateUserInput: $input) {
     id
-    linkImage {
+    avatar {
       filename
       type
       url
@@ -1882,7 +2057,7 @@ export const UpdateUserWithPassDocument = gql`
     mutation updateUserWithPass($input: UpdateUserWithPassInput!) {
   updateUserWithPass(updateUserInput: $input) {
     id
-    linkImage {
+    avatar {
       filename
       type
       url
@@ -1981,7 +2156,7 @@ export const LoginCustomerDocument = gql`
       username
       email
       password
-      linkImage {
+      avatar {
         filename
         type
         url
@@ -2427,7 +2602,7 @@ export const CheckloginCustomerDocument = gql`
     query checkloginCustomer {
   checkloginCustomer {
     id
-    linkImage {
+    avatar {
       filename
       type
       url
@@ -3789,6 +3964,216 @@ export type GetTotalFacilitiesHaveSrvCountForClientQueryHookResult = ReturnType<
 export type GetTotalFacilitiesHaveSrvCountForClientLazyQueryHookResult = ReturnType<typeof useGetTotalFacilitiesHaveSrvCountForClientLazyQuery>;
 export type GetTotalFacilitiesHaveSrvCountForClientSuspenseQueryHookResult = ReturnType<typeof useGetTotalFacilitiesHaveSrvCountForClientSuspenseQuery>;
 export type GetTotalFacilitiesHaveSrvCountForClientQueryResult = Apollo.QueryResult<GetTotalFacilitiesHaveSrvCountForClientQuery, GetTotalFacilitiesHaveSrvCountForClientQueryVariables>;
+export const GetAllBlogPaginationForClientDocument = gql`
+    query getAllBlogPaginationForClient($search: String, $page: Float!, $limit: Float!, $sortOrder: String, $type: String) {
+  getAllBlogPaginationForClient(
+    search: $search
+    page: $page
+    limit: $limit
+    sortOrder: $sortOrder
+    type: $type
+  ) {
+    id
+    slug
+    title
+    status
+    content
+    shortContent
+    priority
+    type
+    keywords
+    mainPhoto {
+      filename
+      type
+      url
+    }
+    createdAt
+    createdBy {
+      username
+      showName
+      role
+    }
+    updatedAt
+    updatedBy {
+      username
+      showName
+      role
+    }
+    deletedAt
+    deletedBy {
+      role
+      showName
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAllBlogPaginationForClientQuery__
+ *
+ * To run a query within a React component, call `useGetAllBlogPaginationForClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllBlogPaginationForClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllBlogPaginationForClientQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      sortOrder: // value for 'sortOrder'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetAllBlogPaginationForClientQuery(baseOptions: Apollo.QueryHookOptions<GetAllBlogPaginationForClientQuery, GetAllBlogPaginationForClientQueryVariables> & ({ variables: GetAllBlogPaginationForClientQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllBlogPaginationForClientQuery, GetAllBlogPaginationForClientQueryVariables>(GetAllBlogPaginationForClientDocument, options);
+      }
+export function useGetAllBlogPaginationForClientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllBlogPaginationForClientQuery, GetAllBlogPaginationForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllBlogPaginationForClientQuery, GetAllBlogPaginationForClientQueryVariables>(GetAllBlogPaginationForClientDocument, options);
+        }
+export function useGetAllBlogPaginationForClientSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllBlogPaginationForClientQuery, GetAllBlogPaginationForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllBlogPaginationForClientQuery, GetAllBlogPaginationForClientQueryVariables>(GetAllBlogPaginationForClientDocument, options);
+        }
+export type GetAllBlogPaginationForClientQueryHookResult = ReturnType<typeof useGetAllBlogPaginationForClientQuery>;
+export type GetAllBlogPaginationForClientLazyQueryHookResult = ReturnType<typeof useGetAllBlogPaginationForClientLazyQuery>;
+export type GetAllBlogPaginationForClientSuspenseQueryHookResult = ReturnType<typeof useGetAllBlogPaginationForClientSuspenseQuery>;
+export type GetAllBlogPaginationForClientQueryResult = Apollo.QueryResult<GetAllBlogPaginationForClientQuery, GetAllBlogPaginationForClientQueryVariables>;
+export const GetTotalBlogsCountForClientDocument = gql`
+    query getTotalBlogsCountForClient($search: String, $type: String) {
+  getTotalBlogsCountForClient(search: $search, type: $type)
+}
+    `;
+
+/**
+ * __useGetTotalBlogsCountForClientQuery__
+ *
+ * To run a query within a React component, call `useGetTotalBlogsCountForClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTotalBlogsCountForClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTotalBlogsCountForClientQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetTotalBlogsCountForClientQuery(baseOptions?: Apollo.QueryHookOptions<GetTotalBlogsCountForClientQuery, GetTotalBlogsCountForClientQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTotalBlogsCountForClientQuery, GetTotalBlogsCountForClientQueryVariables>(GetTotalBlogsCountForClientDocument, options);
+      }
+export function useGetTotalBlogsCountForClientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTotalBlogsCountForClientQuery, GetTotalBlogsCountForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTotalBlogsCountForClientQuery, GetTotalBlogsCountForClientQueryVariables>(GetTotalBlogsCountForClientDocument, options);
+        }
+export function useGetTotalBlogsCountForClientSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTotalBlogsCountForClientQuery, GetTotalBlogsCountForClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTotalBlogsCountForClientQuery, GetTotalBlogsCountForClientQueryVariables>(GetTotalBlogsCountForClientDocument, options);
+        }
+export type GetTotalBlogsCountForClientQueryHookResult = ReturnType<typeof useGetTotalBlogsCountForClientQuery>;
+export type GetTotalBlogsCountForClientLazyQueryHookResult = ReturnType<typeof useGetTotalBlogsCountForClientLazyQuery>;
+export type GetTotalBlogsCountForClientSuspenseQueryHookResult = ReturnType<typeof useGetTotalBlogsCountForClientSuspenseQuery>;
+export type GetTotalBlogsCountForClientQueryResult = Apollo.QueryResult<GetTotalBlogsCountForClientQuery, GetTotalBlogsCountForClientQueryVariables>;
+export const GetBlogBySlugDocument = gql`
+    query getBlogBySlug($slug: String!) {
+  getBlogBySlug(slug: $slug) {
+    id
+    slug
+    title
+    content
+    shortContent
+    priority
+    type
+    keywords
+    mainPhoto {
+      filename
+      type
+      url
+    }
+    status
+    createdAt
+    createdBy {
+      username
+      showName
+      role
+    }
+    updatedAt
+    updatedBy {
+      username
+      showName
+      role
+    }
+    deletedAt
+    deletedBy {
+      role
+      showName
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBlogBySlugQuery__
+ *
+ * To run a query within a React component, call `useGetBlogBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlogBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBlogBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetBlogBySlugQuery(baseOptions: Apollo.QueryHookOptions<GetBlogBySlugQuery, GetBlogBySlugQueryVariables> & ({ variables: GetBlogBySlugQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBlogBySlugQuery, GetBlogBySlugQueryVariables>(GetBlogBySlugDocument, options);
+      }
+export function useGetBlogBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlogBySlugQuery, GetBlogBySlugQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBlogBySlugQuery, GetBlogBySlugQueryVariables>(GetBlogBySlugDocument, options);
+        }
+export function useGetBlogBySlugSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetBlogBySlugQuery, GetBlogBySlugQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetBlogBySlugQuery, GetBlogBySlugQueryVariables>(GetBlogBySlugDocument, options);
+        }
+export type GetBlogBySlugQueryHookResult = ReturnType<typeof useGetBlogBySlugQuery>;
+export type GetBlogBySlugLazyQueryHookResult = ReturnType<typeof useGetBlogBySlugLazyQuery>;
+export type GetBlogBySlugSuspenseQueryHookResult = ReturnType<typeof useGetBlogBySlugSuspenseQuery>;
+export type GetBlogBySlugQueryResult = Apollo.QueryResult<GetBlogBySlugQuery, GetBlogBySlugQueryVariables>;
+export type BlogKeySpecifier = ('content' | 'createdAt' | 'createdBy' | 'deletedAt' | 'deletedBy' | 'id' | 'keywords' | 'mainPhoto' | 'priority' | 'shortContent' | 'slug' | 'status' | 'title' | 'type' | 'updatedAt' | 'updatedBy' | BlogKeySpecifier)[];
+export type BlogFieldPolicy = {
+	content?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdBy?: FieldPolicy<any> | FieldReadFunction<any>,
+	deletedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	deletedBy?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	keywords?: FieldPolicy<any> | FieldReadFunction<any>,
+	mainPhoto?: FieldPolicy<any> | FieldReadFunction<any>,
+	priority?: FieldPolicy<any> | FieldReadFunction<any>,
+	shortContent?: FieldPolicy<any> | FieldReadFunction<any>,
+	slug?: FieldPolicy<any> | FieldReadFunction<any>,
+	status?: FieldPolicy<any> | FieldReadFunction<any>,
+	title?: FieldPolicy<any> | FieldReadFunction<any>,
+	type?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedBy?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -3911,10 +4296,11 @@ export type MedicalStaffFieldPolicy = {
 	staffName?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('activeUser' | 'confirmRegister' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('activeUser' | 'confirmRegister' | 'createBlog' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUnDeleteBlog' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateBlog' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	activeUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	confirmRegister?: FieldPolicy<any> | FieldReadFunction<any>,
+	createBlog?: FieldPolicy<any> | FieldReadFunction<any>,
 	createCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	createDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	createEvaluate?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -3937,12 +4323,14 @@ export type MutationFieldPolicy = {
 	deleteNotification?: FieldPolicy<any> | FieldReadFunction<any>,
 	deletePackage?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteProfile?: FieldPolicy<any> | FieldReadFunction<any>,
+	deleteUnDeleteBlog?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteVaccination?: FieldPolicy<any> | FieldReadFunction<any>,
 	login?: FieldPolicy<any> | FieldReadFunction<any>,
 	logout?: FieldPolicy<any> | FieldReadFunction<any>,
 	signup?: FieldPolicy<any> | FieldReadFunction<any>,
 	signupUser?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateBlog?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateEvaluate?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -3998,10 +4386,12 @@ export type ProfileFieldPolicy = {
 	register?: FieldPolicy<any> | FieldReadFunction<any>,
 	relationship?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfiles' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllBlogPagination' | 'getAllBlogPaginationForClient' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getBlogBySlug' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfiles' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalBlogsCount' | 'getTotalBlogsCountForClient' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	checklogin?: FieldPolicy<any> | FieldReadFunction<any>,
 	checkloginCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllBlogPagination?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllBlogPaginationForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllCustomerPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4038,6 +4428,7 @@ export type QueryFieldPolicy = {
 	getAllVaccinationPaginationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllVaccinationPaginationOfFacilityForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllVaccinationSelect?: FieldPolicy<any> | FieldReadFunction<any>,
+	getBlogBySlug?: FieldPolicy<any> | FieldReadFunction<any>,
 	getDoctorbyId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getDoctorbyUserId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getEvaluateById?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4055,6 +4446,8 @@ export type QueryFieldPolicy = {
 	getProfiles?: FieldPolicy<any> | FieldReadFunction<any>,
 	getSetting?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTopMedicalFacilities?: FieldPolicy<any> | FieldReadFunction<any>,
+	getTotalBlogsCount?: FieldPolicy<any> | FieldReadFunction<any>,
+	getTotalBlogsCountForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalCustomersCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalDoctorsCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalDoctorsCountForClient?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4112,21 +4505,31 @@ export type SettingKeySpecifier = ('defaultLang' | SettingKeySpecifier)[];
 export type SettingFieldPolicy = {
 	defaultLang?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type SubscriptionKeySpecifier = ('registerCreated' | SubscriptionKeySpecifier)[];
+export type SubscriptionKeySpecifier = ('registerCreated' | 'registerDoctorCreated' | 'registerPackageCreated' | 'registerSpecialtyCreated' | 'registerVaccinationCreated' | SubscriptionKeySpecifier)[];
 export type SubscriptionFieldPolicy = {
-	registerCreated?: FieldPolicy<any> | FieldReadFunction<any>
+	registerCreated?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerDoctorCreated?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerPackageCreated?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerSpecialtyCreated?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerVaccinationCreated?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserKeySpecifier = ('active' | 'customer' | 'doctor' | 'email' | 'id' | 'linkImage' | 'medicalFacilities' | 'password' | 'roles' | 'username' | UserKeySpecifier)[];
+export type UserKeySpecifier = ('active' | 'avatar' | 'customer' | 'doctor' | 'email' | 'id' | 'medicalFacilities' | 'password' | 'roles' | 'username' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
 	active?: FieldPolicy<any> | FieldReadFunction<any>,
+	avatar?: FieldPolicy<any> | FieldReadFunction<any>,
 	customer?: FieldPolicy<any> | FieldReadFunction<any>,
 	doctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
-	linkImage?: FieldPolicy<any> | FieldReadFunction<any>,
 	medicalFacilities?: FieldPolicy<any> | FieldReadFunction<any>,
 	password?: FieldPolicy<any> | FieldReadFunction<any>,
 	roles?: FieldPolicy<any> | FieldReadFunction<any>,
+	username?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type UserSlimEntityKeySpecifier = ('role' | 'showName' | 'username' | UserSlimEntityKeySpecifier)[];
+export type UserSlimEntityFieldPolicy = {
+	role?: FieldPolicy<any> | FieldReadFunction<any>,
+	showName?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type VaccinationKeySpecifier = ('countryOfOrigin' | 'facility' | 'id' | 'indication' | 'medicalFactilitiesId' | 'note' | 'price' | 'prophylactic' | 'vaccineName' | 'workSchedule' | VaccinationKeySpecifier)[];
@@ -4150,6 +4553,10 @@ export type WorkScheduleFieldPolicy = {
 	status?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type StrictTypedTypePolicies = {
+	Blog?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | BlogKeySpecifier | (() => undefined | BlogKeySpecifier),
+		fields?: BlogFieldPolicy,
+	},
 	Customer?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CustomerKeySpecifier | (() => undefined | CustomerKeySpecifier),
 		fields?: CustomerFieldPolicy,
@@ -4233,6 +4640,10 @@ export type StrictTypedTypePolicies = {
 	User?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UserKeySpecifier | (() => undefined | UserKeySpecifier),
 		fields?: UserFieldPolicy,
+	},
+	UserSlimEntity?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | UserSlimEntityKeySpecifier | (() => undefined | UserSlimEntityKeySpecifier),
+		fields?: UserSlimEntityFieldPolicy,
 	},
 	Vaccination?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | VaccinationKeySpecifier | (() => undefined | VaccinationKeySpecifier),

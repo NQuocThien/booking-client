@@ -102,7 +102,7 @@ function InforCustomerCpn({
   }, [inforUser]);
   // console.log("test form data: ", formData);
   return (
-    <Container className="account">
+    <Container className="update-form">
       {isloginIn && formData && (
         <Row>
           <Form validated={validated} onSubmit={handleSubmit}>

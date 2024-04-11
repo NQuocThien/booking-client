@@ -3,7 +3,6 @@ import { regisVi } from "@/locales/vi/Facility";
 import ModalCpn from "../subs/Modal";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { MdTransgender } from "react-icons/md";
-import "leaflet/dist/leaflet.css";
 import { getSchedule } from "@/utils/getData";
 import { store } from "@/redux/store/store";
 import { IoIosPricetags } from "react-icons/io";

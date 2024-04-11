@@ -6,6 +6,7 @@ import Link from "next/link";
 export interface IBreadcrumbItem {
   label: string;
   url: string;
+  onClick?: () => void;
 }
 
 export interface ICustomBreadcrumbsProps {
@@ -19,14 +20,20 @@ const CustomBreadcrumbs: React.FC<ICustomBreadcrumbsProps> = ({ paths }) => {
         if (index === paths.length - 1)
           return (
             <Breadcrumb.Item
+              className=" fw-bold"
               key={index}
               active={index === paths.length - 1}
-              as={"span"}>
+              as={"span"}
+              onClick={path.onClick}>
               {path.label}
             </Breadcrumb.Item>
           );
         return (
-          <Link key={index} href={path.url} className="me-1">
+          <Link
+            key={index}
+            href={path.url}
+            onClick={path.onClick}
+            className="me-1">
             {path.label} /
           </Link>
         );

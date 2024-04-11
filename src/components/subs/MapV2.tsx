@@ -1,53 +1,57 @@
-import React, { useRef, useEffect } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { Modal } from "react-bootstrap";
+import React, { useEffect, useRef } from "react";
 
-interface MapModalProps {
-  show: boolean;
-  onHide: () => void;
+// Khai báo mở rộng cho window
+declare global {
+  interface Window {
+    Microsoft: any;
+    initMap: () => void;
+  }
 }
 
-const MapModal: React.FC<MapModalProps> = ({ show, onHide }) => {
-  const mapRef = useRef<L.Map | null>(null);
+const BingMap = ({
+  lat,
+  lng,
+  title = undefined,
+}: {
+  lat: number;
+  lng: number;
+  title?: string;
+}) => {
+  const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (show && !mapRef.current) {
-      // Khởi tạo bản đồ khi modal được hiển thị
-      mapRef.current = L.map("map-modal", {
-        center: [0, 0],
-        zoom: 1,
-      });
+    // thêm thể script
+    const script = document.createElement("script");
+    script.src = `https://www.bing.com/api/maps/mapcontrol?key=AvudJ4Nz3hYphoV6VjOWYS7jgrOin8G-rfMb8FT_263RAsiyH1JhuvAvLWbW8qIT&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
 
-      // Thêm layer OpenStreetMap
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-      }).addTo(mapRef.current);
-    }
+    script.onload = () => {
+      if (window.Microsoft && window.Microsoft.Maps) {
+        window.initMap = () => {
+          const map = new window.Microsoft.Maps.Map(mapRef.current, {
+            credentials:
+              "AvudJ4Nz3hYphoV6VjOWYS7jgrOin8G-rfMb8FT_263RAsiyH1JhuvAvLWbW8qIT",
+            center: new window.Microsoft.Maps.Location(lat, lng),
+            zoom: 14,
+          });
 
-    // Clean up khi modal bị ẩn
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
+          const pin = new window.Microsoft.Maps.Pushpin(map.getCenter(), {
+            title: title || "HERE",
+          });
+          map.entities.push(pin);
+        };
       }
     };
-  }, [show]);
 
-  return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>Map Modal</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div id="map-modal" style={{ width: "100%", height: "400px" }}></div>
-      </Modal.Body>
-      <Modal.Footer>
-        <button onClick={onHide}>Close</button>
-      </Modal.Footer>
-    </Modal>
-  );
+    return () => {
+      document.body.removeChild(script);
+      window.initMap;
+    };
+  }, [lat, lng]);
+
+  return <div ref={mapRef} style={{ width: "100%", height: "100%" }} />;
 };
 
-export default MapModal;
+export default BingMap;

@@ -3,7 +3,6 @@ import { facilityVi, regisVi } from "@/locales/vi/Facility";
 import ModalCpn from "../subs/Modal";
 import { Col, Container, Row } from "react-bootstrap";
 import { MdOutlineSick, MdPerson } from "react-icons/md";
-import "leaflet/dist/leaflet.css";
 import { IoPricetags } from "react-icons/io5";
 import { formatter } from "@/utils/tools";
 import { AiOutlineSchedule } from "react-icons/ai";

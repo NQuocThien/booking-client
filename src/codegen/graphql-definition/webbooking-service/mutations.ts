@@ -3,7 +3,7 @@ const updateUser = gql`
   mutation updateUser($input: UpdateUserInput!) {
     updateUser(updateUserInput: $input) {
       id
-      linkImage {
+      avatar {
         filename
         type
         url
@@ -31,7 +31,7 @@ const updateUserWithPass = gql`
   mutation updateUserWithPass($input: UpdateUserWithPassInput!) {
     updateUserWithPass(updateUserInput: $input) {
       id
-      linkImage {
+      avatar {
         filename
         type
         url
@@ -78,7 +78,7 @@ const loginCustomer = gql`
         username
         email
         password
-        linkImage {
+        avatar {
           filename
           type
           url

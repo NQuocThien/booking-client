@@ -27,9 +27,6 @@ function FormCreateCustomer({
   inforUser,
   onCreate,
 }: InforUserCpnProps) {
-  // console.log("test:11 ", inforUser);
-  // console.log("test:22 ", isloginIn);
-
   const [formData, setFormData] = useState<CreateCustomerInput>({
     address: "",
     email: "",
@@ -79,7 +76,7 @@ function FormCreateCustomer({
   }, [dataupdateUser]);
 
   return (
-    <Container className="account">
+    <Container className="create-form">
       {isloginIn && formData && (
         <Row>
           <Form validated={validated} onSubmit={handleSubmit}>
@@ -141,18 +138,30 @@ function FormCreateCustomer({
                     required
                     aria-label="Default select example"
                     value={formData.gender}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      var gender: EGender = formData.gender;
+                      if (
+                        e.currentTarget.value &&
+                        e.currentTarget.value === EGender.Male
+                      ) {
+                        gender = EGender.Male;
+                      } else if (
+                        e.currentTarget.value &&
+                        e.currentTarget.value === EGender.Female
+                      ) {
+                        gender = EGender.Female;
+                      }
                       setFormData(
                         (pre) =>
                           pre && {
                             ...pre,
-                            gender: getEnumValueGender(e.target.value),
+                            gender: gender,
                           }
-                      )
-                    }>
+                      );
+                    }}>
                     <option>{lan.labelGender}</option>
-                    <option value="Nam">{lan.labelMale}</option>
-                    <option value="Nữ">{lan.labelFemale}</option>
+                    <option value={EGender.Male}>{lan.labelMale}</option>
+                    <option value={EGender.Female}>{lan.labelFemale}</option>
                   </Form.Select>
                 </Form.Group>
               </Col>

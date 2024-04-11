@@ -1,0 +1,146 @@
+.blog-page {
+  .blogs {
+    background-color: $white;
+  }
+  .blogs-top {
+    .active {
+      color: $item-hover;
+      font-weight: bold;
+    }
+    .type {
+      cursor: pointer;
+    }
+    .type:hover {
+      color: $item-hover;
+    }
+    .title {
+      cursor: pointer;
+    }
+  }
+  .blog-main {
+    .title {
+      cursor: pointer;
+    }
+    .image {
+      img {
+        border: 2px solid $item-hover;
+        border-radius: 10px;
+        width: 100%;
+      }
+    }
+  }
+  .blog-main:hover {
+    .title {
+      font-weight: bold;
+    }
+    .image {
+      img {
+        opacity: 0.8;
+      }
+    }
+  }
+  .blog-priority {
+    .blog-priority-item {
+      border-radius: 10px;
+      .image {
+        width: 100%;
+        height: auto;
+        img {
+          width: 90%;
+        }
+      }
+      .title {
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .calendar {
+        font-size: 12px;
+      }
+      .type {
+        font-size: 14px;
+      }
+    }
+    .blog-priority-item :hover {
+      .title {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    }
+  }
+  .blog-normal {
+    .blog-normal-item {
+      border-radius: 10px;
+      .image {
+        img {
+          border-radius: 10px;
+          width: 100%;
+        }
+      }
+      .title {
+        cursor: pointer;
+      }
+      .type {
+        font-size: 14px;
+      }
+      .calendar {
+        font-size: 14px;
+      }
+    }
+    .blog-normal-item:hover {
+      border-radius: 10px;
+      .image {
+        opacity: 0.8;
+      }
+      .title {
+        font-weight: bold;
+      }
+      .type {
+        font-size: 16px;
+      }
+      .calendar {
+        font-size: 14px;
+      }
+    }
+  }
+}
+//----------------------------------------------------------------
+.blog-detail {
+  border-radius: 18px;
+  .custom-breadcrumb {
+    .breadcrumb {
+      margin: 0;
+    }
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 18px;
+  }
+  .main {
+    background-color: $white;
+    box-shadow: 5px 6px 6px $gay;
+    border-radius: 10px;
+    * {
+      max-width: 100%;
+    }
+    .title {
+    }
+    .keywords {
+      .keyword-item {
+        border: 1px solid $item-hover;
+        border-radius: 10px;
+      }
+    }
+  }
+  .same-blog {
+    .blog-priority {
+      background-color: $white;
+      box-shadow: 5px 6px 6px $gay;
+      border-radius: 0 0 10px 10px;
+    }
+    .title {
+      background-color: $white;
+      border-radius: 10px 10px 0 0;
+      margin: 0;
+    }
+  }
+}

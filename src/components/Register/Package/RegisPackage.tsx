@@ -112,8 +112,6 @@ function RegisPackageCpn(props: IProps) {
     if (dayOffFacility && dayOffFacility.includes(dayOfWeek)) {
       return false;
     }
-
-    // Trả về true nếu ngày đó có trong lịch làm việc của chuyên khoa, ngược lại trả về false
     return find !== -1;
   };
 

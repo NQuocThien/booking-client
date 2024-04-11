@@ -41,7 +41,9 @@ function RegisDoctorCpn(props: IProps) {
   const router = useRouter();
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
-    useGetAllRegisPendingLazyQuery();
+    useGetAllRegisPendingLazyQuery({
+      fetchPolicy: "no-cache",
+    });
 
   const [regisDoctor, { loading: loadingRegisDoctor }] =
     useCreateRegisterDoctorMutation();
@@ -75,9 +77,10 @@ function RegisDoctorCpn(props: IProps) {
             (s) => s.startTime === ss.startTime && s.endTime === ss.endTime
           ).length;
           const maxCount: number = state.doctor?.workSchedule?.numberSlot || 10;
-          console.log("count regis: ", count, maxCount);
-          return count <= maxCount;
+          console.log("count regis doctor: ", count, maxCount);
+          return count < maxCount;
         }) || [];
+
       setSessions(sessionFiltered);
     }
   }, [dataRegis]);
@@ -122,7 +125,6 @@ function RegisDoctorCpn(props: IProps) {
         date: formattedDate,
       })
     );
-
     getRegisPending({
       variables: {
         input: {

@@ -4,7 +4,6 @@ import ModalCpn from "../subs/Modal";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { MdEmail, MdOutlineLocationOn, MdTransgender } from "react-icons/md";
 import { FaBookMedical, FaBookOpen, FaPhone } from "react-icons/fa";
-import "leaflet/dist/leaflet.css";
 import { getAcademiTitle, getDegree } from "@/utils/getData";
 import { store } from "@/redux/store/store";
 import { AiOutlineExperiment } from "react-icons/ai";

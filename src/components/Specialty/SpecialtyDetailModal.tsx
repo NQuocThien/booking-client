@@ -2,7 +2,6 @@ import { MedicalSpecialties } from "@/graphql/webbooking-service.generated";
 import { regisVi } from "@/locales/vi/Facility";
 import ModalCpn from "../subs/Modal";
 import { Container, Row } from "react-bootstrap";
-import "leaflet/dist/leaflet.css";
 import { formatter } from "@/utils/tools";
 import { IoIosPricetags } from "react-icons/io";
 import { getSchedule } from "@/utils/getData";

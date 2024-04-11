@@ -19,7 +19,7 @@ function Footer({ data }: { data: GeneralInfor | undefined }) {
         <div className="">
           <div className="row">
             <div className="col-lg-6 col-md-6 footer-contact">
-              <h6>{data?.company}</h6>
+              <h5 className="text-primary fw-bold">{data?.company}</h5>
               <div className="logo">
                 <img
                   className="me-auto img-fluid"
@@ -27,7 +27,7 @@ function Footer({ data }: { data: GeneralInfor | undefined }) {
                   alt=""
                 />
               </div>
-              <p>
+              <p className="mt-2">
                 <strong>
                   {lan.texAddress}: {data?.address}
                 </strong>

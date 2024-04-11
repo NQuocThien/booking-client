@@ -1,6 +1,5 @@
 import { GetETypeOfFacility } from "@/assets/contains/emun";
 import {
-  ETypeOfFacility,
   MedicalFacilities,
   useGetAllMedicalFacilityPaginationQuery,
   useGetTotalFacilitiesCountQuery,
@@ -14,11 +13,12 @@ import useNProgress from "@/hooks/useNProgress";
 import PaginationCpn from "../subs/Pagination";
 import { useRouter } from "next/navigation";
 import FacilityDetailModal from "./FacilityModalDetail";
+import MapComponent from "../subs/Map";
 interface IProps {
   type: GetETypeOfFacility;
   lan: typeof facilityVi;
 }
-function MedicalFacilities(props: IProps) {
+function MedicalFacilitiesCpn(props: IProps) {
   const { type, lan } = props;
   const router = useRouter();
   const [facilities, setFacilies] = useState<MedicalFacilities[]>([]);
@@ -210,6 +210,7 @@ function MedicalFacilities(props: IProps) {
           )}
         </Col>
       </Row>
+      <div style={{ height: 300, width: 300 }}></div>
       <FacilityDetailModal
         facility={facility}
         lan={lan}
@@ -219,7 +220,7 @@ function MedicalFacilities(props: IProps) {
     </Container>
   );
 }
-export default MedicalFacilities;
+export default MedicalFacilitiesCpn;
 
 function renderTitle(
   type: GetETypeOfFacility | undefined,

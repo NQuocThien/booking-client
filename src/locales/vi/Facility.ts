@@ -1,6 +1,6 @@
 export const facilityVi = {
   labelfillter: "Cơ sở y tế",
-  subSrvDoctor: "Khám theo bác sỉ",
+  subSrvDoctor: "Khám theo bác sĩ",
   subSrvPackage: "Khám theo gói khám",
   subSrvSpecialty: "Khám theo chuyên khoa",
   subSrvVaccination: "Tim Chủng Vaccine",
@@ -33,18 +33,18 @@ export const regisVi = {
   titleTypeService: "Chọn hình thức đăng ký khám",
   subTypeService:
     "Tiết kiệm thời giang xếp hàng, chờ đợi với nhiều cơ sở y tế trong địa bàn tỉnh An Giang",
-  titleSrvDoctor: "Đăng ký khám theo bác sỉ",
+  titleSrvDoctor: "Đăng ký khám theo bác sĩ",
   titleSrvSpecialty: "Đăng ký khám theo chuyên khoa",
   titleSrvPackage: "Đăng ký khám theo gói khám",
   titleSrvVaccine: "Đăng ký tiêm chủng",
 
-  svrDoctor: "Khám theo bác sỉ",
+  svrDoctor: "Khám theo bác sĩ",
   svrSpecialty: "Khám theo chuyên khoa",
   svrPackage: "Khám theo gói khám",
   svrVaccine: "Tiêm chủng",
 
   titleChooseSpecialty: "Đăng ký khám theo chuyên khoa",
-  titleChooseDoctor: "Đăng ký khám theo bác sỉ",
+  titleChooseDoctor: "Đăng ký khám theo bác sĩ",
   titleChoosePackage: "Đăng ký khám theo gói khám",
   titleChooseVaccine: "Đăng ký tiêm chủng",
 
@@ -54,7 +54,7 @@ export const regisVi = {
   titleSpecialties: "Chọn chuyên khoa khám",
   titleVaccination: "Chọn Vaccine",
   titlePackage: "Chọn gói khám",
-  titleDoctors: "Chọn bác sỉ",
+  titleDoctors: "Chọn bác sĩ",
   labelDayOfWeek: "Thứ ",
 
   headServiceName: " Dịch vụ y tế",
@@ -71,7 +71,7 @@ export const regisVi = {
 
   modalVaccineHead: "Thông tin vaccine",
   modalSpecialtyHead: "Thông tin chuyên khoa",
-  modalDoctorHead: "Thông tin Bác sỉ",
+  modalDoctorHead: "Thông tin Bác sĩ",
   modalPackageHead: "Thông tin gói khám",
 
   modalVaccineNote: "Chú ý",
@@ -81,7 +81,7 @@ export const regisVi = {
 };
 
 export const filterVi = {
-  holderDoctorName: "Tên bác sỉ...",
+  holderDoctorName: "Tên bác sĩ...",
   optDegree: "Học vị",
   optAcademicTitle: "Học hàm",
   optGender: "Giới tính",
@@ -90,11 +90,11 @@ export const filterVi = {
 
   otpSpecialty: "Chuyên khoa",
 
-  optDoctorate: "Tiến sỉ Bác sỉ",
-  optMasterDoctor: "Thạch sỉ Bác sỉ",
-  optDoctor: "Bác sỉ",
-  optDoctorS1: "Bác sỉ chuyên khoa I",
-  optDoctorS2: "Bác sỉ chuyên khoa II",
+  optDoctorate: "Tiến sĩ Bác sĩ",
+  optMasterDoctor: "Thạch sĩ Bác sĩ",
+  optDoctor: "Bác sĩ",
+  optDoctorS1: "Bác sĩ chuyên khoa I",
+  optDoctorS2: "Bác sĩ chuyên khoa II",
   optProfessor: "Giáo sư",
   optAssociateProfesso: "Phó giáo sư",
 };

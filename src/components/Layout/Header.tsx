@@ -183,45 +183,19 @@ function Header(props: IProps) {
                 </ul>
               </li>
               <li className="dropdown">
-                <a href="#" className="nav-link">
+                <Link href="/blogs" className="nav-link">
                   <span>{lan.texNavBlog}</span>{" "}
                   <i className="bi bi-chevron-down"></i>
-                </a>
+                </Link>
                 <ul>
                   <li>
-                    <a href="#">Drop Down 1</a>
-                  </li>
-                  <li className="dropdown">
-                    <a href="#">
-                      <span>Deep Drop Down</span>{" "}
-                      <i className="bi bi-chevron-right"></i>
-                    </a>
-                    <ul>
-                      <li>
-                        <a href="#">Deep Drop Down 1</a>
-                      </li>
-                      <li>
-                        <a href="#">Deep Drop Down 2</a>
-                      </li>
-                      <li>
-                        <a href="#">Deep Drop Down 3</a>
-                      </li>
-                      <li>
-                        <a href="#">Deep Drop Down 4</a>
-                      </li>
-                      <li>
-                        <a href="#">Deep Drop Down 5</a>
-                      </li>
-                    </ul>
+                    <Link href="/blogs">{lan.texNavBlogHealth}</Link>
                   </li>
                   <li>
-                    <a href="#">Drop Down 2</a>
+                    <Link href="/blogs">{lan.texNavBlogMedical}</Link>
                   </li>
                   <li>
-                    <a href="#">Drop Down 3</a>
-                  </li>
-                  <li>
-                    <a href="#">Drop Down 4</a>
+                    <Link href="/blogs">{lan.texNavBlogService}</Link>
                   </li>
                 </ul>
               </li>
@@ -353,7 +327,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
                   <li>
                     <a href="#" className="nav-link">
-                      Khám theo bác sỉ
+                      Khám theo bác sĩ
                     </a>
                   </li>
                   <li>

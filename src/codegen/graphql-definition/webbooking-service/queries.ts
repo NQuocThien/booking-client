@@ -28,7 +28,7 @@ const checkLoginUser = gql`
   query checkloginCustomer {
     checkloginCustomer {
       id
-      linkImage {
+      avatar {
         filename
         type
         url
@@ -699,5 +699,100 @@ const getTotalFacilitiesHaveSrvCountForClient = gql`
     $type: String
   ) {
     getTotalFacilitiesHaveSrvCountForClient(search: $search, type: $type)
+  }
+`;
+const getAllBlogPaginationForClient = gql`
+  # Write your query or mutation here
+  query getAllBlogPaginationForClient(
+    $search: String
+    $page: Float!
+    $limit: Float!
+    $sortOrder: String
+    $type: String
+  ) {
+    getAllBlogPaginationForClient(
+      search: $search
+      page: $page
+      limit: $limit
+      sortOrder: $sortOrder
+      type: $type
+    ) {
+      id
+      slug
+      title
+      status
+      content
+      shortContent
+      priority
+      type
+      keywords
+      mainPhoto {
+        filename
+        type
+        url
+      }
+      createdAt
+      createdBy {
+        username
+        showName
+        role
+      }
+      updatedAt
+      updatedBy {
+        username
+        showName
+        role
+      }
+      deletedAt
+      deletedBy {
+        role
+        showName
+        username
+      }
+    }
+  }
+`;
+const getTotalBlogsCountForClient = gql`
+  query getTotalBlogsCountForClient($search: String, $type: String) {
+    getTotalBlogsCountForClient(search: $search, type: $type)
+  }
+`;
+
+const getBlogBySlug = gql`
+  query getBlogBySlug($slug: String!) {
+    getBlogBySlug(slug: $slug) {
+      id
+      slug
+      title
+      content
+      shortContent
+      priority
+      type
+      keywords
+      mainPhoto {
+        filename
+        type
+        url
+      }
+      status
+      createdAt
+      createdBy {
+        username
+        showName
+        role
+      }
+      updatedAt
+      updatedBy {
+        username
+        showName
+        role
+      }
+      deletedAt
+      deletedBy {
+        role
+        showName
+        username
+      }
+    }
   }
 `;

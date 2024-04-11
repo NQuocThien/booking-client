@@ -11,6 +11,11 @@ import { useEffect, useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import FacilityDetailModal from "../MedicalFacility/FacilityModalDetail";
+import { facilityVi } from "@/locales/vi/Facility";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { facilityUs } from "@/locales/en/Facility";
 interface IText {
   titleTop: string;
   titleSub: string;
@@ -25,8 +30,12 @@ interface IProps {
 
 function TopFacilitiesCpn(props: IProps) {
   const { lan, type } = props;
+  const [lanFacility, setLanFacility] = useState(facilityVi);
+  const currentLan = useSelector((state: RootState) => state.client.language);
 
   const [items, setItems] = useState<MedicalFacilities[]>([]);
+  const [facility, setFacility] = useState<MedicalFacilities>();
+  const [modal, setModal] = useState(false);
   const [slidesToShow, setSlidesToShow] = useState<number>(5);
 
   const { data, loading } = useGetTopMedicalFacilitiesQuery({
@@ -67,6 +76,11 @@ function TopFacilitiesCpn(props: IProps) {
     };
   }, [items]);
 
+  useEffect(() => {
+    if (currentLan.code === "us") setLanFacility(facilityUs);
+    else setLanFacility(facilityVi);
+  }, [currentLan]);
+
   function isValidUrl(url: string) {
     try {
       new URL(url);
@@ -94,10 +108,14 @@ function TopFacilitiesCpn(props: IProps) {
 
   const router = useRouter();
 
+  const handleClickDetail = (facility: MedicalFacilities) => {
+    setFacility(facility);
+    setModal(true);
+  };
   if (loading) {
     return (
       <div className="container">
-        <p className="">Loading...</p>;
+        <p className="">Loading...</p>
       </div>
     );
   }
@@ -127,13 +145,22 @@ function TopFacilitiesCpn(props: IProps) {
                   href={`/medical-facility/regis/${item.id}`}>
                   {lan.btnRegis}
                 </Link>
-                <Button variant="outline-primary" size="sm">
+                <Button
+                  onClick={() => handleClickDetail(item)}
+                  variant="outline-primary"
+                  size="sm">
                   {lan.btnDetail}
                 </Button>
               </Card.Body>
             </Card>
           ))}
         </div>
+        <FacilityDetailModal
+          facility={facility}
+          onClose={() => setModal(false)}
+          lan={lanFacility}
+          open={modal}
+        />
       </div>
     );
   }
@@ -168,7 +195,10 @@ function TopFacilitiesCpn(props: IProps) {
                     href={`/medical-facility/regis/${item.id}`}>
                     {lan.btnRegis}
                   </Link>
-                  <Button variant="outline-primary" size="sm">
+                  <Button
+                    onClick={() => handleClickDetail(item)}
+                    variant="outline-primary"
+                    size="sm">
                     {lan.btnDetail}
                   </Button>
                 </Card.Body>
@@ -183,6 +213,12 @@ function TopFacilitiesCpn(props: IProps) {
           <i className="bi bi-arrow-right fs-6 ms-2"></i>
         </Link>
       </div>
+      <FacilityDetailModal
+        facility={facility}
+        onClose={() => setModal(false)}
+        lan={lanFacility}
+        open={modal}
+      />
     </div>
   );
 }

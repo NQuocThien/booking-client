@@ -45,7 +45,7 @@ function CustomerDetailPage() {
     );
   } else if (userInfo && userInfo.customer) {
     return (
-      <div className="container">
+      <div className="container profile">
         <ManaProfile lan={lan} customerId={userInfo.customer.id} />;
       </div>
     );

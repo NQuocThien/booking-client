@@ -47,18 +47,18 @@ export const getDegree = (
   if (lan === "vn")
     switch (input) {
       case GetEDegree.Doctor:
-        return "Bác sỉ";
+        return "Bác sĩ";
       case GetEDegree.DoctorS1:
-        return "Bác sỉ chuyên khoa I";
+        return "Bác sĩ chuyên khoa I";
       case GetEDegree.DoctorS2:
-        return "Bác sỉ chuyên khoa II";
+        return "Bác sĩ chuyên khoa II";
       case GetEDegree.Doctorate:
-        return "Tiến sỉ bác sỉ";
+        return "Tiến sĩ bác sĩ";
       case GetEDegree.MasterDoctor:
-        return "Thạch sỉ bác sỉ";
+        return "Thạch sĩ bác sĩ";
 
       default:
-        return "Bác sỉ";
+        return "Bác sĩ";
     }
   else {
     switch (input) {

@@ -19,6 +19,10 @@ function AccountDetailPage() {
     } else setLan(accountInforVi);
   }, [currentLan]);
   if (!isloginIn) redirect("/account/login");
-  return <InforUserCpn inforUser={userInfo} isloginIn={isloginIn} lan={lan} />;
+  return (
+    <div className="user">
+      <InforUserCpn inforUser={userInfo} isloginIn={isloginIn} lan={lan} />
+    </div>
+  );
 }
 export default AccountDetailPage;

@@ -1,14 +1,12 @@
 "use client";
 
-import InforUserCpn from "@/components/Account/AccountInfor";
 import { formCustomerUs } from "@/locales/en/Account";
 import { formCustomerVi } from "@/locales/vi/Account";
 import { RootState } from "@/redux/store/store";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { redirect } from "next/navigation";
 import { setUserInfo } from "@/redux/store/client";
-import { UseDispatch } from "react-redux";
 import FormCreateCustomer from "@/components/Account/FormCreateCustomer";
 import InforCustomerCpn from "@/components/Account/FormUpdateCustomer";
 import { Customer } from "@/graphql/webbooking-service.generated";
@@ -39,21 +37,25 @@ function CustomerDetailPage() {
   if (!isloginIn) redirect("/account/login");
   if (userInfo && !userInfo.customer) {
     return (
-      <FormCreateCustomer
-        inforUser={userInfo}
-        isloginIn={true}
-        lan={lan}
-        onCreate={handleChangCustomerInfor}
-      />
+      <div className="account-info">
+        <FormCreateCustomer
+          inforUser={userInfo}
+          isloginIn={true}
+          lan={lan}
+          onCreate={handleChangCustomerInfor}
+        />
+      </div>
     );
   } else if (userInfo && userInfo.customer) {
     return (
-      <InforCustomerCpn
-        onChangeCustomer={handleChangCustomerInfor}
-        inforUser={userInfo}
-        isloginIn={true}
-        lan={lan}
-      />
+      <div className="account-info">
+        <InforCustomerCpn
+          onChangeCustomer={handleChangCustomerInfor}
+          inforUser={userInfo}
+          isloginIn={true}
+          lan={lan}
+        />
+      </div>
     );
   }
 }

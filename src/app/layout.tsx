@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@/styles/style.scss";
 import MainLayout from "@/components/Layout/MainLayout";
 import "nprogress/nprogress.css";
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,6 +22,10 @@ export default function RootLayout({
     <MainContextProvider>
       <StoreProvider>
         <html lang="en">
+          <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDofN0TQ25L-6NhzMJGnT430QzuO_seZhg&libraries=places"
+            async></script>
+
           <body className={inter.className}>
             <MainLayout>{children}</MainLayout>
           </body>

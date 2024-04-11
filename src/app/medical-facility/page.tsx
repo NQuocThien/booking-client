@@ -43,7 +43,7 @@ function CustomerDetailPage() {
     if (type && type !== "") {
       const filter = getNextRoute(type);
       setTypeOfFacility(filter);
-      console.log("Change: ", filter);
+      // console.log("Change: ", filter);
     }
   }, [searchParams.get("type")]);
 

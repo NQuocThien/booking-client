@@ -50,7 +50,7 @@ function RegisDoctorPage() {
     if (type && type !== "") {
       const typeService = getTypeService(type);
       setFilter((pre) => ({ ...pre, typeService: typeService }));
-      console.log("Change: ", filter);
+      // console.log("Change: ", filter);
     }
   }, [searchParams.get("type")]);
 

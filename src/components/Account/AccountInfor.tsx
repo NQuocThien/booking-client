@@ -33,7 +33,7 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
     username: "",
     password: "",
     passwordNew: "",
-    linkImage: {
+    avatar: {
       filename: "",
       url: "",
       type: "",
@@ -57,7 +57,7 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
     dispatch(checkExpToken());
     if (stateUpdatePass) {
       // đổi pass
-      var avatar: LinkImageInput | undefined | null = formData.linkImage;
+      var avatar: LinkImageInput | undefined | null = formData.avatar;
       if (selectedFile) {
         avatar = await uploadImage(selectedFile, "users");
       }
@@ -68,7 +68,7 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
         passwordNew: formData.passwordNew,
         username: formData.username,
         active: formData.active,
-        linkImage:
+        avatar:
           (avatar && {
             filename: avatar.filename,
             type: avatar.type,
@@ -93,7 +93,7 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
           console.log(error, "error");
         });
     } else {
-      var avatar: LinkImageInput | undefined | null = formData.linkImage;
+      var avatar: LinkImageInput | undefined | null = formData.avatar;
       if (selectedFile) {
         avatar = await uploadImage(selectedFile, "users");
       }
@@ -101,7 +101,7 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
         id: formData.id,
         active: true,
         email: formData.email,
-        linkImage:
+        avatar:
           (avatar && {
             filename: avatar.filename,
             type: avatar.type,
@@ -130,7 +130,7 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
       const input: UpdateUserWithPassInput = {
         username: inforUser.username,
         email: inforUser.email,
-        linkImage: inforUser.linkImage,
+        avatar: inforUser.avatar,
         active: true,
         id: inforUser.id,
         password: "",
@@ -162,14 +162,14 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
                 <br></br>
                 <Image
                   className={"image-input"}
-                  height={120}
-                  width={120}
+                  height={180}
+                  width={180}
                   src={
                     (selectedFile && URL.createObjectURL(selectedFile)) ||
-                    formData.linkImage?.url ||
+                    formData.avatar?.url ||
                     "/default.png"
                   }
-                  thumbnail
+                  roundedCircle
                   onClick={() => avatarRef.current && avatarRef.current.click()}
                 />
                 <Form.Control
