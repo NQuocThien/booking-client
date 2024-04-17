@@ -77,7 +77,7 @@ function ListProfile(props: IProps) {
     setModal(true);
   };
   return (
-    <div className="profile">
+    <div className="profile py-3">
       <h4 className="text-primary  text-center">{lan.titleProfile}</h4>
       <h4 className="text-primary text-center">{lan.subProfile}</h4>
       <div className="profile-list">

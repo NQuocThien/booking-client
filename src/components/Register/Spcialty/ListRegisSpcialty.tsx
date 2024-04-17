@@ -92,7 +92,9 @@ function ListRegisSpecialty(props: IProps) {
   };
   return (
     <div>
-      <h4 className="text-primary text-center">{lan.titleSpecialties}</h4>
+      <h4 className="text-primary fw-bold text-center py-3">
+        {lan.titleSpecialties}
+      </h4>
       <SearchInputCpn
         onSearch={(s) => {
           setFilter((pre) => ({ ...pre, search: s }));
