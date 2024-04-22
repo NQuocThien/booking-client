@@ -2,6 +2,7 @@ import { GetEAcademicTitle, GetEDegree } from "@/assets/contains/emun";
 import {
   EDayOfWeed,
   EGender,
+  EnumBlogType,
   Schedule,
 } from "@/graphql/webbooking-service.generated";
 import { store } from "@/redux/store/store";
@@ -136,5 +137,19 @@ export const getEnumValueDayOfWeek = (input: string): EDayOfWeed => {
       return EDayOfWeed.Sunday;
     default:
       return EDayOfWeed.Sunday;
+  }
+};
+export const getEnumBlogType = (
+  input: string | undefined
+): EnumBlogType | undefined => {
+  switch (input) {
+    case "Health":
+      return EnumBlogType.Health;
+    case "Medical":
+      return EnumBlogType.Medical;
+    case "Service":
+      return EnumBlogType.Service;
+    default:
+      return undefined;
   }
 };

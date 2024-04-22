@@ -6,14 +6,10 @@ import { useSelector } from "react-redux";
 import ListBlog from "@/components/blogs/ListBlog";
 import { blogVi } from "@/locales/vi/Blog";
 import { blogUs } from "@/locales/en/Blog";
-import { Blog } from "@/graphql/webbooking-service.generated";
-import BlogDetailLayout from "@/components/blogs/BlogDetailPage";
 
 function AccountDetailPage() {
   const [lan, setLan] = useState(blogVi);
   const currentLan = useSelector((state: RootState) => state.client.language);
-  const [blog, setBlog] = useState<Blog>();
-  const [topBlogs, setTopBlogs] = useState<Blog[]>([]);
   useLayoutEffect(() => {
     if (currentLan.code === "us") {
       setLan(blogUs);
@@ -21,21 +17,7 @@ function AccountDetailPage() {
   }, [currentLan]);
   return (
     <div className="blog-page">
-      {blog === undefined && (
-        <ListBlog
-          setTopBlogs={(blogs) => setTopBlogs(blogs)}
-          onChange={(blog) => setBlog(blog)}
-          lan={lan}
-        />
-      )}
-      {blog && (
-        <BlogDetailLayout
-          onChange={(blog) => setBlog(blog)}
-          topBlogs={topBlogs}
-          blog={blog}
-          lan={lan}
-        />
-      )}
+      <ListBlog lan={lan} />
     </div>
   );
 }

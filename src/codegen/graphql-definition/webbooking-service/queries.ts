@@ -144,16 +144,18 @@ const getTopMedicalFacilities = gql`
   }
 `;
 const getAllMedicalFacility = gql`
-  query getAllMedicalFacilityPagination(
+  query getAllMedicalFacilityPaginationForClient(
     $search: String
+    $searchField: String
     $page: Float!
     $limit: Float!
     $sortField: String
     $sortOrder: String
     $typeOfFacility: String
   ) {
-    getAllMedicalFacilityPagination(
+    getAllMedicalFacilityPaginationForClient(
       search: $search
+      searchField: $searchField
       page: $page
       limit: $limit
       sortField: $sortField
@@ -192,8 +194,16 @@ const getAllMedicalFacility = gql`
   }
 `;
 const getTotalFacilities = gql`
-  query getTotalFacilitiesCount($search: String, $type: String) {
-    getTotalFacilitiesCount(search: $search, type: $type)
+  query getTotalFacilitiesCountForClient(
+    $search: String
+    $searchField: String
+    $type: String
+  ) {
+    getTotalFacilitiesCountForClient(
+      search: $search
+      searchField: $searchField
+      type: $type
+    )
   }
 `;
 const getListMedicalSpecialtyRegisInfoByFacilityId = gql`
@@ -360,6 +370,7 @@ const getAllRegisPending = gql`
       packageId
       state
       profileId
+      createdAt
     }
   }
 `;
@@ -383,6 +394,7 @@ const getProfileTicketByCustomerId = gql`
         date
         typeOfService
         state
+        cancel
         session {
           endTime
           startTime

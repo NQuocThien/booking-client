@@ -22,6 +22,8 @@ export const facilityUs = {
   btnRegis: "Register",
   btnDetail: "Details",
   titlDiscription: "Discription",
+  otpName: "Search by Name",
+  otpAddress: "Search by Address",
   modalHead: "Healthcare Facility Information",
 };
 
@@ -61,6 +63,7 @@ export const regisUs = {
   messLogin: "Please log in to continue",
   messRegisSuccess: "Appointment booking successful",
   messRegisError: "Appointment booking error",
+  messRegisErrorExists: "Profile already exists",
   btnBack: "Back",
   btnDetail: "Detail",
   btnBooking: "Book Now",

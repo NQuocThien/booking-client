@@ -108,4 +108,7 @@ export const formCustomerUs = {
   modalHeader: "Detailed Profile Information",
   messCheckCutomer: "Create cutomer information please!",
   modalHeaderRegis: "Registration Information",
+  cancelRegis: "Cancel",
+  cancelledRegis: "Cancelled",
+  cancelledMess: "Cancelled",
 };

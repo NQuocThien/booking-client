@@ -1,54 +1,64 @@
 import { GetETypeOfFacility } from "@/assets/contains/emun";
 import {
   MedicalFacilities,
-  useGetAllMedicalFacilityPaginationQuery,
-  useGetTotalFacilitiesCountQuery,
+  useGetAllMedicalFacilityPaginationForClientQuery,
+  useGetTotalFacilitiesCountForClientQuery,
 } from "@/graphql/webbooking-service.generated";
 import { facilityVi } from "@/locales/vi/Facility";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import FillterCpn from "../Filter/FilterFacility";
-import { IFillter } from "@/assets/contains/item-interface";
+import { IPagination } from "@/assets/contains/item-interface";
 import useNProgress from "@/hooks/useNProgress";
 import PaginationCpn from "../subs/Pagination";
 import { useRouter } from "next/navigation";
 import FacilityDetailModal from "./FacilityModalDetail";
-import MapComponent from "../subs/Map";
 interface IProps {
-  type: GetETypeOfFacility;
+  type: GetETypeOfFacility | undefined;
   lan: typeof facilityVi;
 }
+
+export interface IFilter {
+  pagination: IPagination;
+  search: string;
+  searchField: "address" | "medicalFacilityName";
+  type: GetETypeOfFacility | undefined;
+}
+
 function MedicalFacilitiesCpn(props: IProps) {
   const { type, lan } = props;
   const router = useRouter();
   const [facilities, setFacilies] = useState<MedicalFacilities[]>([]);
   const [facility, setFacily] = useState<MedicalFacilities>();
-  const [fillter, setFillter] = useState<IFillter>({
+  const [fillter, setFillter] = useState<IFilter>({
     pagination: {
       current: 1,
       total: 0,
-      // sort: "asc",
       limit: 10,
     },
     search: "",
+    searchField: "medicalFacilityName",
     type: type,
   });
   const [modal, setModal] = useState<boolean>(false);
   // =================================================================
 
-  const { data, loading, error } = useGetAllMedicalFacilityPaginationQuery({
-    variables: {
-      limit: fillter.pagination.limit || 10,
-      page: fillter.pagination.current,
-      search: fillter.search,
-      typeOfFacility: fillter.type,
-    },
-  });
+  const { data, loading, error } =
+    useGetAllMedicalFacilityPaginationForClientQuery({
+      variables: {
+        limit: fillter.pagination.limit || 10,
+        page: fillter.pagination.current,
+        search: fillter.search,
+        searchField: fillter.searchField,
+        typeOfFacility: fillter.type,
+      },
+    });
   const { data: dataTotal, loading: loadingTotal } =
-    useGetTotalFacilitiesCountQuery({
+    useGetTotalFacilitiesCountForClientQuery({
       variables: {
         search: fillter.search,
         type: fillter.type,
+        searchField: fillter.searchField,
       },
     });
   // =====================================================================
@@ -61,20 +71,20 @@ function MedicalFacilitiesCpn(props: IProps) {
     }));
   }, [type]);
   useEffect(() => {
-    if (dataTotal?.getTotalFacilitiesCount) {
+    if (dataTotal?.getTotalFacilitiesCountForClient) {
       setFillter((pre) => ({
         ...pre,
         pagination: {
           ...pre.pagination,
-          total: dataTotal.getTotalFacilitiesCount,
+          total: dataTotal.getTotalFacilitiesCountForClient,
         },
       }));
     }
   }, [dataTotal]);
   useEffect(() => {
-    if (data?.getAllMedicalFacilityPagination) {
-      setFacilies(data?.getAllMedicalFacilityPagination);
-      setFacily(data?.getAllMedicalFacilityPagination[0]);
+    if (data?.getAllMedicalFacilityPaginationForClient) {
+      setFacilies(data?.getAllMedicalFacilityPaginationForClient);
+      setFacily(data?.getAllMedicalFacilityPaginationForClient[0]);
     }
   }, [data]);
   useEffect(() => {
@@ -105,6 +115,9 @@ function MedicalFacilitiesCpn(props: IProps) {
         <FillterCpn
           lan={lan}
           typeOfFacility={fillter.type}
+          onChangeSearchField={(field) => {
+            setFillter((pre) => ({ ...pre, searchField: field }));
+          }}
           onSearch={(s) => {
             setFillter((pre) => ({
               ...pre,

@@ -111,7 +111,7 @@ export type CreateMedicalFacilityInput = {
   numberPhone: Scalars['String']['input'];
   operatingStatus: Scalars['String']['input'];
   schedule: Scalars['String']['input'];
-  status: Scalars['String']['input'];
+  status: EStatusService;
   taxCode: Scalars['String']['input'];
   typeOfFacility: ETypeOfFacility;
   userId: Scalars['String']['input'];
@@ -247,10 +247,17 @@ export type Doctor = {
   medicalFactilitiesId: Scalars['String']['output'];
   numberPhone: Scalars['String']['output'];
   price: Scalars['Float']['output'];
+  registerCount?: Maybe<Scalars['Float']['output']>;
   specialistId: Scalars['String']['output'];
   specialty?: Maybe<MedicalSpecialties>;
   userId: Scalars['String']['output'];
   workSchedule: WorkSchedule;
+};
+
+
+export type DoctorRegisterCountArgs = {
+  endTime: Scalars['String']['input'];
+  startTime: Scalars['String']['input'];
 };
 
 export enum EAcademicTitle {
@@ -488,8 +495,15 @@ export type MedicalSpecialties = {
   id: Scalars['ID']['output'];
   medicalFactilityId: Scalars['String']['output'];
   price: Scalars['Float']['output'];
+  registerCount?: Maybe<Scalars['Float']['output']>;
   specialtyName: Scalars['String']['output'];
   workSchedule?: Maybe<WorkSchedule>;
+};
+
+
+export type MedicalSpecialtiesRegisterCountArgs = {
+  endTime: Scalars['String']['input'];
+  startTime: Scalars['String']['input'];
 };
 
 export type MedicalStaff = {
@@ -509,6 +523,7 @@ export type MedicalStaff = {
 export type Mutation = {
   __typename?: 'Mutation';
   activeUser: User;
+  cancelRegister: Register;
   confirmRegister: Register;
   createBlog: Blog;
   createCustomer: Customer;
@@ -561,6 +576,11 @@ export type Mutation = {
 
 
 export type MutationActiveUserArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationCancelRegisterArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -818,7 +838,14 @@ export type Package = {
   medicalFactilitiesId: Scalars['String']['output'];
   packageName: Scalars['String']['output'];
   price: Scalars['Float']['output'];
+  registerCount?: Maybe<Scalars['Float']['output']>;
   workSchedule: WorkSchedule;
+};
+
+
+export type PackageRegisterCountArgs = {
+  endTime: Scalars['String']['input'];
+  startTime: Scalars['String']['input'];
 };
 
 export type Profile = {
@@ -844,12 +871,14 @@ export type Query = {
   __typename?: 'Query';
   checklogin: User;
   checkloginCustomer: User;
+  getAllBlogOfFacilityPagination: Array<Blog>;
   getAllBlogPagination: Array<Blog>;
   getAllBlogPaginationForClient: Array<Blog>;
   getAllCustomer: Array<Customer>;
   getAllCustomerPagination: Array<Customer>;
   getAllDoctor: Array<Doctor>;
   getAllDoctorByFacilityId: Array<Doctor>;
+  getAllDoctorOfFacility: Array<Doctor>;
   getAllDoctorPagination: Array<Doctor>;
   getAllDoctorPaginationOfFacility: Array<Doctor>;
   getAllDoctorPaginationOfFacilityForClient: Array<Doctor>;
@@ -859,6 +888,8 @@ export type Query = {
   getAllMedicalFacility: Array<MedicalFacilities>;
   getAllMedicalFacilityHaveSrvPaginationForClient: Array<MedicalFacilities>;
   getAllMedicalFacilityPagination: Array<MedicalFacilities>;
+  getAllMedicalFacilityPaginationForClient: Array<MedicalFacilities>;
+  getAllMedicalSpecialtiesOfFacility: Array<MedicalSpecialties>;
   getAllMedicalSpecialtiesPaginationByStaff: Array<MedicalSpecialties>;
   getAllMedicalSpecialtiesPaginationOfFacility: Array<MedicalSpecialties>;
   getAllMedicalSpecialtiesPaginationOfFacilityForClient: Array<MedicalSpecialties>;
@@ -867,6 +898,7 @@ export type Query = {
   getAllNotification: Array<Notification>;
   getAllPackage: Array<Package>;
   getAllPackageByFacilityId: Array<Package>;
+  getAllPackageOfFacility: Array<Package>;
   getAllPackagePaginationByStaff: Array<Package>;
   getAllPackagePaginationOfFacility: Array<Package>;
   getAllPackagePaginationOfFacilityForClient: Array<Package>;
@@ -878,6 +910,7 @@ export type Query = {
   getAllUsersPagination: Array<User>;
   getAllVacation: Array<Vaccination>;
   getAllVaccinationByFacilityId: Array<Vaccination>;
+  getAllVaccinationOfFacility: Array<Vaccination>;
   getAllVaccinationPaginationByStaff: Array<Vaccination>;
   getAllVaccinationPaginationOfFacility: Array<Vaccination>;
   getAllVaccinationPaginationOfFacilityForClient: Array<Vaccination>;
@@ -906,6 +939,7 @@ export type Query = {
   getTotalDoctorsCount: Scalars['Float']['output'];
   getTotalDoctorsCountForClient: Scalars['Float']['output'];
   getTotalFacilitiesCount: Scalars['Float']['output'];
+  getTotalFacilitiesCountForClient: Scalars['Float']['output'];
   getTotalFacilitiesHaveSrvCountForClient: Scalars['Float']['output'];
   getTotalMedicalSpecialtiesCount: Scalars['Float']['output'];
   getTotalMedicalSpecialtiesCountForClient: Scalars['Float']['output'];
@@ -925,6 +959,17 @@ export type Query = {
   totalStaffsCount: Scalars['Float']['output'];
   totalUsersCount: Scalars['Float']['output'];
   users: Array<User>;
+};
+
+
+export type QueryGetAllBlogOfFacilityPaginationArgs = {
+  facilityId: Scalars['String']['input'];
+  isDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
+  sortField?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -959,6 +1004,12 @@ export type QueryGetAllCustomerPaginationArgs = {
 
 export type QueryGetAllDoctorByFacilityIdArgs = {
   input: Scalars['String']['input'];
+};
+
+
+export type QueryGetAllDoctorOfFacilityArgs = {
+  staffId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1012,6 +1063,23 @@ export type QueryGetAllMedicalFacilityPaginationArgs = {
 };
 
 
+export type QueryGetAllMedicalFacilityPaginationForClientArgs = {
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
+  searchField?: InputMaybe<Scalars['String']['input']>;
+  sortField?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetAllMedicalSpecialtiesOfFacilityArgs = {
+  staffId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryGetAllMedicalSpecialtiesPaginationByStaffArgs = {
   limit?: Scalars['Float']['input'];
   page?: Scalars['Float']['input'];
@@ -1055,6 +1123,12 @@ export type QueryGetAllMedicalStaffPaginationOfFacilityArgs = {
 
 export type QueryGetAllPackageByFacilityIdArgs = {
   input: Scalars['String']['input'];
+};
+
+
+export type QueryGetAllPackageOfFacilityArgs = {
+  staffId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1124,6 +1198,12 @@ export type QueryGetAllUsersPaginationArgs = {
 
 export type QueryGetAllVaccinationByFacilityIdArgs = {
   input: Scalars['String']['input'];
+};
+
+
+export type QueryGetAllVaccinationOfFacilityArgs = {
+  staffId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1281,6 +1361,13 @@ export type QueryGetTotalFacilitiesCountArgs = {
 };
 
 
+export type QueryGetTotalFacilitiesCountForClientArgs = {
+  search?: InputMaybe<Scalars['String']['input']>;
+  searchField?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryGetTotalFacilitiesHaveSrvCountForClientArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
@@ -1374,6 +1461,7 @@ export type QueryTotalUsersCountArgs = {
 export type Register = {
   __typename?: 'Register';
   cancel: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
   date: Scalars['DateTime']['output'];
   doctor?: Maybe<Doctor>;
   doctorId?: Maybe<Scalars['String']['output']>;
@@ -1429,21 +1517,11 @@ export type Setting = {
 export type Subscription = {
   __typename?: 'Subscription';
   registerCreated: Register;
-  registerDoctorCreated: Register;
-  registerPackageCreated: Register;
-  registerSpecialtyCreated: Register;
-  registerVaccinationCreated: Register;
 };
 
 
 export type SubscriptionRegisterCreatedArgs = {
   option: GetRegisterByOptionInput;
-};
-
-
-export type SubscriptionRegisterDoctorCreatedArgs = {
-  date: Scalars['String']['input'];
-  doctorId: Scalars['String']['input'];
 };
 
 export type UpdateBlogInput = {
@@ -1515,7 +1593,7 @@ export type UpdateMedicalFacilityInput = {
   numberPhone: Scalars['String']['input'];
   operatingStatus: Scalars['String']['input'];
   schedule: Scalars['String']['input'];
-  status: Scalars['String']['input'];
+  status: EStatusService;
   taxCode: Scalars['String']['input'];
   typeOfFacility: ETypeOfFacility;
   userId: Scalars['String']['input'];
@@ -1664,8 +1742,15 @@ export type Vaccination = {
   note: Scalars['String']['output'];
   price: Scalars['Float']['output'];
   prophylactic: Scalars['String']['output'];
+  registerCount?: Maybe<Scalars['Float']['output']>;
   vaccineName: Scalars['String']['output'];
   workSchedule: WorkSchedule;
+};
+
+
+export type VaccinationRegisterCountArgs = {
+  endTime: Scalars['String']['input'];
+  startTime: Scalars['String']['input'];
 };
 
 export type WorkSchedule = {
@@ -1774,6 +1859,13 @@ export type CreateRegisterVaccinationMutationVariables = Exact<{
 
 export type CreateRegisterVaccinationMutation = { __typename?: 'Mutation', createRegisterVaccine: { __typename?: 'Register', id: string } };
 
+export type CancelRegisterMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type CancelRegisterMutation = { __typename?: 'Mutation', cancelRegister: { __typename?: 'Register', id: string } };
+
 export type GetGeneralInforQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1807,8 +1899,9 @@ export type GetTopMedicalFacilitiesQueryVariables = Exact<{
 
 export type GetTopMedicalFacilitiesQuery = { __typename?: 'Query', getTopMedicalFacilities: Array<{ __typename?: 'MedicalFacilities', id: string, userId: string, medicalFacilityName: string, address: string, numberPhone: string, email: string, lat?: number | null, lng?: number | null, discription: string, introduce: string, typeOfFacility: string, operatingStatus: string, legalRepresentation: string, taxCode: string, status: string, dateOff?: Array<any> | null, schedule: string, logo: { __typename?: 'LinkImage', filename: string, type: string, url: string }, image: { __typename?: 'LinkImage', filename: string, type: string, url: string } }> };
 
-export type GetAllMedicalFacilityPaginationQueryVariables = Exact<{
+export type GetAllMedicalFacilityPaginationForClientQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']['input']>;
+  searchField?: InputMaybe<Scalars['String']['input']>;
   page: Scalars['Float']['input'];
   limit: Scalars['Float']['input'];
   sortField?: InputMaybe<Scalars['String']['input']>;
@@ -1817,15 +1910,16 @@ export type GetAllMedicalFacilityPaginationQueryVariables = Exact<{
 }>;
 
 
-export type GetAllMedicalFacilityPaginationQuery = { __typename?: 'Query', getAllMedicalFacilityPagination: Array<{ __typename?: 'MedicalFacilities', id: string, userId: string, medicalFacilityName: string, address: string, numberPhone: string, email: string, lat?: number | null, lng?: number | null, discription: string, introduce: string, typeOfFacility: string, operatingStatus: string, legalRepresentation: string, taxCode: string, status: string, dateOff?: Array<any> | null, schedule: string, logo: { __typename?: 'LinkImage', filename: string, type: string, url: string }, image: { __typename?: 'LinkImage', filename: string, type: string, url: string } }> };
+export type GetAllMedicalFacilityPaginationForClientQuery = { __typename?: 'Query', getAllMedicalFacilityPaginationForClient: Array<{ __typename?: 'MedicalFacilities', id: string, userId: string, medicalFacilityName: string, address: string, numberPhone: string, email: string, lat?: number | null, lng?: number | null, discription: string, introduce: string, typeOfFacility: string, operatingStatus: string, legalRepresentation: string, taxCode: string, status: string, dateOff?: Array<any> | null, schedule: string, logo: { __typename?: 'LinkImage', filename: string, type: string, url: string }, image: { __typename?: 'LinkImage', filename: string, type: string, url: string } }> };
 
-export type GetTotalFacilitiesCountQueryVariables = Exact<{
+export type GetTotalFacilitiesCountForClientQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']['input']>;
+  searchField?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetTotalFacilitiesCountQuery = { __typename?: 'Query', getTotalFacilitiesCount: number };
+export type GetTotalFacilitiesCountForClientQuery = { __typename?: 'Query', getTotalFacilitiesCountForClient: number };
 
 export type GetListMedicalSpecialtyRegisInfoByFacilityIdQueryVariables = Exact<{
   input: Scalars['String']['input'];
@@ -1864,14 +1958,14 @@ export type GetAllRegisPendingQueryVariables = Exact<{
 }>;
 
 
-export type GetAllRegisPendingQuery = { __typename?: 'Query', getAllRegisPending: Array<{ __typename?: 'Register', id: string, date: any, doctorId?: string | null, cancel: boolean, packageId?: string | null, specialtyId?: string | null, vaccineId?: string | null, typeOfService: string, state: string, profileId: string, session: { __typename?: 'Session', endTime: string, startTime: string } }> };
+export type GetAllRegisPendingQuery = { __typename?: 'Query', getAllRegisPending: Array<{ __typename?: 'Register', id: string, date: any, doctorId?: string | null, cancel: boolean, packageId?: string | null, specialtyId?: string | null, vaccineId?: string | null, typeOfService: string, state: string, profileId: string, createdAt: any, session: { __typename?: 'Session', endTime: string, startTime: string } }> };
 
 export type GetProfileTicketByCustomerIdQueryVariables = Exact<{
   input: Scalars['String']['input'];
 }>;
 
 
-export type GetProfileTicketByCustomerIdQuery = { __typename?: 'Query', getProfileByCustomerId: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string, register?: Array<{ __typename?: 'Register', id: string, date: any, typeOfService: string, state: string, doctorId?: string | null, vaccineId?: string | null, packageId?: string | null, specialtyId?: string | null, session: { __typename?: 'Session', endTime: string, startTime: string }, doctor?: { __typename?: 'Doctor', id: string, doctorName: string, price: number, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string } | null, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null }> | null }> };
+export type GetProfileTicketByCustomerIdQuery = { __typename?: 'Query', getProfileByCustomerId: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string, register?: Array<{ __typename?: 'Register', id: string, date: any, typeOfService: string, state: string, cancel: boolean, doctorId?: string | null, vaccineId?: string | null, packageId?: string | null, specialtyId?: string | null, session: { __typename?: 'Session', endTime: string, startTime: string }, doctor?: { __typename?: 'Doctor', id: string, doctorName: string, price: number, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string } | null, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null }> | null }> };
 
 export type GetAllDoctorPaginationOfFacilityForClientQueryVariables = Exact<{
   filter: FilterDoctorInput;
@@ -2542,6 +2636,39 @@ export function useCreateRegisterVaccinationMutation(baseOptions?: Apollo.Mutati
 export type CreateRegisterVaccinationMutationHookResult = ReturnType<typeof useCreateRegisterVaccinationMutation>;
 export type CreateRegisterVaccinationMutationResult = Apollo.MutationResult<CreateRegisterVaccinationMutation>;
 export type CreateRegisterVaccinationMutationOptions = Apollo.BaseMutationOptions<CreateRegisterVaccinationMutation, CreateRegisterVaccinationMutationVariables>;
+export const CancelRegisterDocument = gql`
+    mutation cancelRegister($id: String!) {
+  cancelRegister(id: $id) {
+    id
+  }
+}
+    `;
+export type CancelRegisterMutationFn = Apollo.MutationFunction<CancelRegisterMutation, CancelRegisterMutationVariables>;
+
+/**
+ * __useCancelRegisterMutation__
+ *
+ * To run a mutation, you first call `useCancelRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelRegisterMutation, { data, loading, error }] = useCancelRegisterMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCancelRegisterMutation(baseOptions?: Apollo.MutationHookOptions<CancelRegisterMutation, CancelRegisterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelRegisterMutation, CancelRegisterMutationVariables>(CancelRegisterDocument, options);
+      }
+export type CancelRegisterMutationHookResult = ReturnType<typeof useCancelRegisterMutation>;
+export type CancelRegisterMutationResult = Apollo.MutationResult<CancelRegisterMutation>;
+export type CancelRegisterMutationOptions = Apollo.BaseMutationOptions<CancelRegisterMutation, CancelRegisterMutationVariables>;
 export const GetGeneralInforDocument = gql`
     query GetGeneralInfor {
   getGeneralInfor {
@@ -2848,10 +2975,11 @@ export type GetTopMedicalFacilitiesQueryHookResult = ReturnType<typeof useGetTop
 export type GetTopMedicalFacilitiesLazyQueryHookResult = ReturnType<typeof useGetTopMedicalFacilitiesLazyQuery>;
 export type GetTopMedicalFacilitiesSuspenseQueryHookResult = ReturnType<typeof useGetTopMedicalFacilitiesSuspenseQuery>;
 export type GetTopMedicalFacilitiesQueryResult = Apollo.QueryResult<GetTopMedicalFacilitiesQuery, GetTopMedicalFacilitiesQueryVariables>;
-export const GetAllMedicalFacilityPaginationDocument = gql`
-    query getAllMedicalFacilityPagination($search: String, $page: Float!, $limit: Float!, $sortField: String, $sortOrder: String, $typeOfFacility: String) {
-  getAllMedicalFacilityPagination(
+export const GetAllMedicalFacilityPaginationForClientDocument = gql`
+    query getAllMedicalFacilityPaginationForClient($search: String, $searchField: String, $page: Float!, $limit: Float!, $sortField: String, $sortOrder: String, $typeOfFacility: String) {
+  getAllMedicalFacilityPaginationForClient(
     search: $search
+    searchField: $searchField
     page: $page
     limit: $limit
     sortField: $sortField
@@ -2890,18 +3018,19 @@ export const GetAllMedicalFacilityPaginationDocument = gql`
     `;
 
 /**
- * __useGetAllMedicalFacilityPaginationQuery__
+ * __useGetAllMedicalFacilityPaginationForClientQuery__
  *
- * To run a query within a React component, call `useGetAllMedicalFacilityPaginationQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllMedicalFacilityPaginationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllMedicalFacilityPaginationForClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllMedicalFacilityPaginationForClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllMedicalFacilityPaginationQuery({
+ * const { data, loading, error } = useGetAllMedicalFacilityPaginationForClientQuery({
  *   variables: {
  *      search: // value for 'search'
+ *      searchField: // value for 'searchField'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      sortField: // value for 'sortField'
@@ -2910,61 +3039,66 @@ export const GetAllMedicalFacilityPaginationDocument = gql`
  *   },
  * });
  */
-export function useGetAllMedicalFacilityPaginationQuery(baseOptions: Apollo.QueryHookOptions<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables> & ({ variables: GetAllMedicalFacilityPaginationQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetAllMedicalFacilityPaginationForClientQuery(baseOptions: Apollo.QueryHookOptions<GetAllMedicalFacilityPaginationForClientQuery, GetAllMedicalFacilityPaginationForClientQueryVariables> & ({ variables: GetAllMedicalFacilityPaginationForClientQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>(GetAllMedicalFacilityPaginationDocument, options);
+        return Apollo.useQuery<GetAllMedicalFacilityPaginationForClientQuery, GetAllMedicalFacilityPaginationForClientQueryVariables>(GetAllMedicalFacilityPaginationForClientDocument, options);
       }
-export function useGetAllMedicalFacilityPaginationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>) {
+export function useGetAllMedicalFacilityPaginationForClientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllMedicalFacilityPaginationForClientQuery, GetAllMedicalFacilityPaginationForClientQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>(GetAllMedicalFacilityPaginationDocument, options);
+          return Apollo.useLazyQuery<GetAllMedicalFacilityPaginationForClientQuery, GetAllMedicalFacilityPaginationForClientQueryVariables>(GetAllMedicalFacilityPaginationForClientDocument, options);
         }
-export function useGetAllMedicalFacilityPaginationSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>) {
+export function useGetAllMedicalFacilityPaginationForClientSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllMedicalFacilityPaginationForClientQuery, GetAllMedicalFacilityPaginationForClientQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>(GetAllMedicalFacilityPaginationDocument, options);
+          return Apollo.useSuspenseQuery<GetAllMedicalFacilityPaginationForClientQuery, GetAllMedicalFacilityPaginationForClientQueryVariables>(GetAllMedicalFacilityPaginationForClientDocument, options);
         }
-export type GetAllMedicalFacilityPaginationQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationQuery>;
-export type GetAllMedicalFacilityPaginationLazyQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationLazyQuery>;
-export type GetAllMedicalFacilityPaginationSuspenseQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationSuspenseQuery>;
-export type GetAllMedicalFacilityPaginationQueryResult = Apollo.QueryResult<GetAllMedicalFacilityPaginationQuery, GetAllMedicalFacilityPaginationQueryVariables>;
-export const GetTotalFacilitiesCountDocument = gql`
-    query getTotalFacilitiesCount($search: String, $type: String) {
-  getTotalFacilitiesCount(search: $search, type: $type)
+export type GetAllMedicalFacilityPaginationForClientQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationForClientQuery>;
+export type GetAllMedicalFacilityPaginationForClientLazyQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationForClientLazyQuery>;
+export type GetAllMedicalFacilityPaginationForClientSuspenseQueryHookResult = ReturnType<typeof useGetAllMedicalFacilityPaginationForClientSuspenseQuery>;
+export type GetAllMedicalFacilityPaginationForClientQueryResult = Apollo.QueryResult<GetAllMedicalFacilityPaginationForClientQuery, GetAllMedicalFacilityPaginationForClientQueryVariables>;
+export const GetTotalFacilitiesCountForClientDocument = gql`
+    query getTotalFacilitiesCountForClient($search: String, $searchField: String, $type: String) {
+  getTotalFacilitiesCountForClient(
+    search: $search
+    searchField: $searchField
+    type: $type
+  )
 }
     `;
 
 /**
- * __useGetTotalFacilitiesCountQuery__
+ * __useGetTotalFacilitiesCountForClientQuery__
  *
- * To run a query within a React component, call `useGetTotalFacilitiesCountQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTotalFacilitiesCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTotalFacilitiesCountForClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTotalFacilitiesCountForClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTotalFacilitiesCountQuery({
+ * const { data, loading, error } = useGetTotalFacilitiesCountForClientQuery({
  *   variables: {
  *      search: // value for 'search'
+ *      searchField: // value for 'searchField'
  *      type: // value for 'type'
  *   },
  * });
  */
-export function useGetTotalFacilitiesCountQuery(baseOptions?: Apollo.QueryHookOptions<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>) {
+export function useGetTotalFacilitiesCountForClientQuery(baseOptions?: Apollo.QueryHookOptions<GetTotalFacilitiesCountForClientQuery, GetTotalFacilitiesCountForClientQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>(GetTotalFacilitiesCountDocument, options);
+        return Apollo.useQuery<GetTotalFacilitiesCountForClientQuery, GetTotalFacilitiesCountForClientQueryVariables>(GetTotalFacilitiesCountForClientDocument, options);
       }
-export function useGetTotalFacilitiesCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>) {
+export function useGetTotalFacilitiesCountForClientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTotalFacilitiesCountForClientQuery, GetTotalFacilitiesCountForClientQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>(GetTotalFacilitiesCountDocument, options);
+          return Apollo.useLazyQuery<GetTotalFacilitiesCountForClientQuery, GetTotalFacilitiesCountForClientQueryVariables>(GetTotalFacilitiesCountForClientDocument, options);
         }
-export function useGetTotalFacilitiesCountSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>) {
+export function useGetTotalFacilitiesCountForClientSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTotalFacilitiesCountForClientQuery, GetTotalFacilitiesCountForClientQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>(GetTotalFacilitiesCountDocument, options);
+          return Apollo.useSuspenseQuery<GetTotalFacilitiesCountForClientQuery, GetTotalFacilitiesCountForClientQueryVariables>(GetTotalFacilitiesCountForClientDocument, options);
         }
-export type GetTotalFacilitiesCountQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountQuery>;
-export type GetTotalFacilitiesCountLazyQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountLazyQuery>;
-export type GetTotalFacilitiesCountSuspenseQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountSuspenseQuery>;
-export type GetTotalFacilitiesCountQueryResult = Apollo.QueryResult<GetTotalFacilitiesCountQuery, GetTotalFacilitiesCountQueryVariables>;
+export type GetTotalFacilitiesCountForClientQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountForClientQuery>;
+export type GetTotalFacilitiesCountForClientLazyQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountForClientLazyQuery>;
+export type GetTotalFacilitiesCountForClientSuspenseQueryHookResult = ReturnType<typeof useGetTotalFacilitiesCountForClientSuspenseQuery>;
+export type GetTotalFacilitiesCountForClientQueryResult = Apollo.QueryResult<GetTotalFacilitiesCountForClientQuery, GetTotalFacilitiesCountForClientQueryVariables>;
 export const GetListMedicalSpecialtyRegisInfoByFacilityIdDocument = gql`
     query getListMedicalSpecialtyRegisInfoByFacilityId($input: String!, $isClient: Boolean!) {
   getMedicalFacilityById(id: $input) {
@@ -3251,6 +3385,7 @@ export const GetAllRegisPendingDocument = gql`
     packageId
     state
     profileId
+    createdAt
   }
 }
     `;
@@ -3307,6 +3442,7 @@ export const GetProfileTicketByCustomerIdDocument = gql`
       date
       typeOfService
       state
+      cancel
       session {
         endTime
         startTime
@@ -4187,7 +4323,7 @@ export type CustomerFieldPolicy = {
 	profiles?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type DoctorKeySpecifier = ('academicTitle' | 'avatar' | 'degree' | 'discription' | 'doctorName' | 'email' | 'facility' | 'gender' | 'id' | 'medicalFactilitiesId' | 'numberPhone' | 'price' | 'specialistId' | 'specialty' | 'userId' | 'workSchedule' | DoctorKeySpecifier)[];
+export type DoctorKeySpecifier = ('academicTitle' | 'avatar' | 'degree' | 'discription' | 'doctorName' | 'email' | 'facility' | 'gender' | 'id' | 'medicalFactilitiesId' | 'numberPhone' | 'price' | 'registerCount' | 'specialistId' | 'specialty' | 'userId' | 'workSchedule' | DoctorKeySpecifier)[];
 export type DoctorFieldPolicy = {
 	academicTitle?: FieldPolicy<any> | FieldReadFunction<any>,
 	avatar?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4201,6 +4337,7 @@ export type DoctorFieldPolicy = {
 	medicalFactilitiesId?: FieldPolicy<any> | FieldReadFunction<any>,
 	numberPhone?: FieldPolicy<any> | FieldReadFunction<any>,
 	price?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	specialistId?: FieldPolicy<any> | FieldReadFunction<any>,
 	specialty?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4273,13 +4410,14 @@ export type MedicalFacilitiesFieldPolicy = {
 	userId?: FieldPolicy<any> | FieldReadFunction<any>,
 	vaccinations?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MedicalSpecialtiesKeySpecifier = ('discription' | 'facility' | 'id' | 'medicalFactilityId' | 'price' | 'specialtyName' | 'workSchedule' | MedicalSpecialtiesKeySpecifier)[];
+export type MedicalSpecialtiesKeySpecifier = ('discription' | 'facility' | 'id' | 'medicalFactilityId' | 'price' | 'registerCount' | 'specialtyName' | 'workSchedule' | MedicalSpecialtiesKeySpecifier)[];
 export type MedicalSpecialtiesFieldPolicy = {
 	discription?: FieldPolicy<any> | FieldReadFunction<any>,
 	facility?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	medicalFactilityId?: FieldPolicy<any> | FieldReadFunction<any>,
 	price?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	specialtyName?: FieldPolicy<any> | FieldReadFunction<any>,
 	workSchedule?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -4296,9 +4434,10 @@ export type MedicalStaffFieldPolicy = {
 	staffName?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('activeUser' | 'confirmRegister' | 'createBlog' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUnDeleteBlog' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateBlog' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('activeUser' | 'cancelRegister' | 'confirmRegister' | 'createBlog' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUnDeleteBlog' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateBlog' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	activeUser?: FieldPolicy<any> | FieldReadFunction<any>,
+	cancelRegister?: FieldPolicy<any> | FieldReadFunction<any>,
 	confirmRegister?: FieldPolicy<any> | FieldReadFunction<any>,
 	createBlog?: FieldPolicy<any> | FieldReadFunction<any>,
 	createCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4356,7 +4495,7 @@ export type NotificationFieldPolicy = {
 	status?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type PackageKeySpecifier = ('examinationDetails' | 'facility' | 'gender' | 'id' | 'image' | 'medicalFactilitiesId' | 'packageName' | 'price' | 'workSchedule' | PackageKeySpecifier)[];
+export type PackageKeySpecifier = ('examinationDetails' | 'facility' | 'gender' | 'id' | 'image' | 'medicalFactilitiesId' | 'packageName' | 'price' | 'registerCount' | 'workSchedule' | PackageKeySpecifier)[];
 export type PackageFieldPolicy = {
 	examinationDetails?: FieldPolicy<any> | FieldReadFunction<any>,
 	facility?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4366,6 +4505,7 @@ export type PackageFieldPolicy = {
 	medicalFactilitiesId?: FieldPolicy<any> | FieldReadFunction<any>,
 	packageName?: FieldPolicy<any> | FieldReadFunction<any>,
 	price?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	workSchedule?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type ProfileKeySpecifier = ('address' | 'customer' | 'customerId' | 'dataOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'identity' | 'job' | 'medicalInsurance' | 'numberPhone' | 'register' | 'relationship' | ProfileKeySpecifier)[];
@@ -4386,16 +4526,18 @@ export type ProfileFieldPolicy = {
 	register?: FieldPolicy<any> | FieldReadFunction<any>,
 	relationship?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllBlogPagination' | 'getAllBlogPaginationForClient' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getBlogBySlug' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfiles' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalBlogsCount' | 'getTotalBlogsCountForClient' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllBlogOfFacilityPagination' | 'getAllBlogPagination' | 'getAllBlogPaginationForClient' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorOfFacility' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalFacilityPaginationForClient' | 'getAllMedicalSpecialtiesOfFacility' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackageOfFacility' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationOfFacility' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getBlogBySlug' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfiles' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalBlogsCount' | 'getTotalBlogsCountForClient' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesCountForClient' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	checklogin?: FieldPolicy<any> | FieldReadFunction<any>,
 	checkloginCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllBlogOfFacilityPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllBlogPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllBlogPaginationForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllCustomerPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllDoctorByFacilityId?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllDoctorOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllDoctorPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllDoctorPaginationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllDoctorPaginationOfFacilityForClient?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4405,6 +4547,8 @@ export type QueryFieldPolicy = {
 	getAllMedicalFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllMedicalFacilityHaveSrvPaginationForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllMedicalFacilityPagination?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllMedicalFacilityPaginationForClient?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllMedicalSpecialtiesOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllMedicalSpecialtiesPaginationByStaff?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllMedicalSpecialtiesPaginationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllMedicalSpecialtiesPaginationOfFacilityForClient?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4413,6 +4557,7 @@ export type QueryFieldPolicy = {
 	getAllNotification?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackage?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackageByFacilityId?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllPackageOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackagePaginationByStaff?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackagePaginationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackagePaginationOfFacilityForClient?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4424,6 +4569,7 @@ export type QueryFieldPolicy = {
 	getAllUsersPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllVacation?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllVaccinationByFacilityId?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllVaccinationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllVaccinationPaginationByStaff?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllVaccinationPaginationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllVaccinationPaginationOfFacilityForClient?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4452,6 +4598,7 @@ export type QueryFieldPolicy = {
 	getTotalDoctorsCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalDoctorsCountForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalFacilitiesCount?: FieldPolicy<any> | FieldReadFunction<any>,
+	getTotalFacilitiesCountForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalFacilitiesHaveSrvCountForClient?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalMedicalSpecialtiesCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTotalMedicalSpecialtiesCountForClient?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4472,9 +4619,10 @@ export type QueryFieldPolicy = {
 	totalUsersCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	users?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type RegisterKeySpecifier = ('cancel' | 'date' | 'doctor' | 'doctorId' | 'id' | 'package' | 'packageId' | 'profile' | 'profileId' | 'session' | 'specialty' | 'specialtyId' | 'state' | 'typeOfService' | 'vaccination' | 'vaccineId' | RegisterKeySpecifier)[];
+export type RegisterKeySpecifier = ('cancel' | 'createdAt' | 'date' | 'doctor' | 'doctorId' | 'id' | 'package' | 'packageId' | 'profile' | 'profileId' | 'session' | 'specialty' | 'specialtyId' | 'state' | 'typeOfService' | 'vaccination' | 'vaccineId' | RegisterKeySpecifier)[];
 export type RegisterFieldPolicy = {
 	cancel?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	date?: FieldPolicy<any> | FieldReadFunction<any>,
 	doctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	doctorId?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4505,13 +4653,9 @@ export type SettingKeySpecifier = ('defaultLang' | SettingKeySpecifier)[];
 export type SettingFieldPolicy = {
 	defaultLang?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type SubscriptionKeySpecifier = ('registerCreated' | 'registerDoctorCreated' | 'registerPackageCreated' | 'registerSpecialtyCreated' | 'registerVaccinationCreated' | SubscriptionKeySpecifier)[];
+export type SubscriptionKeySpecifier = ('registerCreated' | SubscriptionKeySpecifier)[];
 export type SubscriptionFieldPolicy = {
-	registerCreated?: FieldPolicy<any> | FieldReadFunction<any>,
-	registerDoctorCreated?: FieldPolicy<any> | FieldReadFunction<any>,
-	registerPackageCreated?: FieldPolicy<any> | FieldReadFunction<any>,
-	registerSpecialtyCreated?: FieldPolicy<any> | FieldReadFunction<any>,
-	registerVaccinationCreated?: FieldPolicy<any> | FieldReadFunction<any>
+	registerCreated?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type UserKeySpecifier = ('active' | 'avatar' | 'customer' | 'doctor' | 'email' | 'id' | 'medicalFacilities' | 'password' | 'roles' | 'username' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
@@ -4532,7 +4676,7 @@ export type UserSlimEntityFieldPolicy = {
 	showName?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type VaccinationKeySpecifier = ('countryOfOrigin' | 'facility' | 'id' | 'indication' | 'medicalFactilitiesId' | 'note' | 'price' | 'prophylactic' | 'vaccineName' | 'workSchedule' | VaccinationKeySpecifier)[];
+export type VaccinationKeySpecifier = ('countryOfOrigin' | 'facility' | 'id' | 'indication' | 'medicalFactilitiesId' | 'note' | 'price' | 'prophylactic' | 'registerCount' | 'vaccineName' | 'workSchedule' | VaccinationKeySpecifier)[];
 export type VaccinationFieldPolicy = {
 	countryOfOrigin?: FieldPolicy<any> | FieldReadFunction<any>,
 	facility?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4542,6 +4686,7 @@ export type VaccinationFieldPolicy = {
 	note?: FieldPolicy<any> | FieldReadFunction<any>,
 	price?: FieldPolicy<any> | FieldReadFunction<any>,
 	prophylactic?: FieldPolicy<any> | FieldReadFunction<any>,
+	registerCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	vaccineName?: FieldPolicy<any> | FieldReadFunction<any>,
 	workSchedule?: FieldPolicy<any> | FieldReadFunction<any>
 };

@@ -206,3 +206,10 @@ const createRegisterVaccination = gql`
     }
   }
 `;
+const cancelRegister = gql`
+  mutation cancelRegister($id: String!) {
+    cancelRegister(id: $id) {
+      id
+    }
+  }
+`;

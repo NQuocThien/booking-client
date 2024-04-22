@@ -8,4 +8,7 @@ export const blogVi = {
   labelHealth: "Cẩm nang sức khỏe",
   topBlog: "Bài viết nổi bật",
   lableKeyword: "Từ khóa",
+
+  bcHome: "Trang chủ",
+  bcBlog: "Bài viết",
 };

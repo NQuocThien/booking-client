@@ -42,12 +42,7 @@ function BlogDetailLayout({ blog, lan, onChange, topBlogs }: IProp) {
           </Col>
           <Col className="p-2 same-blog ">
             <h5 className="text-dark title text-center pt-2">{lan.topBlog}</h5>
-
-            <TopBlogs
-              onClick={(blog) => onChange(blog)}
-              blogs={topBlogs}
-              lan={lan}
-            />
+            <TopBlogs blogs={topBlogs} lan={lan} />
           </Col>
         </Row>
       </div>

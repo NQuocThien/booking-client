@@ -258,7 +258,9 @@ function RegisDoctorCpn(props: IProps) {
                   router.push("/");
                 })
                 .catch((e) => {
-                  showToast(lan.messRegisError);
+                  if (e.message === "!Regis Exist")
+                    showToast(lan.messRegisErrorExists, "error");
+                  else showToast(lan.messRegisError, "error");
                   console.log(e);
                 });
             }

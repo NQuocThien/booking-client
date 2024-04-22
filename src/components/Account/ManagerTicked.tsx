@@ -1,7 +1,7 @@
 "use client";
 import {
   GetProfileTicketByCustomerIdQuery,
-  Profile,
+  useCancelRegisterMutation,
   useGetProfileTicketByCustomerIdQuery,
 } from "@/graphql/webbooking-service.generated";
 import useNProgress from "@/hooks/useNProgress";
@@ -9,6 +9,7 @@ import { formatDate, formatter } from "@/utils/tools";
 import { useEffect, useState } from "react";
 import { CiCalendarDate } from "react-icons/ci";
 import { IoIosPricetag } from "react-icons/io";
+import { TiCancelOutline } from "react-icons/ti";
 import {
   FaBriefcaseMedical,
   FaBuilding,
@@ -18,29 +19,27 @@ import {
 import { FaLocationDot, FaPeopleGroup } from "react-icons/fa6";
 import { MdAddLocation, MdOutlineTransgender } from "react-icons/md";
 import { formCustomerVi } from "@/locales/vi/Account";
-import { useDispatch } from "react-redux";
 import { GiTriangleTarget } from "react-icons/gi";
-import { Accordion, Col, Row } from "react-bootstrap";
+import { Accordion, Button, Col, Row } from "react-bootstrap";
 import { SlCalender } from "react-icons/sl";
+import { showToast } from "../subs/toast";
 
 interface IProps {
   customerId: string;
   lan: typeof formCustomerVi;
 }
 function ManagerTicked({ customerId, lan }: IProps) {
-  const dispatch = useDispatch();
   const [list, setList] =
     useState<GetProfileTicketByCustomerIdQuery["getProfileByCustomerId"]>();
-  const [profileDetail, setProfileDetail] = useState<Profile>();
-  const [modal, setModal] = useState(false);
-
   // =================================================================
-  const { data, loading, error } = useGetProfileTicketByCustomerIdQuery({
-    variables: {
-      input: customerId,
-    },
-  });
+  const { refetch, data, loading, error } =
+    useGetProfileTicketByCustomerIdQuery({
+      variables: {
+        input: customerId,
+      },
+    });
 
+  const [cancelRegis, { loading: loadingCancel }] = useCancelRegisterMutation();
   // =====================================================================
   useEffect(() => {
     if (data?.getProfileByCustomerId) {
@@ -52,6 +51,44 @@ function ManagerTicked({ customerId, lan }: IProps) {
     else useNProgress(false);
   }, [loading]);
 
+  // =================================================================
+  const handleCancel = async (idRegis: string, idProfile: string) => {
+    await cancelRegis({
+      variables: {
+        id: idRegis,
+      },
+    })
+      .then(() => {
+        showToast(lan.cancelledMess);
+        setList((pre) =>
+          pre?.map((profile) => {
+            if (profile.id !== idProfile) {
+              return profile;
+            }
+            var newProfile = profile;
+            var newRegister = profile.register;
+            newRegister = newRegister?.map((regis) => {
+              if (regis.id === idRegis) {
+                return {
+                  ...regis,
+                  cancel: true,
+                };
+              }
+              return regis;
+            });
+            newProfile = {
+              ...newProfile,
+              register: newRegister,
+            };
+            return newProfile;
+          })
+        );
+      })
+      .catch((e) => {
+        console.log(e);
+        showToast(lan.messError, "error");
+      });
+  };
   // =================================================================
   return (
     <div className="py-3">
@@ -175,6 +212,28 @@ function ManagerTicked({ customerId, lan }: IProps) {
                                 {regis.session.endTime}
                               </span>
                             </h6>
+                            <div className="d-flex justify-content-center ">
+                              {!regis.cancel && (
+                                <Button
+                                  size="sm"
+                                  className=""
+                                  onClick={() =>
+                                    handleCancel(regis.id, item.id)
+                                  }
+                                  variant="outline-secondary">
+                                  <TiCancelOutline />
+                                  {lan.cancelRegis}
+                                </Button>
+                              )}
+                              {regis.cancel && (
+                                <div className="text-danger text-center">
+                                  <h5>
+                                    <TiCancelOutline />
+                                  </h5>
+                                  {lan.cancelledRegis}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         ))}
                       </div>

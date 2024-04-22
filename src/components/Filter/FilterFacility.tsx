@@ -20,6 +20,7 @@ interface Iprop {
   lan: typeof facilityVi;
   onSearch: (search: string) => void;
   onChangeType: (type: GetETypeOfFacility | undefined) => void;
+  onChangeSearchField: (field: "address" | "medicalFacilityName") => void;
   typeOfFacility: GetETypeOfFacility | undefined;
   loading?: boolean;
   error?: ApolloError | undefined;
@@ -31,6 +32,7 @@ const FillterCpn = ({
   onSearch,
   loading = undefined,
   onChangeType,
+  onChangeSearchField,
   error = undefined,
 }: Iprop) => {
   const [value, setValue] = useState<string>("");
@@ -44,38 +46,8 @@ const FillterCpn = ({
     }
   }, [typeOfFacility]);
   return (
-    <Row className="row">
-      <Col lg={8} md={6} sm={12} xs={12}>
-        <Form
-          className=""
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSearch(value);
-          }}>
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="Search..."
-              aria-label="Search"
-              aria-describedby="basic-search"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-            {/* <FormControl
-            placeholder="Search..."
-            aria-label="Search"
-            aria-describedby="basic-search"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          /> */}
-
-            <Button variant="outline-secondary" type="submit">
-              {!loading && <IoSearch />}
-              {/* {loading && <StatusCpn size="sm" error={error} loading={loading} />} */}
-            </Button>
-          </InputGroup>
-        </Form>
-      </Col>
-      <Col lg={4} md={6} sm={12} xs={12}>
+    <div>
+      <div className="mb-2">
         <FormSelect
           className=""
           value={type}
@@ -95,8 +67,48 @@ const FillterCpn = ({
             {lan.labelVaccination}
           </option>
         </FormSelect>
-      </Col>
-    </Row>
+      </div>
+      <Row className="">
+        <Form
+          className=""
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSearch(value);
+          }}>
+          <Row className="mb-3">
+            <Col lg={8}>
+              <FormControl
+                placeholder="Search..."
+                aria-label="Search"
+                aria-describedby="basic-search"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              />
+            </Col>
+            <Col lg={4}>
+              <div className="d-flex">
+                <Form.Select
+                  className="col-4"
+                  onChange={(e) => {
+                    const value = e.currentTarget.value as string;
+                    if (value === "address") {
+                      onChangeSearchField("address");
+                    } else if (value === "medicalFacilityName")
+                      onChangeSearchField("medicalFacilityName");
+                  }}>
+                  <option value="medicalFacilityName">{lan.otpName}</option>
+                  <option value="address">{lan.otpAddress}</option>
+                </Form.Select>
+                <Button variant="outline-secondary" type="submit">
+                  {!loading && <IoSearch />}
+                  {/* {loading && <StatusCpn size="sm" error={error} loading={loading} />} */}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </Form>
+      </Row>
+    </div>
   );
 };
 

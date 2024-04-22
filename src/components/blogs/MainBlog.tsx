@@ -7,10 +7,9 @@ import { FaCircleDot } from "react-icons/fa6";
 interface IProps {
   lan: typeof blogVi;
   blog: Blog | undefined;
-  onClick: (blog: Blog) => void;
 }
 function MainBlog(props: IProps) {
-  const { lan, blog, onClick } = props;
+  const { lan, blog } = props;
   if (blog)
     return (
       <div className="blog-main">
@@ -32,9 +31,9 @@ function MainBlog(props: IProps) {
             <FaCircleDot /> <span>{lan.labelMedical}</span>
           </div>
         )}
-        <div className="title fs-4 text-primary" onClick={() => onClick(blog)}>
+        <Link href={`/blogs/${blog.slug}`} className="title fs-4 text-primary">
           {blog?.title}
-        </div>
+        </Link>
         <div className="short">
           <i>{blog?.shortContent}</i>
         </div>

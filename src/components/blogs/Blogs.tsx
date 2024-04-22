@@ -2,15 +2,14 @@ import { Blog, EnumBlogType } from "@/graphql/webbooking-service.generated";
 import { blogVi } from "@/locales/vi/Blog";
 import { formatDate } from "@/utils/tools";
 import Link from "next/link";
-import { Col, Row, Image } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { FaCircleDot } from "react-icons/fa6";
 interface IProps {
   lan: typeof blogVi;
   blogs: Blog[] | undefined;
-  onClick: (blog: Blog) => void;
 }
 function BlogsCpn(props: IProps) {
-  const { lan, blogs, onClick } = props;
+  const { lan, blogs } = props;
   return (
     <Row className="blog-normal mt-3 p-3">
       {blogs?.map((blog, i) => (
@@ -25,11 +24,11 @@ function BlogsCpn(props: IProps) {
             <img src={blog?.mainPhoto.url || ""} />
           </div>
           <div className="ps-1">
-            <div
-              className="title mb-1 text-primary"
-              onClick={() => onClick(blog)}>
+            <Link
+              href={`/blogs/${blog.slug}`}
+              className="title mb-1 text-primary">
               {blog?.title}
-            </div>
+            </Link>
             {blog?.type === EnumBlogType.Health && (
               <div className="type ">
                 <FaCircleDot className="text-primary" />{" "}

@@ -142,5 +142,33 @@
       border-radius: 10px 10px 0 0;
       margin: 0;
     }
+    .blog-priority {
+      .blog-priority-item {
+        border-radius: 10px;
+        .image {
+          width: 100%;
+          height: auto;
+          img {
+            width: 90%;
+          }
+        }
+        .title {
+          font-size: 16px;
+          cursor: pointer;
+        }
+        .calendar {
+          font-size: 12px;
+        }
+        .type {
+          font-size: 14px;
+        }
+      }
+      .blog-priority-item :hover {
+        .title {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+      }
+    }
   }
 }

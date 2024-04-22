@@ -21,6 +21,8 @@ export const facilityVi = {
   subVaccination: "Các trung tâm tiêm chủng trong địa bàn tỉnh An Giang",
   btnRegis: "Đặt khám",
   btnDetail: "Chi tiết",
+  otpName: "Tìm theo tên",
+  otpAddress: "Tìm theo địa chỉ",
   titlDiscription: "Mô tả",
 
   modalHead: "Thông tin cơ sở  y tế",
@@ -64,6 +66,8 @@ export const regisVi = {
   messLogin: "Cần đăng nhập để tiếp tục",
   messRegisSuccess: "Đăng  ký khám thành công",
   messRegisError: "Lỗi đăng ký ",
+  messRegisErrorExists:
+    "Mỗi hồ sơ chỉ được đăng ký 1 lần cho một dịch vụ trong ngày ",
 
   btnBack: "Trở lại",
   btnDetail: "Chi tiết",

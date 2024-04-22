@@ -58,10 +58,10 @@ function PosterCpn(props: IProps) {
   return (
     <Row>
       <Row className="my-5">
-        <Col sm={12} md={12} lg={6}>
+        <Col sm={12} md={12} lg={8}>
           <h1 className="text-light title-top mt-5 mb-3">{lan.title1}</h1>
-          <h4 className="text-light title-top mt-5 mb-3">{lan.title2}</h4>
-          <Select
+          {/* <h4 className="text-light title-top mt-5 mb-3">{lan.title2}</h4> */}
+          {/* <Select
             value={selectedOption}
             onChange={handleChange}
             options={options}
@@ -70,7 +70,7 @@ function PosterCpn(props: IProps) {
             isClearable
             placeholder="Chọn hoặc nhập từ khóa"
             className="custom-select"
-          />
+          /> */}
         </Col>
       </Row>
       <Row className="mt-3 g-2 ">
@@ -111,7 +111,9 @@ function PosterCpn(props: IProps) {
           </Link>
         </Col>
         <Col lg={3} md={4} sm={6} xs={6}>
-          <Link className="service-item py-2" href={`/regis-services?type=${ETypeOfServiceParameters.Vaccine}`}>
+          <Link
+            className="service-item py-2"
+            href={`/regis-services?type=${ETypeOfServiceParameters.Vaccine}`}>
             <img
               className="img-icon mb-3"
               src="/imgs/icons/vaccination-icon.png"

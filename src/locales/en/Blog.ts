@@ -8,4 +8,6 @@ export const blogUs = {
   labelHealth: "Health Guide",
   topBlog: "Featured Articles",
   lableKeyword: "Keyword",
+  bcHome: "Home",
+  bcBlog: "Articles",
 };

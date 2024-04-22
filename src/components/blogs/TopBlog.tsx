@@ -7,10 +7,9 @@ import { FaCircleDot } from "react-icons/fa6";
 interface IProps {
   lan: typeof blogVi;
   blogs: Blog[] | undefined;
-  onClick: (blog: Blog) => void;
 }
 function TopBlogs(props: IProps) {
-  const { lan, blogs, onClick } = props;
+  const { lan, blogs } = props;
   return (
     <div className="blog-priority">
       {blogs?.map((blog, i) => (
@@ -19,9 +18,9 @@ function TopBlogs(props: IProps) {
             <img src={blog?.mainPhoto.url || ""} />
           </div>
           <div className="col-8 ps-1">
-            <div className="title  text-primary" onClick={() => onClick(blog)}>
+            <Link href={`/blogs/${blog.slug}`} className="title  text-primary">
               {blog?.title}
-            </div>
+            </Link>
             {blog?.type === EnumBlogType.Health && (
               <div className="type ">
                 <FaCircleDot className="text-primary" />{" "}

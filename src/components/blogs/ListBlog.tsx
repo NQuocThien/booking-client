@@ -5,16 +5,16 @@ import {
   Blog,
   EnumBlogType,
   useGetAllBlogPaginationForClientQuery,
+  useGetTotalBlogsCountForClientQuery,
 } from "@/graphql/webbooking-service.generated";
 import { IPagination } from "@/assets/contains/item-interface";
 import { useEffect, useState } from "react";
 import useNProgress from "@/hooks/useNProgress";
 import TopBlogs from "./TopBlog";
 import BlogsCpn from "./Blogs";
+import PaginationCpn from "../subs/Pagination";
 interface IProps {
   lan: typeof blogVi;
-  onChange: (blog: Blog) => void;
-  setTopBlogs: (blogs: Blog[]) => void;
 }
 interface IFilter {
   pagination: IPagination;
@@ -22,14 +22,14 @@ interface IFilter {
   type: EnumBlogType | undefined;
 }
 function ListBlog(props: IProps) {
-  const { lan, onChange, setTopBlogs } = props;
+  const { lan } = props;
 
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [filter, setFilter] = useState<IFilter>({
     pagination: {
       current: 1,
       total: 1,
-      limit: 20,
+      limit: 8,
     },
     search: "",
     type: undefined,
@@ -43,14 +43,32 @@ function ListBlog(props: IProps) {
       type: filter.type,
     },
   });
+
+  const { data: dataTotal, loading: loadTotal } =
+    useGetTotalBlogsCountForClientQuery({
+      variables: {
+        search: filter.search,
+        type: filter.type,
+      },
+    });
   // =================================================================
   useEffect(() => {
     if (data) setBlogs(data.getAllBlogPaginationForClient);
   }, [data]);
+  useEffect(() => {
+    if (dataTotal)
+      setFilter((pre) => ({
+        ...pre,
+        pagination: {
+          ...pre.pagination,
+          total: dataTotal.getTotalBlogsCountForClient,
+        },
+      }));
+  }, [dataTotal]);
 
   useEffect(() => {
-    useNProgress(loading);
-  }, [loading]);
+    useNProgress(loading || loadTotal);
+  }, [loading, loadTotal]);
   // =================================================================
   const getTopBlog = (): Blog | undefined => {
     if (blogs.length > 0) {
@@ -72,9 +90,7 @@ function ListBlog(props: IProps) {
     } else return [];
   };
   // =================================================================
-  useEffect(() => {
-    setTopBlogs(getTop(4));
-  }, [blogs]);
+
   return (
     <div className="container blogs">
       <div className="blogs-top d-flex align-items-center mb-3">
@@ -114,29 +130,35 @@ function ListBlog(props: IProps) {
       </div>
       <Row className="blogs-main">
         <Col lg={6} md={6} sm={12} xs={12}>
-          <MainBlog
-            onClick={(blog) => onChange(blog)}
-            lan={lan}
-            blog={getTopBlog()}
-          />
+          <MainBlog lan={lan} blog={getTopBlog()} />
         </Col>
         <Col lg={6} md={6} sm={12} xs={12}>
-          <TopBlogs
-            onClick={(blog) => onChange(blog)}
-            lan={lan}
-            blogs={getTop(3)}
-          />
+          <TopBlogs lan={lan} blogs={getTop(3)} />
         </Col>
       </Row>
       <Row>
         <Col>
-          <BlogsCpn
-            onClick={(blog) => onChange(blog)}
-            lan={lan}
-            blogs={getTop(-3)}
-          />
+          <BlogsCpn lan={lan} blogs={getTop(-3)} />
         </Col>
       </Row>
+      <div className="d-flex justify-content-center my-2 ">
+        <PaginationCpn
+          setPageActive={(page) =>
+            setFilter((pre) => ({
+              ...pre,
+              pagination: {
+                ...pre.pagination,
+                current: page,
+              },
+            }))
+          }
+          totalPage={Math.ceil(
+            (filter.pagination.limit &&
+              filter.pagination.total / filter.pagination.limit) ||
+              filter.pagination.total / 10
+          )}
+        />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 export const homeVi = {
-  title1: "Cổng thông tin đăng ký khám chữa bệnh",
+  title1:
+    "Cổng thông tin đăng ký khám chữa bệnh cho các cơ sở y tế trên địa bàn tỉnh An Giang",
   title2: "Tìm kiếm thông tin cơ cở y tế và bác sĩ tại đây",
   srvDoctor: "Khám theo bác sĩ",
   srvSpecialty: "Khám chuyên khoa",

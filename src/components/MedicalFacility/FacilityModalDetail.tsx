@@ -4,11 +4,7 @@ import ModalCpn from "../subs/Modal";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { MdEmail, MdOutlineLocationOn, MdPerson } from "react-icons/md";
 import { AiOutlineSchedule } from "react-icons/ai";
-import MapAddressCpn from "../subs/MapAddressCpn";
 import { FaPhone } from "react-icons/fa";
-import MapComponent from "../subs/Map";
-import MapLeaflet from "../subs/MapV2";
-import MapboxMap from "../subs/MapV2";
 import BingMap from "../subs/MapV2";
 interface IProp {
   lan: typeof facilityVi;

@@ -105,4 +105,7 @@ export const formCustomerVi = {
   modalBtnRegis: "Đăng ký",
   modalHeader: "Thông tin hồ sơ chi tiết",
   modalHeaderRegis: "Thông tin đăng ký khám bệnh",
+  cancelRegis: "Hủy",
+  cancelledRegis: "Đã hủy",
+  cancelledMess: "Đã hủy",
 };

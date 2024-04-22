@@ -13,9 +13,7 @@ function CustomerDetailPage() {
   const currentLan = useSelector((state: RootState) => state.client.language);
   const searchParams = useSearchParams();
 
-  const [typeOfFacility, setTypeOfFacility] = useState<GetETypeOfFacility>(
-    GetETypeOfFacility.clinic
-  );
+  const [typeOfFacility, setTypeOfFacility] = useState<GetETypeOfFacility>();
 
   useLayoutEffect(() => {
     if (currentLan.code === "us") {
@@ -43,7 +41,6 @@ function CustomerDetailPage() {
     if (type && type !== "") {
       const filter = getNextRoute(type);
       setTypeOfFacility(filter);
-      // console.log("Change: ", filter);
     }
   }, [searchParams.get("type")]);
 
