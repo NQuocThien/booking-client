@@ -34,6 +34,7 @@ function ManagerTicked({ customerId, lan }: IProps) {
   // =================================================================
   const { refetch, data, loading, error } =
     useGetProfileTicketByCustomerIdQuery({
+      fetchPolicy: "no-cache",
       variables: {
         input: customerId,
       },
@@ -164,12 +165,10 @@ function ManagerTicked({ customerId, lan }: IProps) {
                                 {regis?.typeOfService}
                               </span>
                             </h6>
-                            {/* SERVICE */}
                             <h6>
                               <span className="text-primary me-1">
                                 <FaBriefcaseMedical />
                               </span>
-                              {/* {lan.titleFacilityName}: */}
                               <span className="text-dark ms-2">
                                 {regis?.doctor?.doctorName}
                                 {regis?.package?.packageName}

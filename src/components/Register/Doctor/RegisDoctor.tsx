@@ -14,7 +14,7 @@ import {
   ScheduleInput,
   SessionInput,
   useCreateRegisterDoctorMutation,
-  useGetAllRegisPendingLazyQuery,
+  useGetAllRegisOfServiceLazyQuery,
 } from "@/graphql/webbooking-service.generated";
 import DateSession from "../DateSession/DateSession";
 import ListProfile from "../DateSession/ListProfile";
@@ -41,7 +41,7 @@ function RegisDoctorCpn(props: IProps) {
   const router = useRouter();
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
-    useGetAllRegisPendingLazyQuery({
+    useGetAllRegisOfServiceLazyQuery({
       fetchPolicy: "no-cache",
     });
 
@@ -68,7 +68,7 @@ function RegisDoctorCpn(props: IProps) {
 
   useEffect(() => {
     if (dataRegis) {
-      const regis: Register[] = dataRegis.getAllRegisPending;
+      const regis: Register[] = dataRegis.getAllRegisOfService;
       const sessionsExist: Session[] = regis.map((s) => s.session);
 
       const sessionFiltered: Session[] =

@@ -15,7 +15,7 @@ import {
   ScheduleInput,
   SessionInput,
   useCreateRegisterMedicalSpecialtyMutation,
-  useGetAllRegisPendingLazyQuery,
+  useGetAllRegisOfServiceLazyQuery,
 } from "@/graphql/webbooking-service.generated";
 import DateSession from "../DateSession/DateSession";
 import ListProfile from "../DateSession/ListProfile";
@@ -40,7 +40,7 @@ function RegisSpecialty(props: IProps) {
   const params = useSearchParams();
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
-    useGetAllRegisPendingLazyQuery();
+    useGetAllRegisOfServiceLazyQuery();
 
   const [regisSpecialty, { loading: loadingRegisSpecialty }] =
     useCreateRegisterMedicalSpecialtyMutation();
@@ -61,7 +61,7 @@ function RegisSpecialty(props: IProps) {
 
   useEffect(() => {
     if (dataRegis) {
-      const regis: Register[] = dataRegis.getAllRegisPending;
+      const regis: Register[] = dataRegis.getAllRegisOfService;
       const sessionsExist: Session[] = regis.map((s) => s.session);
 
       const sessionFiltered: Session[] =

@@ -353,8 +353,8 @@ const getListVaccinationRegisInfoByFacilityId = gql`
   }
 `;
 const getAllRegisPending = gql`
-  query getAllRegisPending($input: GetRegisterByOptionInput!) {
-    getAllRegisPending(input: $input) {
+  query getAllRegisOfService($input: GetRegisterByOptionInput!) {
+    getAllRegisOfService(input: $input) {
       id
       date
       doctorId
@@ -804,6 +804,54 @@ const getBlogBySlug = gql`
         role
         showName
         username
+      }
+    }
+  }
+`;
+const getRegisHistory = gql`
+  query getRegisHistory($input: GetRegisHistoryInput!) {
+    getRegisHistory(input: $input) {
+      id
+      cancel
+      createdAt
+      date
+      profileId
+
+      session {
+        startTime
+        endTime
+      }
+      typeOfService
+      doctorId
+      packageId
+      specialtyId
+      vaccineId
+      state
+      profile {
+        id
+        fullname
+        address
+        email
+        numberPhone
+        gender
+        ethnic
+        identity
+        medicalInsurance
+        job
+        relationship
+        dataOfBirth
+        customerId
+        customer {
+          id
+          fullname
+          address
+          numberPhone
+          gender
+          ethnic
+          dateOfBirth
+          userId
+          email
+        }
       }
     }
   }
