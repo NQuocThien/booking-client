@@ -1,11 +1,17 @@
-import { Vaccination } from "@/graphql/webbooking-service.generated";
+import {
+  Evaluate,
+  Vaccination,
+  useGetEvaluateByOptionQuery,
+} from "@/graphql/webbooking-service.generated";
 import { facilityVi, regisVi } from "@/locales/vi/Facility";
 import ModalCpn from "../subs/Modal";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { MdOutlineSick, MdPerson } from "react-icons/md";
 import { IoPricetags } from "react-icons/io5";
 import { formatter } from "@/utils/tools";
 import { AiOutlineSchedule } from "react-icons/ai";
+import ListEvaluate from "../subs/ListEvaluate";
+import { useEffect, useState } from "react";
 interface IProp {
   lan: typeof regisVi;
   open: boolean;
@@ -15,6 +21,18 @@ interface IProp {
 function VaccinationDetailModal(props: IProp) {
   const { lan, vaccine, onClose, open } = props;
 
+  const [evaluate, setEvaluate] = useState<Evaluate[]>([]);
+
+  const { data, loading } = useGetEvaluateByOptionQuery({
+    variables: {
+      input: {
+        vaccineId: vaccine?.id || "",
+      },
+    },
+  });
+  useEffect(() => {
+    if (data?.getEvaluateByOption) setEvaluate(data.getEvaluateByOption);
+  }, [data]);
   // =================================================================
 
   return (
@@ -78,6 +96,13 @@ function VaccinationDetailModal(props: IProp) {
             <p>{lan.modalVaccineNote}</p>
             <span> {vaccine?.note}</span>
           </div>
+        </Row>
+
+        <Row>
+          <div>
+            {lan.rating} {loading && <Spinner size="sm" variant="primary" />}
+          </div>
+          <ListEvaluate list={evaluate} />{" "}
         </Row>
       </Container>
     </ModalCpn>

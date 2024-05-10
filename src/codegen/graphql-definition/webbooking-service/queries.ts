@@ -39,6 +39,7 @@ const checkLoginUser = gql`
       roles
       customer {
         id
+        customerKey
         fullname
         gender
         email
@@ -104,6 +105,28 @@ const getProfileByCustomerId = gql`
       identity
       relationship
       job
+      shares
+    }
+  }
+`;
+const getProfileByCustomerKey = gql`
+  query getProfileByCustomerKey($customerKey: String!) {
+    getProfileByCustomerKey(customerKey: $customerKey) {
+      id
+      customerId
+      fullname
+      numberPhone
+      email
+      address
+      gender
+      dataOfBirth
+      ethnic
+      identity
+      relationship
+      job
+      customer {
+        fullname
+      }
     }
   }
 `;
@@ -392,9 +415,86 @@ const getProfileTicketByCustomerId = gql`
       register {
         id
         date
+        createdAt
+        profileId
         typeOfService
         state
         cancel
+        session {
+          endTime
+          startTime
+        }
+        doctorId
+        vaccineId
+        packageId
+        specialtyId
+        doctor {
+          id
+          doctorName
+          specialty {
+            specialtyName
+          }
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+        specialty {
+          specialtyName
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+        vaccination {
+          vaccineName
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+        package {
+          packageName
+          price
+          facility {
+            medicalFacilityName
+            address
+          }
+        }
+      }
+    }
+  }
+`;
+const getProfileTicketByCustomerKey = gql`
+  query getProfileTicketByCustomerKey($customerKey: String!) {
+    getProfileByCustomerKey(customerKey: $customerKey) {
+      id
+      customerId
+      fullname
+      numberPhone
+      email
+      address
+      gender
+      dataOfBirth
+      ethnic
+      identity
+      relationship
+      job
+      customer {
+        fullname
+      }
+      register {
+        id
+        date
+        createdAt
+        profileId
+        typeOfService
+        state
+        cancel
+
         session {
           endTime
           startTime
@@ -808,18 +908,62 @@ const getBlogBySlug = gql`
     }
   }
 `;
-const getRegisHistory = gql`
-  query getRegisHistory($input: GetRegisHistoryInput!) {
-    getRegisHistory(input: $input) {
+
+const getAllNotificationByUserId = gql`
+  query getAllNotificationByUserId($input: String!) {
+    getAllNotificationByUserId(userId: $input) {
+      id
+      content
+      detailPath
+      createdAt
+      status
+      userId
+    }
+  }
+`;
+const getRegisById = gql`
+  query getRegisById($id: String!) {
+    getRegisById(id: $id) {
       id
       cancel
       createdAt
       date
       profileId
-
       session {
         startTime
         endTime
+      }
+      doctor {
+        doctorName
+        price
+        facility {
+          address
+          medicalFacilityName
+        }
+      }
+      specialty {
+        specialtyName
+        price
+        facility {
+          address
+          medicalFacilityName
+        }
+      }
+      vaccination {
+        vaccineName
+        price
+        facility {
+          address
+          medicalFacilityName
+        }
+      }
+      package {
+        packageName
+        price
+        facility {
+          address
+          medicalFacilityName
+        }
       }
       typeOfService
       doctorId
@@ -827,6 +971,12 @@ const getRegisHistory = gql`
       specialtyId
       vaccineId
       state
+      files {
+        filename
+        type
+        url
+      }
+
       profile {
         id
         fullname
@@ -841,18 +991,44 @@ const getRegisHistory = gql`
         relationship
         dataOfBirth
         customerId
-        customer {
-          id
-          fullname
-          address
-          numberPhone
-          gender
-          ethnic
-          dateOfBirth
-          userId
-          email
-        }
       }
+    }
+  }
+`;
+const getEvaluateByRegisId = gql`
+  query getEvaluateByRegisId($regisId: String!) {
+    getEvaluateByRegisId(regisId: $regisId) {
+      id
+      userId
+      customerName
+      registerId
+      typeOfService
+      specialtyId
+      doctorId
+      packageId
+      vaccineId
+      comment
+      rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
+const getEvaluateByOption = gql`
+  query getEvaluateByOption($input: GetEvaluateOptionInput!) {
+    getEvaluateByOption(option: $input) {
+      id
+      userId
+      customerName
+      registerId
+      typeOfService
+      specialtyId
+      doctorId
+      packageId
+      vaccineId
+      comment
+      rating
+      createdAt
     }
   }
 `;

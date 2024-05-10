@@ -11,6 +11,7 @@ export const headerUs = {
   texNavSrvVaccination: "Vaccination service",
   texNavLoginLoading: "Sign in...",
   texNavBlog: "Articles",
+  textKey: "Customer key",
   texNavBlogMedical: "Medical Knowledge",
   texNavBlogService: "Service Information",
   texNavBlogHealth: "Healthcare",
@@ -24,6 +25,9 @@ export const headerUs = {
   texBtnTiket: "Medical examination form",
   texBtnNotification: "Announcement",
   texBtnLogout: "Log out",
+  textListNotification: "Notification List",
+  btnSeenAll: "Mark all as seen",
+  headModalNotify: "Notifications",
 };
 export const footerUs = {
   texNavFacility: "Medical Facility",

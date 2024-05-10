@@ -1,13 +1,19 @@
-import { Package } from "@/graphql/webbooking-service.generated";
+import {
+  Evaluate,
+  Package,
+  useGetEvaluateByOptionQuery,
+} from "@/graphql/webbooking-service.generated";
 import { regisVi } from "@/locales/vi/Facility";
 import ModalCpn from "../subs/Modal";
-import { Col, Container, Image, Row } from "react-bootstrap";
+import { Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import { MdTransgender } from "react-icons/md";
 import { getSchedule } from "@/utils/getData";
 import { store } from "@/redux/store/store";
 import { IoIosPricetags } from "react-icons/io";
 import { formatter } from "@/utils/tools";
 import { GrSchedules } from "react-icons/gr";
+import ListEvaluate from "../subs/ListEvaluate";
+import { useEffect, useState } from "react";
 interface IProp {
   lan: typeof regisVi;
   open: boolean;
@@ -17,6 +23,18 @@ interface IProp {
 function PackageDetailModal(props: IProp) {
   const { lan, packageCare, onClose, open } = props;
 
+  const [evaluate, setEvaluate] = useState<Evaluate[]>([]);
+
+  const { data, loading } = useGetEvaluateByOptionQuery({
+    variables: {
+      input: {
+        packageId: packageCare?.id || "",
+      },
+    },
+  });
+  useEffect(() => {
+    if (data?.getEvaluateByOption) setEvaluate(data.getEvaluateByOption);
+  }, [data]);
   // =================================================================
   return (
     <ModalCpn
@@ -76,7 +94,12 @@ function PackageDetailModal(props: IProp) {
             </div>
           </Row>
         </Row>
-        <Row></Row>
+        <Row>
+          <div>
+            {lan.rating} {loading && <Spinner size="sm" variant="primary" />}
+          </div>
+          <ListEvaluate list={evaluate} />{" "}
+        </Row>
       </Container>
     </ModalCpn>
   );

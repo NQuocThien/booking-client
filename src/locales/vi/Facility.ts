@@ -55,6 +55,7 @@ export const regisVi = {
   titleSession: "Các phiên khám",
   titleSpecialties: "Chọn chuyên khoa khám",
   titleVaccination: "Chọn Vaccine",
+  rating: "Đánh giá",
   titlePackage: "Chọn gói khám",
   titleDoctors: "Chọn bác sĩ",
   labelDayOfWeek: "Thứ ",

@@ -1,8 +1,10 @@
 import { IStateRegister } from "../reducer";
 import { Button, Col, Row } from "react-bootstrap";
 import {
+  GetProfileByCustomerKeyQuery,
   Profile,
   useGetProfileByCustomerIdQuery,
+  useGetProfileByCustomerKeyQuery,
 } from "@/graphql/webbooking-service.generated";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { formatDate } from "@/utils/tools";
@@ -17,7 +19,7 @@ import {
   MdOutlineEmail,
   MdOutlineTransgender,
 } from "react-icons/md";
-import { FaPeopleGroup } from "react-icons/fa6";
+import { FaPeopleGroup, FaRegShareFromSquare } from "react-icons/fa6";
 import { IoLocationOutline, IoPersonCircleOutline } from "react-icons/io5";
 import { CiCalendarDate, CiClock2 } from "react-icons/ci";
 import { RootState } from "@/redux/store/store";
@@ -32,12 +34,14 @@ import { GiMedicalPackAlt } from "react-icons/gi";
 import { SlCalender } from "react-icons/sl";
 interface IProps {
   state: IStateRegister;
-  onClickProfile: (profile: Profile) => void;
+  onClickProfile: (profile: Profile, share: boolean) => void;
+  onChangeProfileShare: (share: boolean) => void;
   onRegis: () => void;
   onBack: () => void;
 }
 function ListProfile(props: IProps) {
-  const { state, onClickProfile, onRegis, onBack } = props;
+  const { state, onClickProfile, onRegis, onBack, onChangeProfileShare } =
+    props;
   const router = useRouter();
   const [lan, setLan] = useState(formCustomerVi);
   const currentLan = useSelector((state: RootState) => state.client.language);
@@ -46,12 +50,22 @@ function ListProfile(props: IProps) {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [profile, setProfile] = useState<Profile>();
   const [modal, setModal] = useState<boolean>(false);
+  const [profileShare, setProfileShare] =
+    useState<GetProfileByCustomerKeyQuery["getProfileByCustomerKey"]>();
   // =================================================================
   const { data, loading, error } = useGetProfileByCustomerIdQuery({
     variables: {
       input: infoUser?.customer?.id || "",
     },
   });
+
+  const { data: dateShare, loading: loadingShare } =
+    useGetProfileByCustomerKeyQuery({
+      fetchPolicy: "no-cache",
+      variables: {
+        customerKey: infoUser?.customer?.customerKey || "",
+      },
+    });
 
   // =================================================================
   useLayoutEffect(() => {
@@ -63,8 +77,12 @@ function ListProfile(props: IProps) {
     if (data?.getProfileByCustomerId) setProfiles(data.getProfileByCustomerId);
   }, [data]);
   useEffect(() => {
-    useNProgress(loading);
-  }, [loading]);
+    if (dateShare?.getProfileByCustomerKey)
+      setProfileShare(dateShare.getProfileByCustomerKey);
+  }, [dateShare]);
+  useEffect(() => {
+    useNProgress(loading || loadingShare);
+  }, [loading, loadingShare]);
   // =================================================================
 
   const handleRegis = async () => {
@@ -73,98 +91,216 @@ function ListProfile(props: IProps) {
 
   const handleClickProfile = (profile: Profile) => {
     setProfile(profile);
-    onClickProfile(profile);
+    onClickProfile(profile, state.profileShare);
+    onClickProfile(profile, true);
     setModal(true);
   };
   return (
     <div className="profile py-3">
-      <h4 className="text-primary  text-center">{lan.titleProfile}</h4>
-      <h4 className="text-primary text-center">{lan.subProfile}</h4>
-      <div className="profile-list">
-        {profiles.map((profile, i) => (
-          <Row key={i} className=" p-3 mt-3 profile-item">
-            <Col lg={10} md={10} sm={12} xs={12}>
-              <div className="px-2">
-                <h6>
-                  <span className="text-primary me-1">
-                    <IoPersonCircleOutline />
-                  </span>
-                  {lan.titleFullname}:{" "}
-                  <strong className="text-success ms-2">
-                    {profile.fullname}{" "}
-                  </strong>
-                </h6>
-              </div>
-              <div className="px-2">
-                <h6>
-                  <span className="text-primary me-1">
-                    <CiCalendarDate />
-                  </span>
-                  {lan.titleDateOfBirth}:
-                  <span className="text-info ms-2">
-                    {formatDate(profile.dataOfBirth)}
-                  </span>
-                </h6>
-              </div>
-              <div className="px-2">
-                <h6>
-                  <span className="text-primary me-1">
-                    <FaPhone />
-                  </span>
-                  {lan.titleFullname}:
-                  <span className="text-info ms-2">{profile.numberPhone}</span>
-                </h6>
-              </div>
-              <div className="px-2">
-                <h6>
-                  <span className="text-primary me-1">
-                    <MdOutlineTransgender />
-                  </span>
-                  {lan.titleGender}:
-                  <span className="text-info ms-2">{profile.gender}</span>
-                </h6>
-              </div>
-              <div className="px-2">
-                <h6>
-                  <span className="text-primary me-1">
-                    <MdAddLocation />
-                  </span>
-                  {lan.titleAddress}:
-                  <span className="text-info ms-2">{profile.address}</span>
-                </h6>
-              </div>
-              <div className="px-2">
-                <h6>
-                  <span className="text-primary me-1">
-                    <FaPeopleGroup />
-                  </span>
-                  {lan.titleEthnic}:
-                  <span className="text-info ms-2">{profile.ethnic}</span>
-                </h6>
-              </div>
-            </Col>
-            <Col
-              lg={2}
-              md={2}
-              sm={12}
-              xs={12}
-              className="d-flex align-items-end justify-content-end">
-              <div className="">
-                <Button
-                  variant="outline-success"
-                  className="mx-1"
-                  onClick={() => {
-                    handleClickProfile(profile);
-                  }}>
-                  <strong>
-                    <FaCheck />
-                  </strong>
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        ))}
+      <h4 className="text-primary text-center">{lan.titleProfile}</h4>
+      <div className="d-flex justify-content-center ">
+        <span className="fs-5 text-primary">
+          {(!state.profileShare && lan.subProfile) || lan.subProfileShare}
+        </span>
+        <Button
+          active={state.profileShare}
+          className="ms-2"
+          size="sm"
+          variant="outline-success"
+          onClick={() => onChangeProfileShare(!state.profileShare)}>
+          <FaRegShareFromSquare />
+        </Button>
       </div>
+      {!state.profileShare && (
+        <div className="profile-list">
+          {profiles.map((profile, i) => (
+            <Row key={i} className=" p-3 mt-3 profile-item">
+              <Col lg={10} md={10} sm={12} xs={12}>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <IoPersonCircleOutline />
+                    </span>
+                    {lan.titleFullname}:{" "}
+                    <strong className="text-success ms-2">
+                      {profile.fullname}{" "}
+                    </strong>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <CiCalendarDate />
+                    </span>
+                    {lan.titleDateOfBirth}:
+                    <span className="text-info ms-2">
+                      {formatDate(profile.dataOfBirth)}
+                    </span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <FaPhone />
+                    </span>
+                    {lan.titleFullname}:
+                    <span className="text-info ms-2">
+                      {profile.numberPhone}
+                    </span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <MdOutlineTransgender />
+                    </span>
+                    {lan.titleGender}:
+                    <span className="text-info ms-2">{profile.gender}</span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <MdAddLocation />
+                    </span>
+                    {lan.titleAddress}:
+                    <span className="text-info ms-2">{profile.address}</span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <FaPeopleGroup />
+                    </span>
+                    {lan.titleEthnic}:
+                    <span className="text-info ms-2">{profile.ethnic}</span>
+                  </h6>
+                </div>
+              </Col>
+              <Col
+                lg={2}
+                md={2}
+                sm={12}
+                xs={12}
+                className="d-flex align-items-end justify-content-end">
+                <div className="">
+                  <Button
+                    variant="outline-success"
+                    className="mx-1"
+                    onClick={() => {
+                      handleClickProfile(profile);
+                    }}>
+                    <strong>
+                      <FaCheck />
+                    </strong>
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          ))}
+        </div>
+      )}
+      {state.profileShare && (
+        <div className="profile-list">
+          {profileShare?.map((profile, i) => (
+            <Row key={i} className=" p-3 mt-3 profile-item">
+              <Col lg={10} md={10} sm={12} xs={12}>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <IoPersonCircleOutline />
+                    </span>
+                    {lan.titleFullname}:{" "}
+                    <strong className="text-success ms-2">
+                      {profile.fullname}{" "}
+                    </strong>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <CiCalendarDate />
+                    </span>
+                    {lan.titleDateOfBirth}:
+                    <span className="text-info ms-2">
+                      {formatDate(profile.dataOfBirth)}
+                    </span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <FaPhone />
+                    </span>
+                    {lan.titleFullname}:
+                    <span className="text-info ms-2">
+                      {profile.numberPhone}
+                    </span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <MdOutlineTransgender />
+                    </span>
+                    {lan.titleGender}:
+                    <span className="text-info ms-2">{profile.gender}</span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <MdAddLocation />
+                    </span>
+                    {lan.titleAddress}:
+                    <span className="text-info ms-2">{profile.address}</span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <FaPeopleGroup />
+                    </span>
+                    {lan.titleEthnic}:
+                    <span className="text-info ms-2">{profile.ethnic}</span>
+                  </h6>
+                </div>
+                <div className="px-2">
+                  <h6>
+                    <span className="text-primary me-1">
+                      <FaRegShareFromSquare />
+                    </span>
+                    {lan.titleEthnic}:
+                    <span className="text-info ms-2">
+                      {profile.customer?.fullname}
+                    </span>
+                  </h6>
+                </div>
+              </Col>
+              <Col
+                lg={2}
+                md={2}
+                sm={12}
+                xs={12}
+                className="d-flex align-items-end justify-content-end">
+                <div className="">
+                  <Button
+                    variant="outline-success"
+                    className="mx-1"
+                    onClick={() => {
+                      const { customer, ...input } = profile;
+                      handleClickProfile(input);
+                    }}>
+                    <strong>
+                      <FaCheck />
+                    </strong>
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          ))}
+        </div>
+      )}
       <div className="mt-2">
         <Button
           active

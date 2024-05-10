@@ -20,6 +20,7 @@ export interface EServiceState {
 export interface IStateRegister {
   svrState: EServiceState;
   facility: MedicalFacilities | undefined;
+  profileShare: boolean;
   // ----- SPECIALTY -----
   specialties: MedicalSpecialties[];
   specialty: MedicalSpecialties | undefined;
@@ -65,6 +66,7 @@ export const initState: IStateRegister = {
       startTime: "",
     },
   },
+  profileShare: false,
 
   doctor: undefined,
   doctors: [],
@@ -120,7 +122,7 @@ const HC_PACKAGE = "hs-package";
 const HS_VACCINATIONS = "hs-vaccinations";
 const HS_REGIS_VACCINATION = "hs-regis-vaccination";
 const HC_VACCINATION = "hs-vaccination";
-
+const HC_PROFILE_SHARE = "hs-profile-share";
 // =================== ACTION ============================
 
 export const handleChangeServiceState = (
@@ -161,6 +163,13 @@ export const handleChangeSpecialty = (
 ): IActionRegis => {
   return {
     type: HC_SPECIALTY,
+    payload: value,
+  };
+};
+
+export const handleChangeProfileShare = (value: boolean): IActionRegis => {
+  return {
+    type: HC_PROFILE_SHARE,
     payload: value,
   };
 };
@@ -252,6 +261,11 @@ export const reducer = (
       return {
         ...state,
         facility: action.payload,
+      };
+    case HC_PROFILE_SHARE:
+      return {
+        ...state,
+        profileShare: action.payload,
       };
     // -------- SPECIALTY --------
     case HS_MEDICAL_SPECIALTIES:

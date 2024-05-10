@@ -2,11 +2,14 @@
 import {
   CreateProfileInput,
   EGender,
+  GetProfileByCustomerKeyQuery,
   Profile,
   UpdateProfileInput,
   useCreateProfileMutation,
   useDeleteProfileMutation,
   useGetProfileByCustomerIdQuery,
+  useGetProfileByCustomerKeyQuery,
+  useShareProfileMutation,
   useUpdateProfileMutation,
 } from "@/graphql/webbooking-service.generated";
 import useNProgress from "@/hooks/useNProgress";
@@ -18,9 +21,10 @@ import { AiFillFileAdd } from "react-icons/ai";
 import { BiMessageAltDetail } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 import { FaPhone } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
+import { FaPeopleGroup, FaRegShareFromSquare } from "react-icons/fa6";
 import { ImProfile } from "react-icons/im";
 import { IoPersonCircleOutline } from "react-icons/io5";
+import { PiShareDuotone } from "react-icons/pi";
 import {
   MdAddLocation,
   MdDeleteForever,
@@ -41,19 +45,27 @@ enum Estate {
   list,
   update,
   ticked,
+  share,
 }
 interface IProps {
   customerId: string;
+  customerKey: string;
   lan: typeof formCustomerVi;
 }
-function ManaProfile({ customerId, lan }: IProps) {
+function ManaProfile({ customerId, lan, customerKey }: IProps) {
   const dispatch = useDispatch();
   const [state, setState] = useState<Estate>(Estate.list);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [profileDetail, setProfileDetail] = useState<Profile>();
   const [modal, setModal] = useState(false);
+  const [modalShare, setModalShare] = useState(false);
   const [validated, setValidated] = useState<boolean>(false);
-
+  const [shareInput, setShareInput] = useState({
+    customerKey: "",
+    profileId: "",
+  });
+  const [profileShare, setProfileShare] =
+    useState<GetProfileByCustomerKeyQuery["getProfileByCustomerKey"]>();
   const [createProfileInput, setCreateProfileInput] =
     useState<CreateProfileInput>({
       fullname: "",
@@ -75,15 +87,25 @@ function ManaProfile({ customerId, lan }: IProps) {
       input: customerId,
     },
   });
-  const [
-    createProfile,
-    { data: dataCreate, loading: loadingCreate, error: errorCreate },
-  ] = useCreateProfileMutation();
+  const {
+    data: dateShare,
+    loading: loadingShare,
+    error: errorShare,
+  } = useGetProfileByCustomerKeyQuery({
+    fetchPolicy: "no-cache",
+    variables: {
+      customerKey: customerKey,
+    },
+  });
+  const [createProfile, { data: dataCreate, loading: loadingCreate }] =
+    useCreateProfileMutation();
 
-  const [
-    updateProfile,
-    { data: dataUpdate, loading: loadingUpdate, error: errorUpdate },
-  ] = useUpdateProfileMutation();
+  const [share, { loading: loadShare }] = useShareProfileMutation({
+    fetchPolicy: "no-cache",
+  });
+
+  const [updateProfile, { data: dataUpdate, loading: loadingUpdate }] =
+    useUpdateProfileMutation();
 
   const [updateProfileInput, setUpdateProfileInput] =
     useState<UpdateProfileInput>();
@@ -97,10 +119,29 @@ function ManaProfile({ customerId, lan }: IProps) {
     }
   }, [data]);
   useEffect(() => {
-    if (loading || loadingCreate || loadingUpdate || loadingDelete)
+    if (dateShare?.getProfileByCustomerKey) {
+      setProfileShare(dateShare.getProfileByCustomerKey);
+    }
+  }, [dateShare]);
+  useEffect(() => {
+    if (
+      loading ||
+      loadingCreate ||
+      loadingUpdate ||
+      loadingDelete ||
+      loadingShare ||
+      loadShare
+    )
       useNProgress(true);
     else useNProgress(false);
-  }, [loading, loadingCreate, loadingUpdate, loadingDelete]);
+  }, [
+    loading,
+    loadingCreate,
+    loadingUpdate,
+    loadingDelete,
+    loadingShare,
+    loadShare,
+  ]);
 
   useEffect(() => {
     if (dataCreate) {
@@ -175,7 +216,7 @@ function ManaProfile({ customerId, lan }: IProps) {
         },
       })
         .then(() => {
-          showToast(lan.messCreatedProfile);
+          showToast(lan.messUpdateProfile);
           setValidated(false);
           setState(Estate.list);
         })
@@ -209,6 +250,25 @@ function ManaProfile({ customerId, lan }: IProps) {
     setProfileDetail(profile);
     setModal(true);
   };
+  const handleShowModalShare = (profile: Profile) => {
+    setShareInput((pre) => ({ ...pre, profileId: profile.id }));
+    setModalShare(true);
+  };
+  const handleShare = async () => {
+    await share({
+      variables: {
+        customerKey: shareInput.customerKey,
+        profileId: shareInput.profileId,
+      },
+    })
+      .then(() => {
+        showToast(lan.mesShare);
+        setModalShare(false);
+      })
+      .catch((err) => {
+        showToast(err.message);
+      });
+  };
   // =================================================================
   return (
     <div className="py-3">
@@ -221,6 +281,13 @@ function ManaProfile({ customerId, lan }: IProps) {
               active={state === Estate.list}
               size="sm">
               <ImProfile /> {lan.btnListProfile}
+            </Button>
+            <Button
+              variant="outline-success"
+              onClick={() => setState(Estate.share)}
+              active={state === Estate.share}
+              size="sm">
+              <FaRegShareFromSquare /> {lan.btnListProfileShare}
             </Button>
 
             <Button
@@ -247,6 +314,11 @@ function ManaProfile({ customerId, lan }: IProps) {
             <Col>
               <h4 className="fw-bold">{lan.titleProfileNone} 🙌🙌🙌</h4>
               <h5 className="fw-bold">{lan.titleProfileSay} ➕➕➕</h5>
+            </Col>
+          )}
+          {state === Estate.share && profileShare?.length === 0 && (
+            <Col>
+              <h4 className="fw-bold">{lan.titleProfileNone} 🙌🙌🙌</h4>
             </Col>
           )}
           {state === Estate.list && profiles && (
@@ -314,6 +386,30 @@ function ManaProfile({ customerId, lan }: IProps) {
                       <span className="text-info ms-2">{profile.ethnic}</span>
                     </h6>
                   </div>
+                  {profile.shares && profile.shares?.length > 0 && (
+                    <div className="px-3">
+                      <div className="d-flex">
+                        <span className="text-primary me-1">
+                          <PiShareDuotone />
+                        </span>
+                        {lan.titleShared}:
+                        <div className="d-flex text-warning ms-2">
+                          {profile?.shares?.map((customerKey, index) => (
+                            <span className="me-2 " key={index}>
+                              {" "}
+                              <span className="user-select-all">
+                                {customerKey}
+                              </span>
+                              {profile.shares &&
+                              index === profile.shares?.length - 1
+                                ? "."
+                                : ","}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className="text-end">
                     <Button
                       variant="outline-danger"
@@ -321,9 +417,6 @@ function ManaProfile({ customerId, lan }: IProps) {
                       size="sm"
                       onClick={() => handleDeleteProfile(profile)}>
                       <MdDeleteForever />
-                      {/* {loadingDelete && (
-                      <Spinner animation="border" variant="light" size="sm" />
-                    )} */}
                     </Button>
                     <Button // sửa
                       variant="outline-warning"
@@ -339,11 +432,109 @@ function ManaProfile({ customerId, lan }: IProps) {
                       size="sm">
                       <BiMessageAltDetail />
                     </Button>
+                    <Button
+                      variant="outline-info"
+                      className="mx-1"
+                      onClick={() => handleShowModalShare(profile)}
+                      size="sm">
+                      <FaRegShareFromSquare />
+                    </Button>
                   </div>
                 </div>
               ))}
             </Col>
           )}
+          {state === Estate.share && profileShare && (
+            <Col className="col-12">
+              <h4 className="fw-bold">{lan.titleProfile}</h4>
+              {profileShare.map((item, i) => (
+                <div key={i} className="shadow-lg bg-light p-3 mt-3">
+                  <div className="px-3">
+                    <h6>
+                      <span className="text-primary me-1">
+                        <IoPersonCircleOutline />
+                      </span>
+                      {lan.titleFullname}:{" "}
+                      <strong className="text-success ms-2">
+                        {item.fullname}{" "}
+                      </strong>
+                    </h6>
+                  </div>
+                  <div className="px-3">
+                    <h6>
+                      <span className="text-primary me-1">
+                        <CiCalendarDate />
+                      </span>
+                      {lan.titleDateOfBirth}:
+                      <span className="text-info ms-2">
+                        {formatDate(item.dataOfBirth)}
+                      </span>
+                    </h6>
+                  </div>
+                  <div className="px-3">
+                    <h6>
+                      <span className="text-primary me-1">
+                        <FaPhone />
+                      </span>
+                      {lan.titleFullname}:
+                      <span className="text-info ms-2">{item.numberPhone}</span>
+                    </h6>
+                  </div>
+                  <div className="px-3">
+                    <h6>
+                      <span className="text-primary me-1">
+                        <MdOutlineTransgender />
+                      </span>
+                      {lan.titleGender}:
+                      <span className="text-info ms-2">{item.gender}</span>
+                    </h6>
+                  </div>
+                  <div className="px-3">
+                    <h6>
+                      <span className="text-primary me-1">
+                        <MdAddLocation />
+                      </span>
+                      {lan.titleAddress}:
+                      <span className="text-info ms-2">{item.address}</span>
+                    </h6>
+                  </div>
+                  <div className="px-3">
+                    <h6>
+                      <span className="text-primary me-1">
+                        <FaPeopleGroup />
+                      </span>
+                      {lan.titleEthnic}:
+                      <span className="text-info ms-2">{item.ethnic}</span>
+                    </h6>
+                  </div>
+                  <div className="px-3">
+                    <h6>
+                      <span className="text-primary me-1">
+                        <FaRegShareFromSquare />
+                      </span>
+                      {lan.titleShare}:
+                      <span className="text-success ms-2">
+                        {item.customer?.fullname}
+                      </span>
+                    </h6>
+                  </div>
+                  <div className="text-end">
+                    <Button
+                      variant="outline-info"
+                      className="mx-1"
+                      onClick={() => {
+                        const { customer, ...profile } = item;
+                        handleShowModalDetail(profile);
+                      }}
+                      size="sm">
+                      <BiMessageAltDetail />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </Col>
+          )}
+
           {state === Estate.add && (
             <Col className="col-12 form-add px-3 py-2">
               <Form validated={validated} onSubmit={handleCreateProfile}>
@@ -403,7 +594,7 @@ function ManaProfile({ customerId, lan }: IProps) {
                         onChange={(e) =>
                           setCreateProfileInput((pre) => ({
                             ...pre,
-                            gender: getEnumValueGender(e.target.value),
+                            gender: e.target.value as EGender,
                           }))
                         }>
                         <option>{lan.labelGender}</option>
@@ -591,7 +782,7 @@ function ManaProfile({ customerId, lan }: IProps) {
             </Col>
           )}
           {state === Estate.update && updateProfileInput && (
-            <Col className="col-12">
+            <Col className="col-12 bg-light rounded px-3 py-2">
               <Form validated={validated} onSubmit={handleUpdateProfile}>
                 <h4 className="text-center py-3">{lan.titleUpdateProfile}</h4>
                 <Row>
@@ -669,7 +860,7 @@ function ManaProfile({ customerId, lan }: IProps) {
                             (pre) =>
                               pre && {
                                 ...pre,
-                                gender: getEnumValueGender(e.target.value),
+                                gender: e.target.value as EGender,
                               }
                           )
                         }>
@@ -1034,6 +1225,40 @@ function ManaProfile({ customerId, lan }: IProps) {
                 </div>
               </>
             )}
+          </div>
+        </ModalCpn>
+        {/* MODAL SHARE */}
+        <ModalCpn
+          handleSave={() => {
+            setModalShare(false);
+          }}
+          handleClose={() => {
+            setModalShare(false);
+            setProfileDetail(undefined);
+          }}
+          closeButton={false}
+          textButtonSave={lan.modalClose}
+          headerText={lan.modalHeaderShare}
+          openRequest={modalShare}>
+          <div className="shadow-lg bg-light p-3 mt-3">
+            <Form>
+              <Form.Group className="mb-3" controlId="customerkey">
+                <Form.Label>{lan.labelCustomerKey}</Form.Label>
+                <Form.Control
+                  onChange={(e) => {
+                    const customerKey = e.currentTarget.value;
+                    setShareInput((pre) => ({
+                      ...pre,
+                      customerKey: customerKey,
+                    }));
+                  }}
+                  placeholder="kh--123456"
+                />
+              </Form.Group>
+              <Button size="sm" onClick={() => handleShare()}>
+                <FaRegShareFromSquare />
+              </Button>
+            </Form>
           </div>
         </ModalCpn>
       </Row>

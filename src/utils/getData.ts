@@ -1,11 +1,15 @@
-import { GetEAcademicTitle, GetEDegree } from "@/assets/contains/emun";
+import {
+  GetEAcademicTitle,
+  GetEDegree,
+  GetETypeOfService,
+} from "@/assets/contains/emun";
 import {
   EDayOfWeed,
   EGender,
+  ETypeOfService,
   EnumBlogType,
   Schedule,
 } from "@/graphql/webbooking-service.generated";
-import { store } from "@/redux/store/store";
 
 export const getEnumValueGender = (input: string): EGender => {
   switch (input) {
@@ -151,5 +155,24 @@ export const getEnumBlogType = (
       return EnumBlogType.Service;
     default:
       return undefined;
+  }
+};
+
+export const getEnumValueTypeOfService = (input: string): ETypeOfService => {
+  switch (input) {
+    case GetETypeOfService.Doctor:
+      return ETypeOfService.Doctor;
+
+    case GetETypeOfService.Vaccine:
+      return ETypeOfService.Vaccine;
+
+    case GetETypeOfService.Package:
+      return ETypeOfService.Package;
+
+    case GetETypeOfService.Specialty:
+      return ETypeOfService.Specialty;
+
+    default:
+      return ETypeOfService.Doctor;
   }
 };

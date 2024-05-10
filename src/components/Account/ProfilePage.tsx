@@ -4,25 +4,29 @@ import { formCustomerUs } from "@/locales/en/Account";
 import { formCustomerVi } from "@/locales/vi/Account";
 import { RootState } from "@/redux/store/store";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
-import ManagerTicked from "@/components/Account/ManagerTicked";
+import { useSelector } from "react-redux";
 
-function TicketDetailPage() {
+import ManaProfile from "@/components/Account/ManaProfile";
+import Link from "next/link";
+
+function ProfilePage() {
+  // const dispath = useDispatch();
   const [lan, setLan] = useState(formCustomerVi);
   const currentLan = useSelector((state: RootState) => state.client.language);
   const userInfo = useSelector((state: RootState) => state.client.inforUser);
   const isloginIn = useSelector((state: RootState) => state.client.isLogin);
+  const [login, setLogin] = useState<boolean>(isloginIn);
 
-  const [auth, setAuth] = useState(isloginIn);
   useLayoutEffect(() => {
     if (currentLan.code === "us") {
       setLan(formCustomerUs);
     } else setLan(formCustomerVi);
   }, [currentLan]);
-
-  useEffect(() => setAuth(isloginIn), [isloginIn]);
-  if (!auth)
+  useEffect(() => {
+    setLogin(isloginIn);
+  }, [isloginIn]);
+  isloginIn;
+  if (!login)
     return (
       <div className="contaner">
         <Link href={"/account/login"}>
@@ -32,6 +36,7 @@ function TicketDetailPage() {
     );
   if (userInfo && !userInfo.customer) {
     return (
+      // <FormCreateCustomer inforUser={userInfo} isloginIn={true} lan={lan} />
       <div className="container">
         <Link href="/account/customer">
           <strong>{lan.messCheckCutomer}</strong>
@@ -40,14 +45,14 @@ function TicketDetailPage() {
     );
   } else if (userInfo && userInfo.customer) {
     return (
-      <div className="container">
-        <ManagerTicked
+      <div className="container profile">
+        <ManaProfile
+          customerKey={userInfo.customer.customerKey}
           lan={lan}
           customerId={userInfo.customer.id}
-          customerKey={userInfo.customer.customerKey}
         />
       </div>
     );
   }
 }
-export default TicketDetailPage;
+export default ProfilePage;

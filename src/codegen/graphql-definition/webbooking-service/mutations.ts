@@ -14,6 +14,7 @@ const updateUser = gql`
       roles
       customer {
         id
+        customerKey
         fullname
         gender
         email
@@ -42,6 +43,7 @@ const updateUserWithPass = gql`
       roles
       customer {
         id
+        customerKey
         fullname
         gender
         email
@@ -59,6 +61,7 @@ const createCustomerByUserId = gql`
     createCustomer(input: $input) {
       id
       userId
+      customerKey
       fullname
       numberPhone
       email
@@ -87,6 +90,7 @@ const loginCustomer = gql`
         active
         customer {
           id
+          customerKey
           fullname
           gender
           email
@@ -105,6 +109,7 @@ const updateCustomer = gql`
     updateCustomer(input: $input) {
       id
       userId
+      customerKey
       fullname
       numberPhone
       email
@@ -209,6 +214,60 @@ const createRegisterVaccination = gql`
 const cancelRegister = gql`
   mutation cancelRegister($id: String!) {
     cancelRegister(id: $id) {
+      id
+    }
+  }
+`;
+const seenAllNotificationByUserId = gql`
+  mutation seenAllNotificationByUserId($userId: String!) {
+    seenAllNotification(userId: $userId)
+  }
+`;
+const seenNotificationById = gql`
+  mutation seenNotificationById($id: String!) {
+    seenNotificationById(id: $id)
+  }
+`;
+const createEvaluate = gql`
+  mutation createEvaluate($input: CreateEvaluateInput!) {
+    createEvaluate(input: $input) {
+      id
+      userId
+      customerName
+      registerId
+      typeOfService
+      specialtyId
+      doctorId
+      packageId
+      vaccineId
+      comment
+      rating
+      createdAt
+    }
+  }
+`;
+
+const updateEvaluate = gql`
+  mutation updateEvaluate($input: UpdateEvaluateInput!) {
+    updateEvaluate(input: $input) {
+      id
+      userId
+      registerId
+      customerName
+      typeOfService
+      specialtyId
+      doctorId
+      packageId
+      vaccineId
+      comment
+      rating
+      createdAt
+    }
+  }
+`;
+const shareProfile = gql`
+  mutation shareProfile($profileId: String!, $customerKey: String!) {
+    shareProfile(profileId: $profileId, customerKey: $customerKey) {
       id
     }
   }

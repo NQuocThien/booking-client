@@ -30,8 +30,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const token = getToken();
     if (checkExpirationToken(token)) {
-      dispatch(login());
       getDataCustomer();
+      dispatch(login());
     }
   }, []);
   useEffect(() => {

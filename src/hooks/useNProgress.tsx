@@ -1,7 +1,5 @@
 "use client";
 import NProgress from "nprogress";
-import { useRouter } from "next/router";
-
 const useNProgress = (load: boolean) => {
   if (load) {
     NProgress.configure({
@@ -11,7 +9,7 @@ const useNProgress = (load: boolean) => {
     NProgress.start();
   } else NProgress.done();
 
-  return null; // Hook này không cần trả về gì
+  return null;
 };
 
 export default useNProgress;

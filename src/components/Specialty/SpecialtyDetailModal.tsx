@@ -1,12 +1,18 @@
-import { MedicalSpecialties } from "@/graphql/webbooking-service.generated";
+import {
+  Evaluate,
+  MedicalSpecialties,
+  useGetEvaluateByOptionQuery,
+} from "@/graphql/webbooking-service.generated";
 import { regisVi } from "@/locales/vi/Facility";
 import ModalCpn from "../subs/Modal";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Spinner } from "react-bootstrap";
 import { formatter } from "@/utils/tools";
 import { IoIosPricetags } from "react-icons/io";
 import { getSchedule } from "@/utils/getData";
 import { store } from "@/redux/store/store";
 import { GrSchedules } from "react-icons/gr";
+import { useEffect, useState } from "react";
+import ListEvaluate from "../subs/ListEvaluate";
 interface IProp {
   lan: typeof regisVi;
   open: boolean;
@@ -15,6 +21,18 @@ interface IProp {
 }
 function SpecialtyDetailModal(props: IProp) {
   const { lan, specialty, onClose, open } = props;
+  const [evaluate, setEvaluate] = useState<Evaluate[]>([]);
+
+  const { data, loading } = useGetEvaluateByOptionQuery({
+    variables: {
+      input: {
+        specialtyId: specialty?.id || "",
+      },
+    },
+  });
+  useEffect(() => {
+    if (data?.getEvaluateByOption) setEvaluate(data.getEvaluateByOption);
+  }, [data]);
 
   // =================================================================
 
@@ -51,10 +69,16 @@ function SpecialtyDetailModal(props: IProp) {
           </Row>
         </Row>
         <Row>
-          <div className="discription mt-3 p-2">
+          <div className="discription my-3 p-2">
             <p>{lan.modalSpecialtyDiscription}</p>
             <span> {specialty?.discription}</span>
           </div>
+        </Row>
+        <Row>
+          <div>
+            {lan.rating} {loading && <Spinner size="sm" variant="primary" />}
+          </div>
+          <ListEvaluate list={evaluate} />{" "}
         </Row>
       </Container>
     </ModalCpn>

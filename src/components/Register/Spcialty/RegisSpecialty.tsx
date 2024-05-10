@@ -3,6 +3,7 @@ import { regisVi } from "@/locales/vi/Facility";
 import {
   IActionRegis,
   IStateRegister,
+  handleChangeProfileShare,
   handleChangeServiceState,
   handleChangeSpecialty,
   handleSetRegisSpecialty,
@@ -25,6 +26,8 @@ import { getEnumValueDayOfWeek } from "@/utils/getData";
 import { showToast } from "@/components/subs/toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ETypeOfServiceParameters } from "@/assets/contains/emun";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
 
 interface IProps {
   lan: typeof regisVi;
@@ -38,6 +41,7 @@ function RegisSpecialty(props: IProps) {
   const [listSchedule, setListSchedule] = useState<ScheduleInput[]>([]);
   const router = useRouter();
   const params = useSearchParams();
+  const inforUser = useSelector((state: RootState) => state.client.inforUser);
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisOfServiceLazyQuery();
@@ -90,21 +94,29 @@ function RegisSpecialty(props: IProps) {
     const dayOfWeek = ["Chủ nhật", "2", "3", "4", "5", "6", "7"][day];
 
     const workSchedule = state.specialty?.workSchedule;
+    const specialtyDayOff = workSchedule?.dayOff;
     const dayOffFacility = state.facility?.dateOff;
     const find = workSchedule?.schedule?.findIndex(
       (item) => item.dayOfWeek === dayOfWeek
     );
 
-    if (
-      workSchedule &&
-      workSchedule.dayOff &&
-      workSchedule.dayOff.includes(dayOfWeek)
-    ) {
-      return false;
-    }
-
-    if (dayOffFacility && dayOffFacility.includes(dayOfWeek)) {
-      return false;
+    if (dayOffFacility) {
+      const selectedYear = date.getFullYear();
+      const selectedMonth = date.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần +1
+      const selectedDay = date.getDate();
+      const selectedDateString = `${selectedYear}-${String(
+        selectedMonth
+      ).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
+      const isExistFacility = dayOffFacility.find((df) => {
+        return df.slice(0, 10) === selectedDateString;
+      });
+      if (specialtyDayOff) {
+        const isExist = specialtyDayOff.find((df) => {
+          return df.slice(0, 10) === selectedDateString;
+        });
+        if (isExist) return false;
+      }
+      if (isExistFacility) return false;
     }
 
     // Trả về true nếu ngày đó có trong lịch làm việc của chuyên khoa, ngược lại trả về false
@@ -229,13 +241,25 @@ function RegisSpecialty(props: IProps) {
       {state.regisSpecialty.specialtyId !== "" && (
         <ListProfile
           state={state}
-          onClickProfile={(profile) => {
-            dispatch(
-              handleSetRegisSpecialty({
-                ...state.regisSpecialty,
-                profileId: profile.id,
-              })
-            );
+          onClickProfile={(profile, share) => {
+            if (share)
+              dispatch(
+                handleSetRegisSpecialty({
+                  ...state.regisSpecialty,
+                  profileId: profile.id,
+                  createBy: inforUser?.customer?.customerKey,
+                })
+              );
+            else
+              dispatch(
+                handleSetRegisSpecialty({
+                  ...state.regisSpecialty,
+                  profileId: profile.id,
+                })
+              );
+          }}
+          onChangeProfileShare={(share) => {
+            dispatch(handleChangeProfileShare(share));
           }}
           onRegis={async () => {
             if (state.svrState.specialty === true) {
@@ -249,7 +273,7 @@ function RegisSpecialty(props: IProps) {
                   router.push("/");
                 })
                 .catch((e) => {
-                  showToast(lan.messRegisError);
+                  showToast(e.message);
                   console.log(e);
                 });
             }

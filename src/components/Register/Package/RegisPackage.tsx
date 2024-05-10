@@ -4,6 +4,7 @@ import {
   IActionRegis,
   IStateRegister,
   handleChangePackage,
+  handleChangeProfileShare,
   handleChangeServiceState,
   handleSetRegisPackage,
 } from "../reducer";
@@ -26,6 +27,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ListRegisPackage from "./ListRegisPackage";
 import useNProgress from "@/hooks/useNProgress";
 import { ETypeOfServiceParameters } from "@/assets/contains/emun";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { userInfo } from "os";
 
 interface IProps {
   lan: typeof regisVi;
@@ -39,6 +43,7 @@ function RegisPackageCpn(props: IProps) {
   const [listSchedule, setListSchedule] = useState<ScheduleInput[]>([]);
   const router = useRouter();
   const params = useSearchParams();
+  const inforUser = useSelector((state: RootState) => state.client.inforUser);
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisOfServiceLazyQuery();
@@ -95,22 +100,30 @@ function RegisPackageCpn(props: IProps) {
     const dayOfWeek = ["Chủ nhật", "2", "3", "4", "5", "6", "7"][day];
 
     const workSchedule = state.package?.workSchedule;
+    const packageDateOff = workSchedule?.dayOff;
     const dayOffFacility = state.facility?.dateOff;
 
     const find = workSchedule?.schedule?.findIndex(
       (item) => item.dayOfWeek === dayOfWeek
     );
 
-    if (
-      workSchedule &&
-      workSchedule.dayOff &&
-      workSchedule.dayOff.includes(dayOfWeek)
-    ) {
-      return false;
-    }
-
-    if (dayOffFacility && dayOffFacility.includes(dayOfWeek)) {
-      return false;
+    if (dayOffFacility) {
+      const selectedYear = date.getFullYear();
+      const selectedMonth = date.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần +1
+      const selectedDay = date.getDate();
+      const selectedDateString = `${selectedYear}-${String(
+        selectedMonth
+      ).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
+      const isExistFacility = dayOffFacility.find((df) => {
+        return df.slice(0, 10) === selectedDateString;
+      });
+      if (packageDateOff) {
+        const isExist = packageDateOff.find((df) => {
+          return df.slice(0, 10) === selectedDateString;
+        });
+        if (isExist) return false;
+      }
+      if (isExistFacility) return false;
     }
     return find !== -1;
   };
@@ -233,13 +246,25 @@ function RegisPackageCpn(props: IProps) {
       {state.regisPackage.packageId !== "" && (
         <ListProfile
           state={state}
-          onClickProfile={(profile) => {
-            dispatch(
-              handleSetRegisPackage({
-                ...state.regisPackage,
-                profileId: profile.id,
-              })
-            );
+          onClickProfile={(profile, share) => {
+            if (share)
+              dispatch(
+                handleSetRegisPackage({
+                  ...state.regisPackage,
+                  profileId: profile.id,
+                  createBy: inforUser?.customer?.customerKey,
+                })
+              );
+            else
+              dispatch(
+                handleSetRegisPackage({
+                  ...state.regisPackage,
+                  profileId: profile.id,
+                })
+              );
+          }}
+          onChangeProfileShare={(share) => {
+            dispatch(handleChangeProfileShare(share));
           }}
           onRegis={async () => {
             if (state.svrState.package === true) {
@@ -253,7 +278,7 @@ function RegisPackageCpn(props: IProps) {
                   router.push("/");
                 })
                 .catch((e) => {
-                  showToast(lan.messRegisError);
+                  showToast(e.message, "error");
                   console.log(e);
                 });
             }

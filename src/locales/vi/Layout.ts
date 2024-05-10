@@ -18,12 +18,17 @@ export const headerVi = {
   texNavLoginLoading: "Đang đăng nhập...",
   texNavTopMess: "Đăng ký khám chữa bệnh",
   texBtnUserHello: "Xin chào",
+  textKey: "Mã Khách hàng",
   texBtnAccout: "Tài khoản",
   texBtnInfo: "Thông tin cá nhân",
   texBtnProfile: "Hồ sơ bệnh nhân",
   texBtnTiket: "Phiếu khám bệnh",
   texBtnNotification: "Thông báo",
   texBtnLogout: "Đăng xuất",
+
+  textListNotification: "Danh sách thông báo",
+  btnSeenAll: "Đánh dấu tất cả đã xem",
+  headModalNotify: "Thông báo",
 };
 export const footerVi = {
   texNavFacility: "Cơ sở y tế",

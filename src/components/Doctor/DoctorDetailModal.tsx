@@ -1,7 +1,11 @@
-import { Doctor } from "@/graphql/webbooking-service.generated";
+import {
+  Doctor,
+  Evaluate,
+  useGetEvaluateByOptionQuery,
+} from "@/graphql/webbooking-service.generated";
 import { regisVi } from "@/locales/vi/Facility";
 import ModalCpn from "../subs/Modal";
-import { Col, Container, Image, Row } from "react-bootstrap";
+import { Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import { MdEmail, MdOutlineLocationOn, MdTransgender } from "react-icons/md";
 import { FaBookMedical, FaBookOpen, FaPhone } from "react-icons/fa";
 import { getAcademiTitle, getDegree } from "@/utils/getData";
@@ -9,6 +13,8 @@ import { store } from "@/redux/store/store";
 import { AiOutlineExperiment } from "react-icons/ai";
 import { IoPricetags } from "react-icons/io5";
 import { formatter } from "@/utils/tools";
+import { useEffect, useState } from "react";
+import ListEvaluate from "../subs/ListEvaluate";
 interface IProp {
   lan: typeof regisVi;
   open: boolean;
@@ -17,7 +23,18 @@ interface IProp {
 }
 function DoctorDetailModal(props: IProp) {
   const { lan, doctor, onClose, open } = props;
+  const [evaluate, setEvaluate] = useState<Evaluate[]>([]);
 
+  const { data, loading } = useGetEvaluateByOptionQuery({
+    variables: {
+      input: {
+        doctorId: doctor?.id || "",
+      },
+    },
+  });
+  useEffect(() => {
+    if (data?.getEvaluateByOption) setEvaluate(data.getEvaluateByOption);
+  }, [data]);
   // =================================================================
   return (
     <ModalCpn
@@ -96,7 +113,12 @@ function DoctorDetailModal(props: IProp) {
             </div>
           </Row>
         </Row>
-        <Row></Row>
+        <Row>
+          <div>
+            {lan.rating} {loading && <Spinner size="sm" variant="primary" />}
+          </div>
+          <ListEvaluate list={evaluate} />{" "}
+        </Row>
       </Container>
     </ModalCpn>
   );

@@ -61,3 +61,16 @@ export enum ETypeOfServiceParameters {
   Package = "service-package",
   Vaccine = "service-vaccine",
 }
+
+export enum GetEStateRegister {
+  Pending = "Chưa duyệt",
+  Approved = "Đã duyệt",
+  Success = "Đã khám",
+}
+
+export enum GetETypeOfService {
+  Doctor = "Khám theo Bác sĩ",
+  Specialty = "Khám theo Chuyên khoa",
+  Package = "Khám theo gói",
+  Vaccine = "Tiêm chủng",
+}

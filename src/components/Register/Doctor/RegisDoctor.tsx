@@ -4,6 +4,7 @@ import {
   IActionRegis,
   IStateRegister,
   handleChangeDoctor,
+  handleChangeProfileShare,
   handleChangeServiceState,
   handleSetRegisDoctor,
 } from "../reducer";
@@ -27,6 +28,8 @@ import ListRegisDoctor from "./ListRegisDoctor";
 import useNProgress from "@/hooks/useNProgress";
 import { format } from "date-fns";
 import { ETypeOfServiceParameters } from "@/assets/contains/emun";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
 interface IProps {
   lan: typeof regisVi;
   state: IStateRegister;
@@ -39,6 +42,7 @@ function RegisDoctorCpn(props: IProps) {
   const [listSchedule, setListSchedule] = useState<ScheduleInput[]>([]);
   const params = useSearchParams();
   const router = useRouter();
+  const inforUser = useSelector((state: RootState) => state.client.inforUser);
   // =================================================================
   const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
     useGetAllRegisOfServiceLazyQuery({
@@ -81,7 +85,7 @@ function RegisDoctorCpn(props: IProps) {
           return count < maxCount;
         }) || [];
 
-      setSessions(sessionFiltered);
+      setSessions(sessionFiltered); // những session hợp lệ
     }
   }, [dataRegis]);
   // =================================================================
@@ -96,24 +100,29 @@ function RegisDoctorCpn(props: IProps) {
     const dayOfWeek = ["Chủ nhật", "2", "3", "4", "5", "6", "7"][day];
 
     const workSchedule = state.doctor?.workSchedule;
+    const dayOffDoctor = workSchedule?.dayOff;
     const dayOffFacility = state.facility?.dateOff;
     const find = workSchedule?.schedule?.findIndex(
       (item) => item.dayOfWeek === dayOfWeek
     );
-
-    if (
-      workSchedule &&
-      workSchedule.dayOff &&
-      workSchedule.dayOff.includes(dayOfWeek)
-    ) {
-      return false;
+    if (dayOffFacility) {
+      const selectedYear = date.getFullYear();
+      const selectedMonth = date.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần +1
+      const selectedDay = date.getDate();
+      const selectedDateString = `${selectedYear}-${String(
+        selectedMonth
+      ).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
+      const isExistFacility = dayOffFacility.find((df) => {
+        return df.slice(0, 10) === selectedDateString;
+      });
+      if (dayOffDoctor) {
+        const isExist = dayOffDoctor.find((df) => {
+          return df.slice(0, 10) === selectedDateString;
+        });
+        if (isExist) return false;
+      }
+      if (isExistFacility) return false;
     }
-
-    if (dayOffFacility && dayOffFacility.includes(dayOfWeek)) {
-      return false;
-    }
-
-    // Trả về true nếu ngày đó có trong lịch làm việc của chuyên khoa, ngược lại trả về false
     return find !== -1;
   };
 
@@ -238,13 +247,26 @@ function RegisDoctorCpn(props: IProps) {
       {state.regisDoctor.doctorId !== "" && (
         <ListProfile
           state={state}
-          onClickProfile={(profile) => {
-            dispatch(
-              handleSetRegisDoctor({
-                ...state.regisDoctor,
-                profileId: profile.id,
-              })
-            );
+          onClickProfile={(profile, share) => {
+            if (share)
+              dispatch(
+                handleSetRegisDoctor({
+                  ...state.regisDoctor,
+                  profileId: profile.id,
+                  createBy: inforUser?.customer?.customerKey,
+                })
+              );
+            else {
+              dispatch(
+                handleSetRegisDoctor({
+                  ...state.regisDoctor,
+                  profileId: profile.id,
+                })
+              );
+            }
+          }}
+          onChangeProfileShare={(share) => {
+            dispatch(handleChangeProfileShare(share));
           }}
           onRegis={async () => {
             if (state.svrState.doctor === true) {
@@ -258,9 +280,9 @@ function RegisDoctorCpn(props: IProps) {
                   router.push("/");
                 })
                 .catch((e) => {
-                  if (e.message === "!Regis Exist")
+                  if (e.message === "!Regis Exist") {
                     showToast(lan.messRegisErrorExists, "error");
-                  else showToast(lan.messRegisError, "error");
+                  } else showToast(e.message, "error");
                   console.log(e);
                 });
             }

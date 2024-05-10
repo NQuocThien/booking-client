@@ -1,5 +1,13 @@
 "use client";
-import { GeneralInfor } from "@/graphql/webbooking-service.generated";
+import {
+  ETypeOfNotification,
+  GeneralInfor,
+  Notification,
+  useGetAllNotificationByUserIdQuery,
+  useNotifyCreatedSubscription,
+  useSeenAllNotificationByUserIdMutation,
+  useSeenNotificationByIdMutation,
+} from "@/graphql/webbooking-service.generated";
 import LanguageSelector from "../subs/LanguageSelector";
 import { RootState } from "@/redux/store/store";
 import { useEffect, useState } from "react";
@@ -9,10 +17,16 @@ import { Language } from "@/assets/contains/item-interface";
 import { setLanguage } from "@/redux/store/client";
 import { headerVi } from "@/locales/vi/Layout";
 import { headerUs } from "@/locales/en/Layout";
-import { Dropdown } from "react-bootstrap";
+import { Button, Col, Dropdown } from "react-bootstrap";
 import Link from "next/link";
 import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 import { usePathname } from "next/navigation";
+import ModalCpn from "../subs/Modal";
+import { formatDateFull, handleNotification } from "@/utils/tools";
+import { AiFillNotification, AiOutlineNotification } from "react-icons/ai";
+import { GoDotFill } from "react-icons/go";
+import { useRouter } from "next/navigation";
+import { FaKey } from "react-icons/fa";
 interface IProps {
   data: GeneralInfor | undefined;
   loginLoading: boolean;
@@ -28,12 +42,46 @@ function Header(props: IProps) {
     // console.log("test event: ", lan);
     dispatch(setLanguage(lan));
   };
+  const router = useRouter();
+  // =================================================================
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState({
+    menu: false,
+    notifacation: false,
+  });
   const [lan, setLan] = useState(headerVi);
   const pathname = usePathname();
   const [path, setPath] = useState<string>("");
+  const [notify, setNotify] = useState<Notification[]>([]);
+  //================================================================
+  const {
+    data: dataNotify,
+    loading: loadingNotify,
+    error: errorNotify,
+  } = useGetAllNotificationByUserIdQuery({
+    fetchPolicy: "no-cache",
+    variables: {
+      input: inforUser?.id || "",
+    },
+  });
+  const [seenAll, { error: errorSeenAll }] =
+    useSeenAllNotificationByUserIdMutation({
+      fetchPolicy: "no-cache",
+      variables: {
+        userId: inforUser?.id || "",
+      },
+    });
+  const [seen, { error: errorSeen }] = useSeenNotificationByIdMutation({
+    fetchPolicy: "no-cache",
+  });
 
+  const { data: dataNotifyCreated, error: errorNotifyCreated } =
+    useNotifyCreatedSubscription({
+      variables: {
+        userId: inforUser?.id || "",
+      },
+    });
+  //================================================================
   useEffect(() => {
     setPath(pathname);
   }, [pathname]);
@@ -59,10 +107,42 @@ function Header(props: IProps) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
+  useEffect(() => {
+    if (dataNotify) {
+      setNotify(dataNotify.getAllNotificationByUserId);
+    }
+  }, [dataNotify]);
+  useEffect(() => {
+    if (dataNotifyCreated) {
+      setNotify((pre) => [dataNotifyCreated.notifyCreated, ...pre]);
+      handleNotification();
+    }
+  }, [dataNotifyCreated]);
+  // =================================================================
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    setIsModalOpen((pre) => ({ ...pre, menu: !pre.menu }));
   };
+  const handleSeenAll = async () => {
+    await seenAll().then(() => {
+      setNotify((pre) =>
+        pre.map((item) => ({ ...item, status: ETypeOfNotification.Seen }))
+      );
+    });
+  };
+  const handleSeenById = async (id: string) => {
+    await seen({
+      variables: { id: id },
+    }).then(() => {
+      setNotify((pre) =>
+        pre.map(
+          (item) =>
+            (item.id === id && { ...item, status: ETypeOfNotification.Seen }) ||
+            item
+        )
+      );
+    });
+  };
+
   return (
     <div>
       <div
@@ -210,7 +290,7 @@ function Header(props: IProps) {
             </div>
           </nav>
           {isLogin && !loginLoading && (
-            <Dropdown>
+            <Dropdown className="pe-auto">
               <Dropdown.Toggle
                 as="div"
                 className="user-btn"
@@ -230,6 +310,14 @@ function Header(props: IProps) {
                     "{inforUser?.username}"
                   </span>{" "}
                 </p>
+                {inforUser?.customer && (
+                  <div className="ms-2 my-1 ">
+                    <FaKey className="text-warning me-1" />
+                    <span className="text-warning user-select-all">
+                      {inforUser?.customer?.customerKey}
+                    </span>{" "}
+                  </div>
+                )}
                 <Dropdown.Divider />
                 <Dropdown.Item as={Link} href="/account">
                   <i className="text-primary me-1bi bi-person-check-fill"></i>
@@ -247,9 +335,20 @@ function Header(props: IProps) {
                   <i className="text-primary me-1 bi bi-ticket-perforated"></i>
                   {lan.texBtnTiket}
                 </Dropdown.Item>
-                <Dropdown.Item href="#/action-3">
-                  <i className="text-primary me-1 bi bi-bell-fill"></i>
-                  {lan.texBtnNotification}
+                <Dropdown.Item
+                  className="d-flex"
+                  onClick={() => {
+                    setIsModalOpen((pre) => ({ ...pre, notifacation: true }));
+                    handleNotification();
+                  }}>
+                  <i className="text-primary me-1 bi bi-bell-fill position-relative">
+                    {notify.find(
+                      (i) => i.status === ETypeOfNotification.NotSeen
+                    ) && (
+                      <i className="bi bi-dot position-absolute bottom-0 start-0 fs-3 text-danger"></i>
+                    )}
+                  </i>
+                  <span>{lan.texBtnNotification}</span>
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item as={"button"} onClick={() => onLogout()}>
@@ -261,14 +360,14 @@ function Header(props: IProps) {
             </Dropdown>
           )}
           {!isLogin && !loginLoading && (
-            <div className="dropdown">
+            <div className="dropdown pe-auto">
               <Link href="/account/login" className="user-btn 56786 ">
                 <span className="d-none d-md-inline">{lan.texNavLogin}</span>
               </Link>
             </div>
           )}
           {loginLoading && (
-            <div className="dropdown">
+            <div className="dropdown pe-auto">
               <div className="user-btn 56786 ">
                 <span className="d-none d-md-inline">
                   {lan.texNavLoginLoading}
@@ -288,7 +387,72 @@ function Header(props: IProps) {
           position: "sticky",
           transition: "height .8s ease",
         }}></div>
-      {<Modal isOpen={isModalOpen} onClose={toggleModal} />}
+      {<Modal isOpen={isModalOpen.menu} onClose={toggleModal} />}
+      <ModalCpn
+        handleClose={() => {
+          setIsModalOpen((pre) => ({ ...pre, notifacation: false }));
+        }}
+        handleSave={() => {}}
+        onlyClose
+        headerText={lan.headModalNotify}
+        openRequest={isModalOpen.notifacation}
+        buttonSize="sm">
+        <div>
+          <div className="d-flex mb-2 border-bottom align-items-center">
+            <h4>{lan.texBtnAccout}</h4>
+            <Button
+              size="sm"
+              className="ms-2"
+              variant="outline-secondary"
+              onClick={() => {
+                handleSeenAll();
+              }}>
+              {lan.btnSeenAll}
+            </Button>
+          </div>
+          <div
+            style={{
+              height: "66vh",
+              width: "100%",
+            }}
+            className="overflow-y-auto">
+            {notify.map((item, key) => (
+              <div
+                key={key}
+                style={{ width: "100%" }}
+                className="d-flex align-items-center mb-3 border rounded border-success p-2 mb-2 border-opacity-25"
+                onClick={() => handleSeenById(item.id)}>
+                <Col className=" col-2 ">
+                  <div
+                    style={{ height: 56, width: 56 }}
+                    className="bg-primary rounded-circle d-flex justify-content-center align-items-center position-relative">
+                    {item.status === ETypeOfNotification.Seen && (
+                      <AiOutlineNotification className="text-light fs-3" />
+                    )}
+                    {item.status === ETypeOfNotification.NotSeen && (
+                      <div className="">
+                        <AiFillNotification className="text-light fs-3" />
+                        <GoDotFill
+                          size={22}
+                          className="text-danger position-absolute top-0 end-0"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </Col>
+                <Col>
+                  <Link href={item.detailPath}>
+                    <h6 className="mb-1">{item.content}</h6>
+                    <i style={{ fontSize: 14 }}>
+                      {formatDateFull(item.createdAt)}
+                    </i>
+                  </Link>
+                </Col>
+              </div>
+            ))}
+          </div>
+        </div>
+      </ModalCpn>
     </div>
   );
 }

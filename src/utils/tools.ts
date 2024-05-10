@@ -93,8 +93,24 @@ export const formatDate = (dateString: string) => {
 
   return `${year}-${month}-${day}`;
 };
+export const formatDateFull = (dateString: number) => {
+  const date = new Date(dateString);
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+
+  return `${hours}:${minutes}:${seconds} ${year}-${month}-${day}`;
+};
 export const formatter = new Intl.NumberFormat("vi-VN", {
   style: "currency",
   currency: "VND",
   currencyDisplay: "code",
 });
+export const handleNotification = () => {
+  const audio = new Audio("/audio/chuong.mp3");
+  audio.loop = false;
+  audio.play();
+};

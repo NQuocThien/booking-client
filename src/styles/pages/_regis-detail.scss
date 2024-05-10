@@ -1,0 +1,23 @@
+.regis-detail {
+  //   background-color: #ffffff;
+  .infor-profile {
+    background-color: #fff;
+  }
+}
+.rating-container {
+  display: flex;
+  gap: 5px;
+}
+
+.rating-container input[type="radio"] {
+  display: none; /* Ẩn nút radio */
+}
+
+.rating-container label {
+  cursor: pointer;
+}
+
+/* Style cho nhãn khi được chọn */
+.rating-container input[type="radio"]:checked + label {
+  font-weight: bold; /* Ví dụ: làm cho nhãn đậm khi được chọn */
+}

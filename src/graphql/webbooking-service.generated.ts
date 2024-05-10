@@ -50,6 +50,18 @@ export type ConfirmRegisterInput = {
   state: EStateRegister;
 };
 
+export type CreatUserAndStaffInput = {
+  email: Scalars['String']['input'];
+  gender: EGender;
+  medicalFacilityId: Scalars['String']['input'];
+  numberPhone: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  permissions: Array<EPermission>;
+  specialtyId?: InputMaybe<Array<Scalars['String']['input']>>;
+  staffName: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
 export type CreateBlogInput = {
   content: Scalars['String']['input'];
   keywords: Scalars['String']['input'];
@@ -73,6 +85,23 @@ export type CreateCustomerInput = {
   userId: Scalars['String']['input'];
 };
 
+export type CreateDoctorAndUserInput = {
+  academicTitle?: InputMaybe<EAcademicTitle>;
+  avatar: LinkImageInput;
+  degree: EDegree;
+  discription: Scalars['String']['input'];
+  doctorName: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  gender: EGender;
+  medicalFactilitiesId: Scalars['String']['input'];
+  numberPhone: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  price: Scalars['Float']['input'];
+  specialistId: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+  workSchedule: WorkScheduleInput;
+};
+
 export type CreateDoctorInput = {
   academicTitle?: InputMaybe<EAcademicTitle>;
   avatar: LinkImageInput;
@@ -91,9 +120,15 @@ export type CreateDoctorInput = {
 
 export type CreateEvaluateInput = {
   comment: Scalars['String']['input'];
+  customerName: Scalars['String']['input'];
+  doctorId?: InputMaybe<Scalars['String']['input']>;
+  packageId?: InputMaybe<Scalars['String']['input']>;
   rating: Scalars['Float']['input'];
   registerId: Scalars['String']['input'];
+  specialtyId?: InputMaybe<Scalars['String']['input']>;
+  typeOfService: ETypeOfService;
   userId: Scalars['String']['input'];
+  vaccineId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateMedicalFacilityInput = {
@@ -139,7 +174,6 @@ export type CreateMedicalStaffInput = {
 export type CreateNotificationInput = {
   content: Scalars['String']['input'];
   detailPath: Scalars['String']['input'];
-  status: ETypeOfNotification;
   userId: Scalars['String']['input'];
 };
 
@@ -169,6 +203,7 @@ export type CreateProfileInput = {
 };
 
 export type CreateRegisterDoctorInput = {
+  createBy?: InputMaybe<Scalars['String']['input']>;
   date: Scalars['DateTime']['input'];
   doctorId: Scalars['String']['input'];
   profileId: Scalars['String']['input'];
@@ -176,6 +211,7 @@ export type CreateRegisterDoctorInput = {
 };
 
 export type CreateRegisterPackageInput = {
+  createBy?: InputMaybe<Scalars['String']['input']>;
   date: Scalars['DateTime']['input'];
   packageId: Scalars['String']['input'];
   profileId: Scalars['String']['input'];
@@ -183,6 +219,7 @@ export type CreateRegisterPackageInput = {
 };
 
 export type CreateRegisterSpecialtyInput = {
+  createBy?: InputMaybe<Scalars['String']['input']>;
   date: Scalars['DateTime']['input'];
   profileId: Scalars['String']['input'];
   session: SessionInput;
@@ -190,6 +227,7 @@ export type CreateRegisterSpecialtyInput = {
 };
 
 export type CreateRegisterVaccineInput = {
+  createBy?: InputMaybe<Scalars['String']['input']>;
   date: Scalars['DateTime']['input'];
   profileId: Scalars['String']['input'];
   session: SessionInput;
@@ -222,6 +260,7 @@ export type CreateVaccineInput = {
 export type Customer = {
   __typename?: 'Customer';
   address: Scalars['String']['output'];
+  customerKey: Scalars['String']['output'];
   dateOfBirth: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   ethnic: Scalars['String']['output'];
@@ -229,6 +268,7 @@ export type Customer = {
   gender: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   numberPhone: Scalars['String']['output'];
+  profileShares?: Maybe<Array<Profile>>;
   profiles?: Maybe<Array<Profile>>;
   userId: Scalars['String']['output'];
 };
@@ -257,6 +297,7 @@ export type Doctor = {
 
 export type DoctorRegisterCountArgs = {
   endTime: Scalars['String']['input'];
+  isCancel?: InputMaybe<Scalars['Boolean']['input']>;
   isPending?: InputMaybe<Scalars['Boolean']['input']>;
   startTime: Scalars['String']['input'];
 };
@@ -348,10 +389,18 @@ export enum EnumBlogType {
 export type Evaluate = {
   __typename?: 'Evaluate';
   comment: Scalars['String']['output'];
+  createdAt: Scalars['Float']['output'];
+  customerName: Scalars['String']['output'];
+  doctorId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  packageId?: Maybe<Scalars['String']['output']>;
   rating: Scalars['Float']['output'];
   registerId: Scalars['String']['output'];
+  specialtyId?: Maybe<Scalars['String']['output']>;
+  typeOfService: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['Float']['output']>;
   userId: Scalars['String']['output'];
+  vaccineId?: Maybe<Scalars['String']['output']>;
 };
 
 export type FilterDoctorInput = {
@@ -388,15 +437,15 @@ export type GeneralInforUpdateInput = {
   logoHeader?: InputMaybe<LinkImageInput>;
 };
 
-export type GetRegisHistoryInput = {
+export type GetEvaluateOptionInput = {
   doctorId?: InputMaybe<Scalars['String']['input']>;
   packageId?: InputMaybe<Scalars['String']['input']>;
-  profileId: Scalars['String']['input'];
   specialtyId?: InputMaybe<Scalars['String']['input']>;
   vaccineId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type GetRegisPendingInput = {
+  cancel: Scalars['Boolean']['input'];
   doctorIds: Array<Scalars['String']['input']>;
   endTime: Scalars['String']['input'];
   packageIds: Array<Scalars['String']['input']>;
@@ -531,6 +580,7 @@ export type MedicalSpecialties = {
 
 export type MedicalSpecialtiesRegisterCountArgs = {
   endTime: Scalars['String']['input'];
+  isCancel?: InputMaybe<Scalars['Boolean']['input']>;
   isPending?: InputMaybe<Scalars['Boolean']['input']>;
   startTime: Scalars['String']['input'];
 };
@@ -553,6 +603,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   activeUser: User;
   cancelRegister: Register;
+  cancelRegisterByAdmin: Register;
   confirmRegister: Register;
   createBlog: Blog;
   createCustomer: Customer;
@@ -561,13 +612,14 @@ export type Mutation = {
   createMedicalFacility: MedicalFacilities;
   createMedicalSpecialty: MedicalSpecialties;
   createMedicalStaff: MedicalStaff;
-  createNotifition: Notification;
+  createNotification: Notification;
   createPackage: Package;
   createProfile: Profile;
   createRegisterDoctor: Register;
   createRegisterPackage: Register;
   createRegisterSpecialty: Register;
   createRegisterVaccine: Register;
+  createUserAndStaff: MedicalStaff;
   createVaccination: Vaccination;
   deleteDoctor: Doctor;
   deleteEvaluate: Evaluate;
@@ -582,7 +634,11 @@ export type Mutation = {
   deleteVaccination: Vaccination;
   login: LoginRespone;
   logout: LogoutUser;
+  seenAllNotification: Scalars['String']['output'];
+  seenNotificationById: Scalars['String']['output'];
+  shareProfile: Profile;
   signup: User;
+  signupAndCreateDoctor: Doctor;
   signupUser: User;
   updateBlog: Blog;
   updateCustomer: Customer;
@@ -599,8 +655,11 @@ export type Mutation = {
   updateRoles: User;
   updateSetting: Setting;
   updateUser: User;
+  updateUserAndDoctor: Doctor;
+  updateUserAndStaff: MedicalStaff;
   updateUserWithPass: User;
   updateVaccination: Vaccination;
+  uploadFileRegister: Register;
 };
 
 
@@ -610,6 +669,12 @@ export type MutationActiveUserArgs = {
 
 
 export type MutationCancelRegisterArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationCancelRegisterByAdminArgs = {
+  content: Scalars['String']['input'];
   id: Scalars['String']['input'];
 };
 
@@ -654,7 +719,7 @@ export type MutationCreateMedicalStaffArgs = {
 };
 
 
-export type MutationCreateNotifitionArgs = {
+export type MutationCreateNotificationArgs = {
   input: CreateNotificationInput;
 };
 
@@ -686,6 +751,11 @@ export type MutationCreateRegisterSpecialtyArgs = {
 
 export type MutationCreateRegisterVaccineArgs = {
   input: CreateRegisterVaccineInput;
+};
+
+
+export type MutationCreateUserAndStaffArgs = {
+  input: CreatUserAndStaffInput;
 };
 
 
@@ -754,8 +824,29 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationSeenAllNotificationArgs = {
+  userId: Scalars['String']['input'];
+};
+
+
+export type MutationSeenNotificationByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationShareProfileArgs = {
+  customerKey: Scalars['String']['input'];
+  profileId: Scalars['String']['input'];
+};
+
+
 export type MutationSignupArgs = {
   createUserInput: CreateUserInput;
+};
+
+
+export type MutationSignupAndCreateDoctorArgs = {
+  input: CreateDoctorAndUserInput;
 };
 
 
@@ -839,6 +930,16 @@ export type MutationUpdateUserArgs = {
 };
 
 
+export type MutationUpdateUserAndDoctorArgs = {
+  input: UpdateUserAndDoctorInput;
+};
+
+
+export type MutationUpdateUserAndStaffArgs = {
+  input: UpdateUserAndStaffInput;
+};
+
+
 export type MutationUpdateUserWithPassArgs = {
   updateUserInput: UpdateUserWithPassInput;
 };
@@ -848,9 +949,15 @@ export type MutationUpdateVaccinationArgs = {
   input: UpdateVaccineInput;
 };
 
+
+export type MutationUploadFileRegisterArgs = {
+  input: UpLoadFileRegisInput;
+};
+
 export type Notification = {
   __typename?: 'Notification';
   content: Scalars['String']['output'];
+  createdAt: Scalars['Float']['output'];
   detailPath: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   status: ETypeOfNotification;
@@ -874,6 +981,7 @@ export type Package = {
 
 export type PackageRegisterCountArgs = {
   endTime: Scalars['String']['input'];
+  isCancel?: InputMaybe<Scalars['Boolean']['input']>;
   isPending?: InputMaybe<Scalars['Boolean']['input']>;
   startTime: Scalars['String']['input'];
 };
@@ -895,6 +1003,7 @@ export type Profile = {
   numberPhone: Scalars['String']['output'];
   register?: Maybe<Array<Register>>;
   relationship: Scalars['String']['output'];
+  shares?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type Query = {
@@ -926,6 +1035,7 @@ export type Query = {
   getAllMedicalStaff: Array<MedicalStaff>;
   getAllMedicalStaffPaginationOfFacility: Array<MedicalStaff>;
   getAllNotification: Array<Notification>;
+  getAllNotificationByUserId: Array<Notification>;
   getAllPackage: Array<Package>;
   getAllPackageByFacilityId: Array<Package>;
   getAllPackageOfFacility: Array<Package>;
@@ -951,6 +1061,8 @@ export type Query = {
   getDoctorbyId: Doctor;
   getDoctorbyUserId: Doctor;
   getEvaluateById: Evaluate;
+  getEvaluateByOption: Array<Evaluate>;
+  getEvaluateByRegisId: Evaluate;
   getGeneralInfor: GeneralInfor;
   getMedicalFacilityById: MedicalFacilities;
   getMedicalFacilityInfo: MedicalFacilities;
@@ -962,7 +1074,10 @@ export type Query = {
   getMedicalStaffByUserId: MedicalStaff;
   getPackageById: Package;
   getProfileByCustomerId: Array<Profile>;
+  getProfileByCustomerKey: Array<Profile>;
+  getProfileById: Profile;
   getProfiles: Profile;
+  getRegisById: Register;
   getRegisHistory: Array<Register>;
   getSetting: Setting;
   getTopMedicalFacilities: Array<MedicalFacilities>;
@@ -1154,6 +1269,11 @@ export type QueryGetAllMedicalStaffPaginationOfFacilityArgs = {
 };
 
 
+export type QueryGetAllNotificationByUserIdArgs = {
+  userId: Scalars['String']['input'];
+};
+
+
 export type QueryGetAllPackageByFacilityIdArgs = {
   input: Scalars['String']['input'];
 };
@@ -1306,6 +1426,16 @@ export type QueryGetEvaluateByIdArgs = {
 };
 
 
+export type QueryGetEvaluateByOptionArgs = {
+  option: GetEvaluateOptionInput;
+};
+
+
+export type QueryGetEvaluateByRegisIdArgs = {
+  regisId: Scalars['String']['input'];
+};
+
+
 export type QueryGetMedicalFacilityByIdArgs = {
   id: Scalars['String']['input'];
 };
@@ -1357,13 +1487,30 @@ export type QueryGetProfileByCustomerIdArgs = {
 };
 
 
+export type QueryGetProfileByCustomerKeyArgs = {
+  customerKey: Scalars['String']['input'];
+};
+
+
+export type QueryGetProfileByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryGetProfilesArgs = {
   id: Scalars['String']['input'];
 };
 
 
+export type QueryGetRegisByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryGetRegisHistoryArgs = {
-  input: GetRegisHistoryInput;
+  profileId: Scalars['String']['input'];
+  staffId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1510,9 +1657,11 @@ export type Register = {
   __typename?: 'Register';
   cancel: Scalars['Boolean']['output'];
   createdAt: Scalars['DateTime']['output'];
+  createdBy?: Maybe<Scalars['String']['output']>;
   date: Scalars['DateTime']['output'];
   doctor?: Maybe<Doctor>;
   doctorId?: Maybe<Scalars['String']['output']>;
+  files?: Maybe<Array<LinkImage>>;
   id: Scalars['ID']['output'];
   package?: Maybe<Package>;
   packageId?: Maybe<Scalars['String']['output']>;
@@ -1564,8 +1713,14 @@ export type Setting = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  notifyCreated: Notification;
   registerCreated: Register;
   registerPendingCreated: Register;
+};
+
+
+export type SubscriptionNotifyCreatedArgs = {
+  userId: Scalars['String']['input'];
 };
 
 
@@ -1576,6 +1731,11 @@ export type SubscriptionRegisterCreatedArgs = {
 
 export type SubscriptionRegisterPendingCreatedArgs = {
   option: GetRegisPendingInput;
+};
+
+export type UpLoadFileRegisInput = {
+  files?: InputMaybe<Array<LinkImageInput>>;
+  id: Scalars['String']['input'];
 };
 
 export type UpdateBlogInput = {
@@ -1627,8 +1787,6 @@ export type UpdateEvaluateInput = {
   comment: Scalars['String']['input'];
   id: Scalars['String']['input'];
   rating: Scalars['Float']['input'];
-  registerId: Scalars['String']['input'];
-  userId: Scalars['String']['input'];
 };
 
 export type UpdateMedicalFacilityInput = {
@@ -1725,6 +1883,38 @@ export type UpdateSettingInput = {
   id: Scalars['Int']['input'];
 };
 
+export type UpdateUserAndDoctorInput = {
+  academicTitle?: InputMaybe<EAcademicTitle>;
+  avatar: LinkImageInput;
+  degree: EDegree;
+  discription: Scalars['String']['input'];
+  doctorName: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  gender: EGender;
+  id: Scalars['String']['input'];
+  medicalFactilitiesId: Scalars['String']['input'];
+  numberPhone: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  price: Scalars['Float']['input'];
+  specialistId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+  workSchedule: WorkScheduleInput;
+};
+
+export type UpdateUserAndStaffInput = {
+  email: Scalars['String']['input'];
+  gender: EGender;
+  id: Scalars['String']['input'];
+  medicalFacilityId: Scalars['String']['input'];
+  numberPhone: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  permissions: Array<EPermission>;
+  specialtyId?: InputMaybe<Array<Scalars['String']['input']>>;
+  staffName: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type UpdateUserInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
   avatar?: InputMaybe<LinkImageInput>;
@@ -1804,6 +1994,7 @@ export type Vaccination = {
 
 export type VaccinationRegisterCountArgs = {
   endTime: Scalars['String']['input'];
+  isCancel?: InputMaybe<Scalars['Boolean']['input']>;
   isPending?: InputMaybe<Scalars['Boolean']['input']>;
   startTime: Scalars['String']['input'];
 };
@@ -1828,35 +2019,35 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, customerKey: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type UpdateUserWithPassMutationVariables = Exact<{
   input: UpdateUserWithPassInput;
 }>;
 
 
-export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type UpdateUserWithPassMutation = { __typename?: 'Mutation', updateUserWithPass: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, customerKey: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type CreateCustomerByUserIdMutationVariables = Exact<{
   input: CreateCustomerInput;
 }>;
 
 
-export type CreateCustomerByUserIdMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'Customer', id: string, userId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
+export type CreateCustomerByUserIdMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'Customer', id: string, userId: string, customerKey: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
 
 export type LoginCustomerMutationVariables = Exact<{
   input: LoginUserInput;
 }>;
 
 
-export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } } };
+export type LoginCustomerMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginRespone', access_token: string, user: { __typename?: 'User', id: string, username: string, email: string, password: string, roles?: Array<string> | null, active?: boolean | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, customerKey: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } } };
 
 export type UpdateCustomerMutationVariables = Exact<{
   input: UpdateCustomerInput;
 }>;
 
 
-export type UpdateCustomerMutation = { __typename?: 'Mutation', updateCustomer: { __typename?: 'Customer', id: string, userId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
+export type UpdateCustomerMutation = { __typename?: 'Mutation', updateCustomer: { __typename?: 'Customer', id: string, userId: string, customerKey: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dateOfBirth: any, ethnic: string } };
 
 export type CreateProfileMutationVariables = Exact<{
   input: CreateProfileInput;
@@ -1921,6 +2112,42 @@ export type CancelRegisterMutationVariables = Exact<{
 
 export type CancelRegisterMutation = { __typename?: 'Mutation', cancelRegister: { __typename?: 'Register', id: string } };
 
+export type SeenAllNotificationByUserIdMutationVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type SeenAllNotificationByUserIdMutation = { __typename?: 'Mutation', seenAllNotification: string };
+
+export type SeenNotificationByIdMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type SeenNotificationByIdMutation = { __typename?: 'Mutation', seenNotificationById: string };
+
+export type CreateEvaluateMutationVariables = Exact<{
+  input: CreateEvaluateInput;
+}>;
+
+
+export type CreateEvaluateMutation = { __typename?: 'Mutation', createEvaluate: { __typename?: 'Evaluate', id: string, userId: string, customerName: string, registerId: string, typeOfService: string, specialtyId?: string | null, doctorId?: string | null, packageId?: string | null, vaccineId?: string | null, comment: string, rating: number, createdAt: number } };
+
+export type UpdateEvaluateMutationVariables = Exact<{
+  input: UpdateEvaluateInput;
+}>;
+
+
+export type UpdateEvaluateMutation = { __typename?: 'Mutation', updateEvaluate: { __typename?: 'Evaluate', id: string, userId: string, registerId: string, customerName: string, typeOfService: string, specialtyId?: string | null, doctorId?: string | null, packageId?: string | null, vaccineId?: string | null, comment: string, rating: number, createdAt: number } };
+
+export type ShareProfileMutationVariables = Exact<{
+  profileId: Scalars['String']['input'];
+  customerKey: Scalars['String']['input'];
+}>;
+
+
+export type ShareProfileMutation = { __typename?: 'Mutation', shareProfile: { __typename?: 'Profile', id: string } };
+
 export type GetGeneralInforQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1929,7 +2156,7 @@ export type GetGeneralInforQuery = { __typename?: 'Query', getGeneralInfor: { __
 export type CheckloginCustomerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
+export type CheckloginCustomerQuery = { __typename?: 'Query', checkloginCustomer: { __typename?: 'User', id: string, email: string, username: string, password: string, roles?: Array<string> | null, avatar?: { __typename?: 'LinkImage', filename: string, type: string, url: string } | null, customer?: { __typename?: 'Customer', id: string, customerKey: string, fullname: string, gender: string, email: string, numberPhone: string, address: string, dateOfBirth: any, ethnic: string, userId: string } | null } };
 
 export type GetMedicalFacilityRegisInfoByIdQueryVariables = Exact<{
   input: Scalars['String']['input'];
@@ -1944,7 +2171,14 @@ export type GetProfileByCustomerIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByCustomerIdQuery = { __typename?: 'Query', getProfileByCustomerId: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string }> };
+export type GetProfileByCustomerIdQuery = { __typename?: 'Query', getProfileByCustomerId: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string, shares?: Array<string> | null }> };
+
+export type GetProfileByCustomerKeyQueryVariables = Exact<{
+  customerKey: Scalars['String']['input'];
+}>;
+
+
+export type GetProfileByCustomerKeyQuery = { __typename?: 'Query', getProfileByCustomerKey: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string, customer?: { __typename?: 'Customer', fullname: string } | null }> };
 
 export type GetTopMedicalFacilitiesQueryVariables = Exact<{
   limit: Scalars['Float']['input'];
@@ -2020,7 +2254,14 @@ export type GetProfileTicketByCustomerIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileTicketByCustomerIdQuery = { __typename?: 'Query', getProfileByCustomerId: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string, register?: Array<{ __typename?: 'Register', id: string, date: any, typeOfService: string, state: string, cancel: boolean, doctorId?: string | null, vaccineId?: string | null, packageId?: string | null, specialtyId?: string | null, session: { __typename?: 'Session', endTime: string, startTime: string }, doctor?: { __typename?: 'Doctor', id: string, doctorName: string, price: number, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string } | null, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null }> | null }> };
+export type GetProfileTicketByCustomerIdQuery = { __typename?: 'Query', getProfileByCustomerId: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string, register?: Array<{ __typename?: 'Register', id: string, date: any, createdAt: any, profileId: string, typeOfService: string, state: string, cancel: boolean, doctorId?: string | null, vaccineId?: string | null, packageId?: string | null, specialtyId?: string | null, session: { __typename?: 'Session', endTime: string, startTime: string }, doctor?: { __typename?: 'Doctor', id: string, doctorName: string, price: number, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string } | null, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null }> | null }> };
+
+export type GetProfileTicketByCustomerKeyQueryVariables = Exact<{
+  customerKey: Scalars['String']['input'];
+}>;
+
+
+export type GetProfileTicketByCustomerKeyQuery = { __typename?: 'Query', getProfileByCustomerKey: Array<{ __typename?: 'Profile', id: string, customerId: string, fullname: string, numberPhone: string, email: string, address: string, gender: string, dataOfBirth: any, ethnic: string, identity?: string | null, relationship: string, job: string, customer?: { __typename?: 'Customer', fullname: string } | null, register?: Array<{ __typename?: 'Register', id: string, date: any, createdAt: any, profileId: string, typeOfService: string, state: string, cancel: boolean, doctorId?: string | null, vaccineId?: string | null, packageId?: string | null, specialtyId?: string | null, session: { __typename?: 'Session', endTime: string, startTime: string }, doctor?: { __typename?: 'Doctor', id: string, doctorName: string, price: number, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string } | null, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', medicalFacilityName: string, address: string } | null } | null }> | null }> };
 
 export type GetAllDoctorPaginationOfFacilityForClientQueryVariables = Exact<{
   filter: FilterDoctorInput;
@@ -2148,12 +2389,40 @@ export type GetBlogBySlugQueryVariables = Exact<{
 
 export type GetBlogBySlugQuery = { __typename?: 'Query', getBlogBySlug: { __typename?: 'Blog', id: string, slug: string, title: string, content: string, shortContent: string, priority: number, type: string, keywords: string, status: string, createdAt: number, updatedAt?: number | null, deletedAt?: number | null, mainPhoto: { __typename?: 'LinkImage', filename: string, type: string, url: string }, createdBy: { __typename?: 'UserSlimEntity', username: string, showName: string, role: string }, updatedBy?: { __typename?: 'UserSlimEntity', username: string, showName: string, role: string } | null, deletedBy?: { __typename?: 'UserSlimEntity', role: string, showName: string, username: string } | null } };
 
-export type GetRegisHistoryQueryVariables = Exact<{
-  input: GetRegisHistoryInput;
+export type GetAllNotificationByUserIdQueryVariables = Exact<{
+  input: Scalars['String']['input'];
 }>;
 
 
-export type GetRegisHistoryQuery = { __typename?: 'Query', getRegisHistory: Array<{ __typename?: 'Register', id: string, cancel: boolean, createdAt: any, date: any, profileId: string, typeOfService: string, doctorId?: string | null, packageId?: string | null, specialtyId?: string | null, vaccineId?: string | null, state: string, session: { __typename?: 'Session', startTime: string, endTime: string }, profile?: { __typename?: 'Profile', id: string, fullname: string, address: string, email: string, numberPhone: string, gender: string, ethnic: string, identity?: string | null, medicalInsurance?: string | null, job: string, relationship: string, dataOfBirth: any, customerId: string, customer?: { __typename?: 'Customer', id: string, fullname: string, address: string, numberPhone: string, gender: string, ethnic: string, dateOfBirth: any, userId: string, email: string } | null } | null }> };
+export type GetAllNotificationByUserIdQuery = { __typename?: 'Query', getAllNotificationByUserId: Array<{ __typename?: 'Notification', id: string, content: string, detailPath: string, createdAt: number, status: ETypeOfNotification, userId: string }> };
+
+export type GetRegisByIdQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetRegisByIdQuery = { __typename?: 'Query', getRegisById: { __typename?: 'Register', id: string, cancel: boolean, createdAt: any, date: any, profileId: string, typeOfService: string, doctorId?: string | null, packageId?: string | null, specialtyId?: string | null, vaccineId?: string | null, state: string, session: { __typename?: 'Session', startTime: string, endTime: string }, doctor?: { __typename?: 'Doctor', doctorName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, files?: Array<{ __typename?: 'LinkImage', filename: string, type: string, url: string }> | null, profile?: { __typename?: 'Profile', id: string, fullname: string, address: string, email: string, numberPhone: string, gender: string, ethnic: string, identity?: string | null, medicalInsurance?: string | null, job: string, relationship: string, dataOfBirth: any, customerId: string } | null } };
+
+export type GetEvaluateByRegisIdQueryVariables = Exact<{
+  regisId: Scalars['String']['input'];
+}>;
+
+
+export type GetEvaluateByRegisIdQuery = { __typename?: 'Query', getEvaluateByRegisId: { __typename?: 'Evaluate', id: string, userId: string, customerName: string, registerId: string, typeOfService: string, specialtyId?: string | null, doctorId?: string | null, packageId?: string | null, vaccineId?: string | null, comment: string, rating: number, createdAt: number, updatedAt?: number | null } };
+
+export type GetEvaluateByOptionQueryVariables = Exact<{
+  input: GetEvaluateOptionInput;
+}>;
+
+
+export type GetEvaluateByOptionQuery = { __typename?: 'Query', getEvaluateByOption: Array<{ __typename?: 'Evaluate', id: string, userId: string, customerName: string, registerId: string, typeOfService: string, specialtyId?: string | null, doctorId?: string | null, packageId?: string | null, vaccineId?: string | null, comment: string, rating: number, createdAt: number }> };
+
+export type NotifyCreatedSubscriptionVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type NotifyCreatedSubscription = { __typename?: 'Subscription', notifyCreated: { __typename?: 'Notification', id: string, content: string, detailPath: string, createdAt: number, status: ETypeOfNotification, userId: string } };
 
 
 export const UpdateUserDocument = gql`
@@ -2171,6 +2440,7 @@ export const UpdateUserDocument = gql`
     roles
     customer {
       id
+      customerKey
       fullname
       gender
       email
@@ -2224,6 +2494,7 @@ export const UpdateUserWithPassDocument = gql`
     roles
     customer {
       id
+      customerKey
       fullname
       gender
       email
@@ -2267,6 +2538,7 @@ export const CreateCustomerByUserIdDocument = gql`
   createCustomer(input: $input) {
     id
     userId
+    customerKey
     fullname
     numberPhone
     email
@@ -2321,6 +2593,7 @@ export const LoginCustomerDocument = gql`
       active
       customer {
         id
+        customerKey
         fullname
         gender
         email
@@ -2365,6 +2638,7 @@ export const UpdateCustomerDocument = gql`
   updateCustomer(input: $input) {
     id
     userId
+    customerKey
     fullname
     numberPhone
     email
@@ -2731,6 +3005,190 @@ export function useCancelRegisterMutation(baseOptions?: Apollo.MutationHookOptio
 export type CancelRegisterMutationHookResult = ReturnType<typeof useCancelRegisterMutation>;
 export type CancelRegisterMutationResult = Apollo.MutationResult<CancelRegisterMutation>;
 export type CancelRegisterMutationOptions = Apollo.BaseMutationOptions<CancelRegisterMutation, CancelRegisterMutationVariables>;
+export const SeenAllNotificationByUserIdDocument = gql`
+    mutation seenAllNotificationByUserId($userId: String!) {
+  seenAllNotification(userId: $userId)
+}
+    `;
+export type SeenAllNotificationByUserIdMutationFn = Apollo.MutationFunction<SeenAllNotificationByUserIdMutation, SeenAllNotificationByUserIdMutationVariables>;
+
+/**
+ * __useSeenAllNotificationByUserIdMutation__
+ *
+ * To run a mutation, you first call `useSeenAllNotificationByUserIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSeenAllNotificationByUserIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [seenAllNotificationByUserIdMutation, { data, loading, error }] = useSeenAllNotificationByUserIdMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useSeenAllNotificationByUserIdMutation(baseOptions?: Apollo.MutationHookOptions<SeenAllNotificationByUserIdMutation, SeenAllNotificationByUserIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SeenAllNotificationByUserIdMutation, SeenAllNotificationByUserIdMutationVariables>(SeenAllNotificationByUserIdDocument, options);
+      }
+export type SeenAllNotificationByUserIdMutationHookResult = ReturnType<typeof useSeenAllNotificationByUserIdMutation>;
+export type SeenAllNotificationByUserIdMutationResult = Apollo.MutationResult<SeenAllNotificationByUserIdMutation>;
+export type SeenAllNotificationByUserIdMutationOptions = Apollo.BaseMutationOptions<SeenAllNotificationByUserIdMutation, SeenAllNotificationByUserIdMutationVariables>;
+export const SeenNotificationByIdDocument = gql`
+    mutation seenNotificationById($id: String!) {
+  seenNotificationById(id: $id)
+}
+    `;
+export type SeenNotificationByIdMutationFn = Apollo.MutationFunction<SeenNotificationByIdMutation, SeenNotificationByIdMutationVariables>;
+
+/**
+ * __useSeenNotificationByIdMutation__
+ *
+ * To run a mutation, you first call `useSeenNotificationByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSeenNotificationByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [seenNotificationByIdMutation, { data, loading, error }] = useSeenNotificationByIdMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSeenNotificationByIdMutation(baseOptions?: Apollo.MutationHookOptions<SeenNotificationByIdMutation, SeenNotificationByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SeenNotificationByIdMutation, SeenNotificationByIdMutationVariables>(SeenNotificationByIdDocument, options);
+      }
+export type SeenNotificationByIdMutationHookResult = ReturnType<typeof useSeenNotificationByIdMutation>;
+export type SeenNotificationByIdMutationResult = Apollo.MutationResult<SeenNotificationByIdMutation>;
+export type SeenNotificationByIdMutationOptions = Apollo.BaseMutationOptions<SeenNotificationByIdMutation, SeenNotificationByIdMutationVariables>;
+export const CreateEvaluateDocument = gql`
+    mutation createEvaluate($input: CreateEvaluateInput!) {
+  createEvaluate(input: $input) {
+    id
+    userId
+    customerName
+    registerId
+    typeOfService
+    specialtyId
+    doctorId
+    packageId
+    vaccineId
+    comment
+    rating
+    createdAt
+  }
+}
+    `;
+export type CreateEvaluateMutationFn = Apollo.MutationFunction<CreateEvaluateMutation, CreateEvaluateMutationVariables>;
+
+/**
+ * __useCreateEvaluateMutation__
+ *
+ * To run a mutation, you first call `useCreateEvaluateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEvaluateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEvaluateMutation, { data, loading, error }] = useCreateEvaluateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEvaluateMutation(baseOptions?: Apollo.MutationHookOptions<CreateEvaluateMutation, CreateEvaluateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEvaluateMutation, CreateEvaluateMutationVariables>(CreateEvaluateDocument, options);
+      }
+export type CreateEvaluateMutationHookResult = ReturnType<typeof useCreateEvaluateMutation>;
+export type CreateEvaluateMutationResult = Apollo.MutationResult<CreateEvaluateMutation>;
+export type CreateEvaluateMutationOptions = Apollo.BaseMutationOptions<CreateEvaluateMutation, CreateEvaluateMutationVariables>;
+export const UpdateEvaluateDocument = gql`
+    mutation updateEvaluate($input: UpdateEvaluateInput!) {
+  updateEvaluate(input: $input) {
+    id
+    userId
+    registerId
+    customerName
+    typeOfService
+    specialtyId
+    doctorId
+    packageId
+    vaccineId
+    comment
+    rating
+    createdAt
+  }
+}
+    `;
+export type UpdateEvaluateMutationFn = Apollo.MutationFunction<UpdateEvaluateMutation, UpdateEvaluateMutationVariables>;
+
+/**
+ * __useUpdateEvaluateMutation__
+ *
+ * To run a mutation, you first call `useUpdateEvaluateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEvaluateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEvaluateMutation, { data, loading, error }] = useUpdateEvaluateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateEvaluateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEvaluateMutation, UpdateEvaluateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEvaluateMutation, UpdateEvaluateMutationVariables>(UpdateEvaluateDocument, options);
+      }
+export type UpdateEvaluateMutationHookResult = ReturnType<typeof useUpdateEvaluateMutation>;
+export type UpdateEvaluateMutationResult = Apollo.MutationResult<UpdateEvaluateMutation>;
+export type UpdateEvaluateMutationOptions = Apollo.BaseMutationOptions<UpdateEvaluateMutation, UpdateEvaluateMutationVariables>;
+export const ShareProfileDocument = gql`
+    mutation shareProfile($profileId: String!, $customerKey: String!) {
+  shareProfile(profileId: $profileId, customerKey: $customerKey) {
+    id
+  }
+}
+    `;
+export type ShareProfileMutationFn = Apollo.MutationFunction<ShareProfileMutation, ShareProfileMutationVariables>;
+
+/**
+ * __useShareProfileMutation__
+ *
+ * To run a mutation, you first call `useShareProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useShareProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [shareProfileMutation, { data, loading, error }] = useShareProfileMutation({
+ *   variables: {
+ *      profileId: // value for 'profileId'
+ *      customerKey: // value for 'customerKey'
+ *   },
+ * });
+ */
+export function useShareProfileMutation(baseOptions?: Apollo.MutationHookOptions<ShareProfileMutation, ShareProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ShareProfileMutation, ShareProfileMutationVariables>(ShareProfileDocument, options);
+      }
+export type ShareProfileMutationHookResult = ReturnType<typeof useShareProfileMutation>;
+export type ShareProfileMutationResult = Apollo.MutationResult<ShareProfileMutation>;
+export type ShareProfileMutationOptions = Apollo.BaseMutationOptions<ShareProfileMutation, ShareProfileMutationVariables>;
 export const GetGeneralInforDocument = gql`
     query GetGeneralInfor {
   getGeneralInfor {
@@ -2802,6 +3260,7 @@ export const CheckloginCustomerDocument = gql`
     roles
     customer {
       id
+      customerKey
       fullname
       gender
       email
@@ -2933,6 +3392,7 @@ export const GetProfileByCustomerIdDocument = gql`
     identity
     relationship
     job
+    shares
   }
 }
     `;
@@ -2969,6 +3429,60 @@ export type GetProfileByCustomerIdQueryHookResult = ReturnType<typeof useGetProf
 export type GetProfileByCustomerIdLazyQueryHookResult = ReturnType<typeof useGetProfileByCustomerIdLazyQuery>;
 export type GetProfileByCustomerIdSuspenseQueryHookResult = ReturnType<typeof useGetProfileByCustomerIdSuspenseQuery>;
 export type GetProfileByCustomerIdQueryResult = Apollo.QueryResult<GetProfileByCustomerIdQuery, GetProfileByCustomerIdQueryVariables>;
+export const GetProfileByCustomerKeyDocument = gql`
+    query getProfileByCustomerKey($customerKey: String!) {
+  getProfileByCustomerKey(customerKey: $customerKey) {
+    id
+    customerId
+    fullname
+    numberPhone
+    email
+    address
+    gender
+    dataOfBirth
+    ethnic
+    identity
+    relationship
+    job
+    customer {
+      fullname
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProfileByCustomerKeyQuery__
+ *
+ * To run a query within a React component, call `useGetProfileByCustomerKeyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileByCustomerKeyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileByCustomerKeyQuery({
+ *   variables: {
+ *      customerKey: // value for 'customerKey'
+ *   },
+ * });
+ */
+export function useGetProfileByCustomerKeyQuery(baseOptions: Apollo.QueryHookOptions<GetProfileByCustomerKeyQuery, GetProfileByCustomerKeyQueryVariables> & ({ variables: GetProfileByCustomerKeyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileByCustomerKeyQuery, GetProfileByCustomerKeyQueryVariables>(GetProfileByCustomerKeyDocument, options);
+      }
+export function useGetProfileByCustomerKeyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileByCustomerKeyQuery, GetProfileByCustomerKeyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileByCustomerKeyQuery, GetProfileByCustomerKeyQueryVariables>(GetProfileByCustomerKeyDocument, options);
+        }
+export function useGetProfileByCustomerKeySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetProfileByCustomerKeyQuery, GetProfileByCustomerKeyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetProfileByCustomerKeyQuery, GetProfileByCustomerKeyQueryVariables>(GetProfileByCustomerKeyDocument, options);
+        }
+export type GetProfileByCustomerKeyQueryHookResult = ReturnType<typeof useGetProfileByCustomerKeyQuery>;
+export type GetProfileByCustomerKeyLazyQueryHookResult = ReturnType<typeof useGetProfileByCustomerKeyLazyQuery>;
+export type GetProfileByCustomerKeySuspenseQueryHookResult = ReturnType<typeof useGetProfileByCustomerKeySuspenseQuery>;
+export type GetProfileByCustomerKeyQueryResult = Apollo.QueryResult<GetProfileByCustomerKeyQuery, GetProfileByCustomerKeyQueryVariables>;
 export const GetTopMedicalFacilitiesDocument = gql`
     query getTopMedicalFacilities($limit: Float!, $typeFacility: String!) {
   getTopMedicalFacilities(limit: $limit, typeFacility: $typeFacility) {
@@ -3502,6 +4016,8 @@ export const GetProfileTicketByCustomerIdDocument = gql`
     register {
       id
       date
+      createdAt
+      profileId
       typeOfService
       state
       cancel
@@ -3586,6 +4102,113 @@ export type GetProfileTicketByCustomerIdQueryHookResult = ReturnType<typeof useG
 export type GetProfileTicketByCustomerIdLazyQueryHookResult = ReturnType<typeof useGetProfileTicketByCustomerIdLazyQuery>;
 export type GetProfileTicketByCustomerIdSuspenseQueryHookResult = ReturnType<typeof useGetProfileTicketByCustomerIdSuspenseQuery>;
 export type GetProfileTicketByCustomerIdQueryResult = Apollo.QueryResult<GetProfileTicketByCustomerIdQuery, GetProfileTicketByCustomerIdQueryVariables>;
+export const GetProfileTicketByCustomerKeyDocument = gql`
+    query getProfileTicketByCustomerKey($customerKey: String!) {
+  getProfileByCustomerKey(customerKey: $customerKey) {
+    id
+    customerId
+    fullname
+    numberPhone
+    email
+    address
+    gender
+    dataOfBirth
+    ethnic
+    identity
+    relationship
+    job
+    customer {
+      fullname
+    }
+    register {
+      id
+      date
+      createdAt
+      profileId
+      typeOfService
+      state
+      cancel
+      session {
+        endTime
+        startTime
+      }
+      doctorId
+      vaccineId
+      packageId
+      specialtyId
+      doctor {
+        id
+        doctorName
+        specialty {
+          specialtyName
+        }
+        price
+        facility {
+          medicalFacilityName
+          address
+        }
+      }
+      specialty {
+        specialtyName
+        price
+        facility {
+          medicalFacilityName
+          address
+        }
+      }
+      vaccination {
+        vaccineName
+        price
+        facility {
+          medicalFacilityName
+          address
+        }
+      }
+      package {
+        packageName
+        price
+        facility {
+          medicalFacilityName
+          address
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProfileTicketByCustomerKeyQuery__
+ *
+ * To run a query within a React component, call `useGetProfileTicketByCustomerKeyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileTicketByCustomerKeyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileTicketByCustomerKeyQuery({
+ *   variables: {
+ *      customerKey: // value for 'customerKey'
+ *   },
+ * });
+ */
+export function useGetProfileTicketByCustomerKeyQuery(baseOptions: Apollo.QueryHookOptions<GetProfileTicketByCustomerKeyQuery, GetProfileTicketByCustomerKeyQueryVariables> & ({ variables: GetProfileTicketByCustomerKeyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileTicketByCustomerKeyQuery, GetProfileTicketByCustomerKeyQueryVariables>(GetProfileTicketByCustomerKeyDocument, options);
+      }
+export function useGetProfileTicketByCustomerKeyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileTicketByCustomerKeyQuery, GetProfileTicketByCustomerKeyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileTicketByCustomerKeyQuery, GetProfileTicketByCustomerKeyQueryVariables>(GetProfileTicketByCustomerKeyDocument, options);
+        }
+export function useGetProfileTicketByCustomerKeySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetProfileTicketByCustomerKeyQuery, GetProfileTicketByCustomerKeyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetProfileTicketByCustomerKeyQuery, GetProfileTicketByCustomerKeyQueryVariables>(GetProfileTicketByCustomerKeyDocument, options);
+        }
+export type GetProfileTicketByCustomerKeyQueryHookResult = ReturnType<typeof useGetProfileTicketByCustomerKeyQuery>;
+export type GetProfileTicketByCustomerKeyLazyQueryHookResult = ReturnType<typeof useGetProfileTicketByCustomerKeyLazyQuery>;
+export type GetProfileTicketByCustomerKeySuspenseQueryHookResult = ReturnType<typeof useGetProfileTicketByCustomerKeySuspenseQuery>;
+export type GetProfileTicketByCustomerKeyQueryResult = Apollo.QueryResult<GetProfileTicketByCustomerKeyQuery, GetProfileTicketByCustomerKeyQueryVariables>;
 export const GetAllDoctorPaginationOfFacilityForClientDocument = gql`
     query getAllDoctorPaginationOfFacilityForClient($filter: FilterDoctorInput!, $page: Float, $limit: Float, $facilityId: String!, $sortField: String, $sortOrder: String) {
   getAllDoctorPaginationOfFacilityForClient(
@@ -4353,9 +4976,54 @@ export type GetBlogBySlugQueryHookResult = ReturnType<typeof useGetBlogBySlugQue
 export type GetBlogBySlugLazyQueryHookResult = ReturnType<typeof useGetBlogBySlugLazyQuery>;
 export type GetBlogBySlugSuspenseQueryHookResult = ReturnType<typeof useGetBlogBySlugSuspenseQuery>;
 export type GetBlogBySlugQueryResult = Apollo.QueryResult<GetBlogBySlugQuery, GetBlogBySlugQueryVariables>;
-export const GetRegisHistoryDocument = gql`
-    query getRegisHistory($input: GetRegisHistoryInput!) {
-  getRegisHistory(input: $input) {
+export const GetAllNotificationByUserIdDocument = gql`
+    query getAllNotificationByUserId($input: String!) {
+  getAllNotificationByUserId(userId: $input) {
+    id
+    content
+    detailPath
+    createdAt
+    status
+    userId
+  }
+}
+    `;
+
+/**
+ * __useGetAllNotificationByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetAllNotificationByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllNotificationByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllNotificationByUserIdQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetAllNotificationByUserIdQuery(baseOptions: Apollo.QueryHookOptions<GetAllNotificationByUserIdQuery, GetAllNotificationByUserIdQueryVariables> & ({ variables: GetAllNotificationByUserIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllNotificationByUserIdQuery, GetAllNotificationByUserIdQueryVariables>(GetAllNotificationByUserIdDocument, options);
+      }
+export function useGetAllNotificationByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllNotificationByUserIdQuery, GetAllNotificationByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllNotificationByUserIdQuery, GetAllNotificationByUserIdQueryVariables>(GetAllNotificationByUserIdDocument, options);
+        }
+export function useGetAllNotificationByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllNotificationByUserIdQuery, GetAllNotificationByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllNotificationByUserIdQuery, GetAllNotificationByUserIdQueryVariables>(GetAllNotificationByUserIdDocument, options);
+        }
+export type GetAllNotificationByUserIdQueryHookResult = ReturnType<typeof useGetAllNotificationByUserIdQuery>;
+export type GetAllNotificationByUserIdLazyQueryHookResult = ReturnType<typeof useGetAllNotificationByUserIdLazyQuery>;
+export type GetAllNotificationByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetAllNotificationByUserIdSuspenseQuery>;
+export type GetAllNotificationByUserIdQueryResult = Apollo.QueryResult<GetAllNotificationByUserIdQuery, GetAllNotificationByUserIdQueryVariables>;
+export const GetRegisByIdDocument = gql`
+    query getRegisById($id: String!) {
+  getRegisById(id: $id) {
     id
     cancel
     createdAt
@@ -4365,12 +5033,49 @@ export const GetRegisHistoryDocument = gql`
       startTime
       endTime
     }
+    doctor {
+      doctorName
+      price
+      facility {
+        address
+        medicalFacilityName
+      }
+    }
+    specialty {
+      specialtyName
+      price
+      facility {
+        address
+        medicalFacilityName
+      }
+    }
+    vaccination {
+      vaccineName
+      price
+      facility {
+        address
+        medicalFacilityName
+      }
+    }
+    package {
+      packageName
+      price
+      facility {
+        address
+        medicalFacilityName
+      }
+    }
     typeOfService
     doctorId
     packageId
     specialtyId
     vaccineId
     state
+    files {
+      filename
+      type
+      url
+    }
     profile {
       id
       fullname
@@ -4385,54 +5090,181 @@ export const GetRegisHistoryDocument = gql`
       relationship
       dataOfBirth
       customerId
-      customer {
-        id
-        fullname
-        address
-        numberPhone
-        gender
-        ethnic
-        dateOfBirth
-        userId
-        email
-      }
     }
   }
 }
     `;
 
 /**
- * __useGetRegisHistoryQuery__
+ * __useGetRegisByIdQuery__
  *
- * To run a query within a React component, call `useGetRegisHistoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetRegisHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetRegisByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRegisByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetRegisHistoryQuery({
+ * const { data, loading, error } = useGetRegisByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetRegisByIdQuery(baseOptions: Apollo.QueryHookOptions<GetRegisByIdQuery, GetRegisByIdQueryVariables> & ({ variables: GetRegisByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRegisByIdQuery, GetRegisByIdQueryVariables>(GetRegisByIdDocument, options);
+      }
+export function useGetRegisByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRegisByIdQuery, GetRegisByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRegisByIdQuery, GetRegisByIdQueryVariables>(GetRegisByIdDocument, options);
+        }
+export function useGetRegisByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetRegisByIdQuery, GetRegisByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetRegisByIdQuery, GetRegisByIdQueryVariables>(GetRegisByIdDocument, options);
+        }
+export type GetRegisByIdQueryHookResult = ReturnType<typeof useGetRegisByIdQuery>;
+export type GetRegisByIdLazyQueryHookResult = ReturnType<typeof useGetRegisByIdLazyQuery>;
+export type GetRegisByIdSuspenseQueryHookResult = ReturnType<typeof useGetRegisByIdSuspenseQuery>;
+export type GetRegisByIdQueryResult = Apollo.QueryResult<GetRegisByIdQuery, GetRegisByIdQueryVariables>;
+export const GetEvaluateByRegisIdDocument = gql`
+    query getEvaluateByRegisId($regisId: String!) {
+  getEvaluateByRegisId(regisId: $regisId) {
+    id
+    userId
+    customerName
+    registerId
+    typeOfService
+    specialtyId
+    doctorId
+    packageId
+    vaccineId
+    comment
+    rating
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetEvaluateByRegisIdQuery__
+ *
+ * To run a query within a React component, call `useGetEvaluateByRegisIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEvaluateByRegisIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEvaluateByRegisIdQuery({
+ *   variables: {
+ *      regisId: // value for 'regisId'
+ *   },
+ * });
+ */
+export function useGetEvaluateByRegisIdQuery(baseOptions: Apollo.QueryHookOptions<GetEvaluateByRegisIdQuery, GetEvaluateByRegisIdQueryVariables> & ({ variables: GetEvaluateByRegisIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEvaluateByRegisIdQuery, GetEvaluateByRegisIdQueryVariables>(GetEvaluateByRegisIdDocument, options);
+      }
+export function useGetEvaluateByRegisIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEvaluateByRegisIdQuery, GetEvaluateByRegisIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEvaluateByRegisIdQuery, GetEvaluateByRegisIdQueryVariables>(GetEvaluateByRegisIdDocument, options);
+        }
+export function useGetEvaluateByRegisIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEvaluateByRegisIdQuery, GetEvaluateByRegisIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEvaluateByRegisIdQuery, GetEvaluateByRegisIdQueryVariables>(GetEvaluateByRegisIdDocument, options);
+        }
+export type GetEvaluateByRegisIdQueryHookResult = ReturnType<typeof useGetEvaluateByRegisIdQuery>;
+export type GetEvaluateByRegisIdLazyQueryHookResult = ReturnType<typeof useGetEvaluateByRegisIdLazyQuery>;
+export type GetEvaluateByRegisIdSuspenseQueryHookResult = ReturnType<typeof useGetEvaluateByRegisIdSuspenseQuery>;
+export type GetEvaluateByRegisIdQueryResult = Apollo.QueryResult<GetEvaluateByRegisIdQuery, GetEvaluateByRegisIdQueryVariables>;
+export const GetEvaluateByOptionDocument = gql`
+    query getEvaluateByOption($input: GetEvaluateOptionInput!) {
+  getEvaluateByOption(option: $input) {
+    id
+    userId
+    customerName
+    registerId
+    typeOfService
+    specialtyId
+    doctorId
+    packageId
+    vaccineId
+    comment
+    rating
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetEvaluateByOptionQuery__
+ *
+ * To run a query within a React component, call `useGetEvaluateByOptionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEvaluateByOptionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEvaluateByOptionQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetRegisHistoryQuery(baseOptions: Apollo.QueryHookOptions<GetRegisHistoryQuery, GetRegisHistoryQueryVariables> & ({ variables: GetRegisHistoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetEvaluateByOptionQuery(baseOptions: Apollo.QueryHookOptions<GetEvaluateByOptionQuery, GetEvaluateByOptionQueryVariables> & ({ variables: GetEvaluateByOptionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRegisHistoryQuery, GetRegisHistoryQueryVariables>(GetRegisHistoryDocument, options);
+        return Apollo.useQuery<GetEvaluateByOptionQuery, GetEvaluateByOptionQueryVariables>(GetEvaluateByOptionDocument, options);
       }
-export function useGetRegisHistoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRegisHistoryQuery, GetRegisHistoryQueryVariables>) {
+export function useGetEvaluateByOptionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEvaluateByOptionQuery, GetEvaluateByOptionQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRegisHistoryQuery, GetRegisHistoryQueryVariables>(GetRegisHistoryDocument, options);
+          return Apollo.useLazyQuery<GetEvaluateByOptionQuery, GetEvaluateByOptionQueryVariables>(GetEvaluateByOptionDocument, options);
         }
-export function useGetRegisHistorySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetRegisHistoryQuery, GetRegisHistoryQueryVariables>) {
+export function useGetEvaluateByOptionSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEvaluateByOptionQuery, GetEvaluateByOptionQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetRegisHistoryQuery, GetRegisHistoryQueryVariables>(GetRegisHistoryDocument, options);
+          return Apollo.useSuspenseQuery<GetEvaluateByOptionQuery, GetEvaluateByOptionQueryVariables>(GetEvaluateByOptionDocument, options);
         }
-export type GetRegisHistoryQueryHookResult = ReturnType<typeof useGetRegisHistoryQuery>;
-export type GetRegisHistoryLazyQueryHookResult = ReturnType<typeof useGetRegisHistoryLazyQuery>;
-export type GetRegisHistorySuspenseQueryHookResult = ReturnType<typeof useGetRegisHistorySuspenseQuery>;
-export type GetRegisHistoryQueryResult = Apollo.QueryResult<GetRegisHistoryQuery, GetRegisHistoryQueryVariables>;
+export type GetEvaluateByOptionQueryHookResult = ReturnType<typeof useGetEvaluateByOptionQuery>;
+export type GetEvaluateByOptionLazyQueryHookResult = ReturnType<typeof useGetEvaluateByOptionLazyQuery>;
+export type GetEvaluateByOptionSuspenseQueryHookResult = ReturnType<typeof useGetEvaluateByOptionSuspenseQuery>;
+export type GetEvaluateByOptionQueryResult = Apollo.QueryResult<GetEvaluateByOptionQuery, GetEvaluateByOptionQueryVariables>;
+export const NotifyCreatedDocument = gql`
+    subscription notifyCreated($userId: String!) {
+  notifyCreated(userId: $userId) {
+    id
+    content
+    detailPath
+    createdAt
+    status
+    userId
+  }
+}
+    `;
+
+/**
+ * __useNotifyCreatedSubscription__
+ *
+ * To run a query within a React component, call `useNotifyCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNotifyCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNotifyCreatedSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNotifyCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<NotifyCreatedSubscription, NotifyCreatedSubscriptionVariables> & ({ variables: NotifyCreatedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NotifyCreatedSubscription, NotifyCreatedSubscriptionVariables>(NotifyCreatedDocument, options);
+      }
+export type NotifyCreatedSubscriptionHookResult = ReturnType<typeof useNotifyCreatedSubscription>;
+export type NotifyCreatedSubscriptionResult = Apollo.SubscriptionResult<NotifyCreatedSubscription>;
 export type BlogKeySpecifier = ('content' | 'createdAt' | 'createdBy' | 'deletedAt' | 'deletedBy' | 'id' | 'keywords' | 'mainPhoto' | 'priority' | 'shortContent' | 'slug' | 'status' | 'title' | 'type' | 'updatedAt' | 'updatedBy' | BlogKeySpecifier)[];
 export type BlogFieldPolicy = {
 	content?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4452,9 +5284,10 @@ export type BlogFieldPolicy = {
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedBy?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type CustomerKeySpecifier = ('address' | 'dateOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'numberPhone' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
+export type CustomerKeySpecifier = ('address' | 'customerKey' | 'dateOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'numberPhone' | 'profileShares' | 'profiles' | 'userId' | CustomerKeySpecifier)[];
 export type CustomerFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
+	customerKey?: FieldPolicy<any> | FieldReadFunction<any>,
 	dateOfBirth?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	ethnic?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4462,6 +5295,7 @@ export type CustomerFieldPolicy = {
 	gender?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	numberPhone?: FieldPolicy<any> | FieldReadFunction<any>,
+	profileShares?: FieldPolicy<any> | FieldReadFunction<any>,
 	profiles?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -4485,13 +5319,21 @@ export type DoctorFieldPolicy = {
 	userId?: FieldPolicy<any> | FieldReadFunction<any>,
 	workSchedule?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type EvaluateKeySpecifier = ('comment' | 'id' | 'rating' | 'registerId' | 'userId' | EvaluateKeySpecifier)[];
+export type EvaluateKeySpecifier = ('comment' | 'createdAt' | 'customerName' | 'doctorId' | 'id' | 'packageId' | 'rating' | 'registerId' | 'specialtyId' | 'typeOfService' | 'updatedAt' | 'userId' | 'vaccineId' | EvaluateKeySpecifier)[];
 export type EvaluateFieldPolicy = {
 	comment?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	customerName?: FieldPolicy<any> | FieldReadFunction<any>,
+	doctorId?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	packageId?: FieldPolicy<any> | FieldReadFunction<any>,
 	rating?: FieldPolicy<any> | FieldReadFunction<any>,
 	registerId?: FieldPolicy<any> | FieldReadFunction<any>,
-	userId?: FieldPolicy<any> | FieldReadFunction<any>
+	specialtyId?: FieldPolicy<any> | FieldReadFunction<any>,
+	typeOfService?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>,
+	vaccineId?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type GeneralInforKeySpecifier = ('ID' | 'address' | 'company' | 'copyrigth' | 'email' | 'hotline' | 'liscenceBusiness' | 'liscenceOparating' | 'logoFooter' | 'logoHeader' | GeneralInforKeySpecifier)[];
 export type GeneralInforFieldPolicy = {
@@ -4576,10 +5418,11 @@ export type MedicalStaffFieldPolicy = {
 	staffName?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('activeUser' | 'cancelRegister' | 'confirmRegister' | 'createBlog' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotifition' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUnDeleteBlog' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'signup' | 'signupUser' | 'updateBlog' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserWithPass' | 'updateVaccination' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('activeUser' | 'cancelRegister' | 'cancelRegisterByAdmin' | 'confirmRegister' | 'createBlog' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotification' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createUserAndStaff' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUnDeleteBlog' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'seenAllNotification' | 'seenNotificationById' | 'shareProfile' | 'signup' | 'signupAndCreateDoctor' | 'signupUser' | 'updateBlog' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserAndDoctor' | 'updateUserAndStaff' | 'updateUserWithPass' | 'updateVaccination' | 'uploadFileRegister' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	activeUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	cancelRegister?: FieldPolicy<any> | FieldReadFunction<any>,
+	cancelRegisterByAdmin?: FieldPolicy<any> | FieldReadFunction<any>,
 	confirmRegister?: FieldPolicy<any> | FieldReadFunction<any>,
 	createBlog?: FieldPolicy<any> | FieldReadFunction<any>,
 	createCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4588,13 +5431,14 @@ export type MutationFieldPolicy = {
 	createMedicalFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	createMedicalSpecialty?: FieldPolicy<any> | FieldReadFunction<any>,
 	createMedicalStaff?: FieldPolicy<any> | FieldReadFunction<any>,
-	createNotifition?: FieldPolicy<any> | FieldReadFunction<any>,
+	createNotification?: FieldPolicy<any> | FieldReadFunction<any>,
 	createPackage?: FieldPolicy<any> | FieldReadFunction<any>,
 	createProfile?: FieldPolicy<any> | FieldReadFunction<any>,
 	createRegisterDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	createRegisterPackage?: FieldPolicy<any> | FieldReadFunction<any>,
 	createRegisterSpecialty?: FieldPolicy<any> | FieldReadFunction<any>,
 	createRegisterVaccine?: FieldPolicy<any> | FieldReadFunction<any>,
+	createUserAndStaff?: FieldPolicy<any> | FieldReadFunction<any>,
 	createVaccination?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteEvaluate?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4609,7 +5453,11 @@ export type MutationFieldPolicy = {
 	deleteVaccination?: FieldPolicy<any> | FieldReadFunction<any>,
 	login?: FieldPolicy<any> | FieldReadFunction<any>,
 	logout?: FieldPolicy<any> | FieldReadFunction<any>,
+	seenAllNotification?: FieldPolicy<any> | FieldReadFunction<any>,
+	seenNotificationById?: FieldPolicy<any> | FieldReadFunction<any>,
+	shareProfile?: FieldPolicy<any> | FieldReadFunction<any>,
 	signup?: FieldPolicy<any> | FieldReadFunction<any>,
+	signupAndCreateDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	signupUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateBlog?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4626,12 +5474,16 @@ export type MutationFieldPolicy = {
 	updateRoles?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateSetting?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateUserAndDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateUserAndStaff?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUserWithPass?: FieldPolicy<any> | FieldReadFunction<any>,
-	updateVaccination?: FieldPolicy<any> | FieldReadFunction<any>
+	updateVaccination?: FieldPolicy<any> | FieldReadFunction<any>,
+	uploadFileRegister?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type NotificationKeySpecifier = ('content' | 'detailPath' | 'id' | 'status' | 'userId' | NotificationKeySpecifier)[];
+export type NotificationKeySpecifier = ('content' | 'createdAt' | 'detailPath' | 'id' | 'status' | 'userId' | NotificationKeySpecifier)[];
 export type NotificationFieldPolicy = {
 	content?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	detailPath?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	status?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4650,7 +5502,7 @@ export type PackageFieldPolicy = {
 	registerCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	workSchedule?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type ProfileKeySpecifier = ('address' | 'customer' | 'customerId' | 'dataOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'identity' | 'job' | 'medicalInsurance' | 'numberPhone' | 'register' | 'relationship' | ProfileKeySpecifier)[];
+export type ProfileKeySpecifier = ('address' | 'customer' | 'customerId' | 'dataOfBirth' | 'email' | 'ethnic' | 'fullname' | 'gender' | 'id' | 'identity' | 'job' | 'medicalInsurance' | 'numberPhone' | 'register' | 'relationship' | 'shares' | ProfileKeySpecifier)[];
 export type ProfileFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	customer?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4666,9 +5518,10 @@ export type ProfileFieldPolicy = {
 	medicalInsurance?: FieldPolicy<any> | FieldReadFunction<any>,
 	numberPhone?: FieldPolicy<any> | FieldReadFunction<any>,
 	register?: FieldPolicy<any> | FieldReadFunction<any>,
-	relationship?: FieldPolicy<any> | FieldReadFunction<any>
+	relationship?: FieldPolicy<any> | FieldReadFunction<any>,
+	shares?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllBlogOfFacilityPagination' | 'getAllBlogPagination' | 'getAllBlogPaginationForClient' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorOfFacility' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalFacilityPaginationForClient' | 'getAllMedicalSpecialtiesOfFacility' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackageOfFacility' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisCountByOption' | 'getAllRegisOfService' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationOfFacility' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getBlogBySlug' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfiles' | 'getRegisHistory' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalBlogsCount' | 'getTotalBlogsCountForClient' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesCountForClient' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllBlogOfFacilityPagination' | 'getAllBlogPagination' | 'getAllBlogPaginationForClient' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorOfFacility' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalFacilityPaginationForClient' | 'getAllMedicalSpecialtiesOfFacility' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllNotificationByUserId' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackageOfFacility' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisCountByOption' | 'getAllRegisOfService' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationOfFacility' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getBlogBySlug' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getEvaluateByOption' | 'getEvaluateByRegisId' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfileByCustomerKey' | 'getProfileById' | 'getProfiles' | 'getRegisById' | 'getRegisHistory' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalBlogsCount' | 'getTotalBlogsCountForClient' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesCountForClient' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	checklogin?: FieldPolicy<any> | FieldReadFunction<any>,
 	checkloginCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4697,6 +5550,7 @@ export type QueryFieldPolicy = {
 	getAllMedicalStaff?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllMedicalStaffPaginationOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllNotification?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllNotificationByUserId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackage?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackageByFacilityId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllPackageOfFacility?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4722,6 +5576,8 @@ export type QueryFieldPolicy = {
 	getDoctorbyId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getDoctorbyUserId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getEvaluateById?: FieldPolicy<any> | FieldReadFunction<any>,
+	getEvaluateByOption?: FieldPolicy<any> | FieldReadFunction<any>,
+	getEvaluateByRegisId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getGeneralInfor?: FieldPolicy<any> | FieldReadFunction<any>,
 	getMedicalFacilityById?: FieldPolicy<any> | FieldReadFunction<any>,
 	getMedicalFacilityInfo?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4733,7 +5589,10 @@ export type QueryFieldPolicy = {
 	getMedicalStaffByUserId?: FieldPolicy<any> | FieldReadFunction<any>,
 	getPackageById?: FieldPolicy<any> | FieldReadFunction<any>,
 	getProfileByCustomerId?: FieldPolicy<any> | FieldReadFunction<any>,
+	getProfileByCustomerKey?: FieldPolicy<any> | FieldReadFunction<any>,
+	getProfileById?: FieldPolicy<any> | FieldReadFunction<any>,
 	getProfiles?: FieldPolicy<any> | FieldReadFunction<any>,
+	getRegisById?: FieldPolicy<any> | FieldReadFunction<any>,
 	getRegisHistory?: FieldPolicy<any> | FieldReadFunction<any>,
 	getSetting?: FieldPolicy<any> | FieldReadFunction<any>,
 	getTopMedicalFacilities?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4764,13 +5623,15 @@ export type QueryFieldPolicy = {
 	totalUsersCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	users?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type RegisterKeySpecifier = ('cancel' | 'createdAt' | 'date' | 'doctor' | 'doctorId' | 'id' | 'package' | 'packageId' | 'profile' | 'profileId' | 'session' | 'specialty' | 'specialtyId' | 'state' | 'typeOfService' | 'vaccination' | 'vaccineId' | RegisterKeySpecifier)[];
+export type RegisterKeySpecifier = ('cancel' | 'createdAt' | 'createdBy' | 'date' | 'doctor' | 'doctorId' | 'files' | 'id' | 'package' | 'packageId' | 'profile' | 'profileId' | 'session' | 'specialty' | 'specialtyId' | 'state' | 'typeOfService' | 'vaccination' | 'vaccineId' | RegisterKeySpecifier)[];
 export type RegisterFieldPolicy = {
 	cancel?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdBy?: FieldPolicy<any> | FieldReadFunction<any>,
 	date?: FieldPolicy<any> | FieldReadFunction<any>,
 	doctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	doctorId?: FieldPolicy<any> | FieldReadFunction<any>,
+	files?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	package?: FieldPolicy<any> | FieldReadFunction<any>,
 	packageId?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -4798,8 +5659,9 @@ export type SettingKeySpecifier = ('defaultLang' | SettingKeySpecifier)[];
 export type SettingFieldPolicy = {
 	defaultLang?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type SubscriptionKeySpecifier = ('registerCreated' | 'registerPendingCreated' | SubscriptionKeySpecifier)[];
+export type SubscriptionKeySpecifier = ('notifyCreated' | 'registerCreated' | 'registerPendingCreated' | SubscriptionKeySpecifier)[];
 export type SubscriptionFieldPolicy = {
+	notifyCreated?: FieldPolicy<any> | FieldReadFunction<any>,
 	registerCreated?: FieldPolicy<any> | FieldReadFunction<any>,
 	registerPendingCreated?: FieldPolicy<any> | FieldReadFunction<any>
 };

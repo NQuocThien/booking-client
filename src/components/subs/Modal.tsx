@@ -46,7 +46,7 @@ function ModalCpn({
         <Modal.Footer>
           {closeButton && (
             <Button size={buttonSize} variant="secondary" onClick={handleClose}>
-              Đống
+              Đóng
             </Button>
           )}
           {!onlyClose && (
