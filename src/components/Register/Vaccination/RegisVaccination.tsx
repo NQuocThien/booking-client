@@ -52,10 +52,10 @@ function RegisVaccinationCpn(props: IProps) {
 
   // =================================================================
 
-  useEffect(() => {
-    // set list schedule khi chọn dịch vụ
-    useNProgress(loadingRegisVaccination || loadingRegis);
-  }, [loadingRegis, loadingRegisVaccination]);
+  // useEffect(() => {
+  // set list schedule khi chọn dịch vụ
+  useNProgress(loadingRegisVaccination || loadingRegis);
+  // }, [loadingRegis, loadingRegisVaccination]);
 
   useEffect(() => {
     if (state.vaccination?.workSchedule) {
@@ -275,7 +275,7 @@ function RegisVaccinationCpn(props: IProps) {
                   router.push("/");
                 })
                 .catch((e) => {
-                  showToast(e.message);
+                  showToast(e.message, "error");
                   console.log(e);
                 });
             }

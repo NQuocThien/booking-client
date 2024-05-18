@@ -53,10 +53,10 @@ function RegisPackageCpn(props: IProps) {
 
   // =================================================================
 
-  useEffect(() => {
-    // set list schedule khi chọn dịch vụ
-    useNProgress(loadingRegisPackage || loadingRegis);
-  }, [loadingRegis, loadingRegisPackage]);
+  // useEffect(() => {
+  // set list schedule khi chọn dịch vụ
+  useNProgress(loadingRegisPackage || loadingRegis);
+  // }, [loadingRegis, loadingRegisPackage]);
 
   useEffect(() => {
     if (state.package?.workSchedule) {

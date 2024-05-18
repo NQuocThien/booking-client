@@ -1,7 +1,9 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import ProfilePage from "@/components/Account/ProfilePage";
-
+const ProfilePage = dynamic(() => import("@/components/Account/ProfilePage"), {
+  ssr: false,
+});
 function CustomerDetailPage() {
   const [isClient, setIsClient] = useState(false);
 

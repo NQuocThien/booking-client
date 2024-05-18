@@ -398,7 +398,11 @@ const getAllRegisPending = gql`
   }
 `;
 const getProfileTicketByCustomerId = gql`
-  query getProfileTicketByCustomerId($input: String!) {
+  query getProfileTicketByCustomerId(
+    $input: String!
+    $cancel: Boolean
+    $stateRegis: String
+  ) {
     getProfileByCustomerId(id: $input) {
       id
       customerId
@@ -412,7 +416,7 @@ const getProfileTicketByCustomerId = gql`
       identity
       relationship
       job
-      register {
+      register(cancel: $cancel, stateRegis: $stateRegis) {
         id
         date
         createdAt
@@ -469,7 +473,11 @@ const getProfileTicketByCustomerId = gql`
   }
 `;
 const getProfileTicketByCustomerKey = gql`
-  query getProfileTicketByCustomerKey($customerKey: String!) {
+  query getProfileTicketByCustomerKey(
+    $customerKey: String!
+    $cancel: Boolean
+    $stateRegis: String
+  ) {
     getProfileByCustomerKey(customerKey: $customerKey) {
       id
       customerId
@@ -486,7 +494,7 @@ const getProfileTicketByCustomerKey = gql`
       customer {
         fullname
       }
-      register {
+      register(cancel: $cancel, stateRegis: $stateRegis) {
         id
         date
         createdAt

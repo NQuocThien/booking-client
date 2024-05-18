@@ -87,9 +87,9 @@ function MedicalFacilitiesCpn(props: IProps) {
       setFacily(data?.getAllMedicalFacilityPaginationForClient[0]);
     }
   }, [data]);
-  useEffect(() => {
-    useNProgress(loading || loadingTotal);
-  }, [loading, loadingTotal]);
+  // useEffect(() => {
+  useNProgress(loading || loadingTotal);
+  // }, [loading, loadingTotal]);
 
   // =================================================================
 

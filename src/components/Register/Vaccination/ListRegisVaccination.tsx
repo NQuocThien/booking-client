@@ -78,9 +78,9 @@ function ListRegisVaccination(props: IProps) {
     }
   }, [dataTotal]);
 
-  useEffect(() => {
-    useNProgress(loading || loadTotalData);
-  }, [loading, loadTotalData]);
+  // useEffect(() => {
+  useNProgress(loading || loadTotalData);
+  // }, [loading, loadTotalData]);
 
   // =================================================================
   const handleClickDDetail = (vaccine: Vaccination) => {

@@ -1,7 +1,7 @@
 function Loadgin() {
   return (
     <div className="container">
-      <span className="text-info">Loading........</span>
+      <span className="text-primary">Loading........</span>
     </div>
   );
 }

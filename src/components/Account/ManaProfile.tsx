@@ -123,26 +123,14 @@ function ManaProfile({ customerId, lan, customerKey }: IProps) {
       setProfileShare(dateShare.getProfileByCustomerKey);
     }
   }, [dateShare]);
-  useEffect(() => {
-    if (
-      loading ||
+  useNProgress(
+    loading ||
       loadingCreate ||
       loadingUpdate ||
       loadingDelete ||
       loadingShare ||
       loadShare
-    )
-      useNProgress(true);
-    else useNProgress(false);
-  }, [
-    loading,
-    loadingCreate,
-    loadingUpdate,
-    loadingDelete,
-    loadingShare,
-    loadShare,
-  ]);
-
+  );
   useEffect(() => {
     if (dataCreate) {
       const newProfile = dataCreate.createProfile;
@@ -652,6 +640,7 @@ function ManaProfile({ customerId, lan, customerKey }: IProps) {
                         {lan.titleEmail}: <span className="text-danger">*</span>
                       </Form.Label>
                       <Form.Control
+                        required
                         type="email"
                         value={createProfileInput.email}
                         onChange={(e) =>

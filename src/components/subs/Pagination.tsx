@@ -61,7 +61,7 @@ function PaginationCpn(props: IProps) {
       if (index === 0 || index === totalPage - 1) {
         return (
           <Pagination.Item
-            key={index}
+            key={"pagination" + index}
             active={active === page}
             onClick={() => handleClick(page)}>
             {page}
@@ -78,10 +78,10 @@ function PaginationCpn(props: IProps) {
             </Pagination.Item>
           );
         } else if (page === active - 3 || page === active + 3) {
-          return <Pagination.Ellipsis />;
+          return <Pagination.Ellipsis key={`ellipsis-${index}`} />;
         }
       }
-      return <span></span>;
+      return <span key={`null-${index}`}></span>;
     });
   };
   return (

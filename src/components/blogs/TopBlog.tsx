@@ -15,7 +15,10 @@ function TopBlogs(props: IProps) {
       {blogs?.map((blog, i) => (
         <div key={i} className="d-flex blog-priority-item p-2">
           <div className="image">
-            <img src={blog?.mainPhoto.url || ""} />
+            <img
+              src={blog?.mainPhoto.url || ""}
+              alt={blog.mainPhoto.filename}
+            />
           </div>
           <div className="col-8 ps-1">
             <Link href={`/blogs/${blog.slug}`} className="title  text-primary">

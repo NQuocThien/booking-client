@@ -68,9 +68,9 @@ function FormCreateCustomer({
       }));
     }
   }, [inforUser]);
-  useEffect(() => {
-    useNProgress(loadingUpdateUser);
-  }, [loadingUpdateUser]);
+  // useEffect(() => {
+  useNProgress(loadingUpdateUser);
+  // }, [loadingUpdateUser]);
   useEffect(() => {
     if (dataupdateUser?.createCustomer) onCreate(dataupdateUser.createCustomer);
   }, [dataupdateUser]);

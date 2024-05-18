@@ -81,13 +81,13 @@ function InforCustomerCpn({
     }
   };
 
+  useNProgress(loadingUpdateUser || loadingUpdateUser);
   useEffect(() => {
-    useNProgress(loadingUpdateUser);
     if (dataupdateCustomer) {
       const newCus: Customer = dataupdateCustomer.updateCustomer;
       onChangeCustomer(newCus);
     }
-  }, [dataupdateCustomer, loadingUpdateUser]);
+  }, [dataupdateCustomer]);
 
   useEffect(() => {
     if (inforUser.customer) {
@@ -98,7 +98,6 @@ function InforCustomerCpn({
       };
       setFormData(input);
     }
-    useNProgress(loadingUpdateUser);
   }, [inforUser]);
   // console.log("test form data: ", formData);
   return (

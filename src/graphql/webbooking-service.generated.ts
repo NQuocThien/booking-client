@@ -1006,6 +1006,12 @@ export type Profile = {
   shares?: Maybe<Array<Scalars['String']['output']>>;
 };
 
+
+export type ProfileRegisterArgs = {
+  cancel?: InputMaybe<Scalars['Boolean']['input']>;
+  stateRegis?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   checklogin: User;
@@ -2251,6 +2257,8 @@ export type GetAllRegisOfServiceQuery = { __typename?: 'Query', getAllRegisOfSer
 
 export type GetProfileTicketByCustomerIdQueryVariables = Exact<{
   input: Scalars['String']['input'];
+  cancel?: InputMaybe<Scalars['Boolean']['input']>;
+  stateRegis?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -2258,6 +2266,8 @@ export type GetProfileTicketByCustomerIdQuery = { __typename?: 'Query', getProfi
 
 export type GetProfileTicketByCustomerKeyQueryVariables = Exact<{
   customerKey: Scalars['String']['input'];
+  cancel?: InputMaybe<Scalars['Boolean']['input']>;
+  stateRegis?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -3999,7 +4009,7 @@ export type GetAllRegisOfServiceLazyQueryHookResult = ReturnType<typeof useGetAl
 export type GetAllRegisOfServiceSuspenseQueryHookResult = ReturnType<typeof useGetAllRegisOfServiceSuspenseQuery>;
 export type GetAllRegisOfServiceQueryResult = Apollo.QueryResult<GetAllRegisOfServiceQuery, GetAllRegisOfServiceQueryVariables>;
 export const GetProfileTicketByCustomerIdDocument = gql`
-    query getProfileTicketByCustomerId($input: String!) {
+    query getProfileTicketByCustomerId($input: String!, $cancel: Boolean, $stateRegis: String) {
   getProfileByCustomerId(id: $input) {
     id
     customerId
@@ -4013,7 +4023,7 @@ export const GetProfileTicketByCustomerIdDocument = gql`
     identity
     relationship
     job
-    register {
+    register(cancel: $cancel, stateRegis: $stateRegis) {
       id
       date
       createdAt
@@ -4083,6 +4093,8 @@ export const GetProfileTicketByCustomerIdDocument = gql`
  * const { data, loading, error } = useGetProfileTicketByCustomerIdQuery({
  *   variables: {
  *      input: // value for 'input'
+ *      cancel: // value for 'cancel'
+ *      stateRegis: // value for 'stateRegis'
  *   },
  * });
  */
@@ -4103,7 +4115,7 @@ export type GetProfileTicketByCustomerIdLazyQueryHookResult = ReturnType<typeof 
 export type GetProfileTicketByCustomerIdSuspenseQueryHookResult = ReturnType<typeof useGetProfileTicketByCustomerIdSuspenseQuery>;
 export type GetProfileTicketByCustomerIdQueryResult = Apollo.QueryResult<GetProfileTicketByCustomerIdQuery, GetProfileTicketByCustomerIdQueryVariables>;
 export const GetProfileTicketByCustomerKeyDocument = gql`
-    query getProfileTicketByCustomerKey($customerKey: String!) {
+    query getProfileTicketByCustomerKey($customerKey: String!, $cancel: Boolean, $stateRegis: String) {
   getProfileByCustomerKey(customerKey: $customerKey) {
     id
     customerId
@@ -4120,7 +4132,7 @@ export const GetProfileTicketByCustomerKeyDocument = gql`
     customer {
       fullname
     }
-    register {
+    register(cancel: $cancel, stateRegis: $stateRegis) {
       id
       date
       createdAt
@@ -4190,6 +4202,8 @@ export const GetProfileTicketByCustomerKeyDocument = gql`
  * const { data, loading, error } = useGetProfileTicketByCustomerKeyQuery({
  *   variables: {
  *      customerKey: // value for 'customerKey'
+ *      cancel: // value for 'cancel'
+ *      stateRegis: // value for 'stateRegis'
  *   },
  * });
  */

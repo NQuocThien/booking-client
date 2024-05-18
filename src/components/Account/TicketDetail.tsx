@@ -77,15 +77,13 @@ function TicketDetail({ regisId, lan }: IProps) {
     }
   }, [data]);
   useEffect(() => {
-    if (data) {
+    if (dataEvaluate) {
       setEvaluate(dataEvaluate?.getEvaluateByRegisId);
     }
   }, [dataEvaluate]);
-  useEffect(() => {
-    useNProgress(
-      loading || loadingEvaluate || loadingUpdated || loadingCreated
-    );
-  }, [loading, loadingEvaluate]);
+  // useEffect(() => {
+  useNProgress(loading || loadingEvaluate || loadingUpdated || loadingCreated);
+  // }, [loading, loadingEvaluate]);
   //================================================================
 
   const handleSubmit = async (rating: number, comment: string) => {
@@ -211,6 +209,13 @@ function TicketDetail({ regisId, lan }: IProps) {
                 <span className="text-info ms-2">{regis?.profile?.gender}</span>
               </h6>
             </div>
+            {/* <div className="px-3">
+              <h6>
+                <span className="text-primary">test IDDDDD:</span>
+                {lan.titleGender}:
+                <span className="text-info ms-2">{regisId}</span>
+              </h6>
+            </div> */}
             <div className="px-3">
               <h6>
                 <span className="text-primary">

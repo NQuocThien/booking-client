@@ -25,8 +25,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
     if (data) {
       setGeneralData(data.getGeneralInfor);
     }
-    useNProgress(loading);
-  }, [data, loading]);
+  }, [data]);
+  useNProgress(loading);
   useEffect(() => {
     const token = getToken();
     if (checkExpirationToken(token)) {

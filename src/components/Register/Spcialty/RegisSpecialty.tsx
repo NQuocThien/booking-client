@@ -273,7 +273,7 @@ function RegisSpecialty(props: IProps) {
                   router.push("/");
                 })
                 .catch((e) => {
-                  showToast(e.message);
+                  showToast(e.message, "error");
                   console.log(e);
                 });
             }

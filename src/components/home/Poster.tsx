@@ -81,7 +81,7 @@ function PosterCpn(props: IProps) {
             <img
               className="img-icon mb-3"
               src="/imgs/icons/doctor-icon.png"
-              alt="package"
+              alt="doctor"
             />
             <p className="text-dark text-center caption">{lan.srvDoctor}</p>
           </Link>
@@ -93,7 +93,7 @@ function PosterCpn(props: IProps) {
             <img
               className="img-icon mb-3"
               src="/imgs/icons/specialty-icon.png"
-              alt="package"
+              alt="specialty"
             />
             <p className="text-dark text-center caption">{lan.srvSpecialty}</p>
           </Link>

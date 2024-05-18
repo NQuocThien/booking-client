@@ -24,7 +24,7 @@ function Footer({ data }: { data: GeneralInfor | undefined }) {
                 <img
                   className="me-auto img-fluid"
                   src={`${data?.logoFooter.url || "/logos/Logon.png"}`}
-                  alt=""
+                  alt="logo"
                 />
               </div>
               <p className="mt-2">

@@ -54,9 +54,9 @@ function RegisDoctorCpn(props: IProps) {
 
   // =================================================================
 
-  useEffect(() => {
-    useNProgress(loadingRegisDoctor || loadingRegis);
-  }, [loadingRegis, loadingRegisDoctor]);
+  // useEffect(() => {
+  useNProgress(loadingRegisDoctor || loadingRegis);
+  // }, [loadingRegis, loadingRegisDoctor]);
 
   useEffect(() => {
     if (state.doctor?.workSchedule) {

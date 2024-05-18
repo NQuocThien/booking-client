@@ -1,8 +1,13 @@
 "use client";
-import { useEffect, useLayoutEffect, useState } from "react";
 // imp
-import TicketDetailPage from "@/components/Account/TicketPage";
-
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+const TicketDetailPage = dynamic(
+  () => import("@/components/Account/TicketPage"),
+  {
+    ssr: false,
+  }
+);
 function CustomerDetailPage() {
   const [isClient, setIsClient] = useState(false);
 

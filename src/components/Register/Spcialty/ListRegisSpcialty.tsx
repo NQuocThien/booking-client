@@ -80,9 +80,9 @@ function ListRegisSpecialty(props: IProps) {
     }
   }, [dataTotal]);
 
-  useEffect(() => {
-    useNProgress(loading || loadTotalData);
-  }, [loading, loadTotalData]);
+  // useEffect(() => {
+  useNProgress(loading || loadTotalData);
+  // }, [loading, loadTotalData]);
 
   //================================================================
 

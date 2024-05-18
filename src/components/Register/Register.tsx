@@ -92,9 +92,9 @@ function Register(props: IProps) {
   }, [dataFacility]);
   // =================================================================
 
-  useEffect(() => {
-    useNProgress(loading);
-  }, [loading]);
+  // useEffect(() => {
+  useNProgress(loading);
+  // }, [loading]);
 
   // =================================================================
   return (

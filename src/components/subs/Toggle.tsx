@@ -2,7 +2,7 @@
 import { forwardRef } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 
-export const CustomToggle = forwardRef<
+const CustomToggle = forwardRef<
   HTMLDivElement,
   { onClick: (e: React.MouseEvent<HTMLDivElement>) => void }
 >(({ onClick }, ref) => (
@@ -16,3 +16,5 @@ export const CustomToggle = forwardRef<
     <CiMenuKebab />
   </div>
 ));
+CustomToggle.displayName = "CustomToggle";
+export default CustomToggle;

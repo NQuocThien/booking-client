@@ -66,9 +66,9 @@ function ListBlog(props: IProps) {
       }));
   }, [dataTotal]);
 
-  useEffect(() => {
-    useNProgress(loading || loadTotal);
-  }, [loading, loadTotal]);
+  // useEffect(() => {
+  useNProgress(loading || loadTotal);
+  // }, [loading, loadTotal]);
   // =================================================================
   const getTopBlog = (): Blog | undefined => {
     if (blogs.length > 0) {

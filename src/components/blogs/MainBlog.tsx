@@ -14,7 +14,7 @@ function MainBlog(props: IProps) {
     return (
       <div className="blog-main">
         <div className="image">
-          <img src={blog?.mainPhoto.url} />
+          <img src={blog?.mainPhoto.url} alt={blog?.mainPhoto.filename} />
         </div>
         {blog?.type === EnumBlogType.Health && (
           <div className="type text-primary">

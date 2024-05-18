@@ -307,7 +307,7 @@ function Header(props: IProps) {
                   <i className="text-primary me-1 bi bi-person-bounding-box"></i>
                   <span>{lan.texBtnUserHello}: </span>
                   <span className="text-primary">
-                    "{inforUser?.username}"
+                    &quot;{inforUser?.username}&quot;
                   </span>{" "}
                 </p>
                 {inforUser?.customer && (

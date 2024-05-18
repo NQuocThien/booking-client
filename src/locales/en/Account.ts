@@ -54,8 +54,10 @@ export const formCustomerUs = {
   subProfileShare:
     "Select patient profiles to share for appointment registration",
   titleProfile: "Your profile list",
+  titleProfileShare: "Your shared profile list",
   subInfoDoctor: "Doctor",
   titleProfileNone: "Empty profile list",
+  titleProfileShareNone: "Empty shared profile list",
   titleProfileSay: "Create a profile",
   titleJob: "Occupation",
   holderJob: "Stdent",
@@ -125,4 +127,9 @@ export const formCustomerUs = {
   star: "Rating: ",
   modalHeaderShare: "Share Profile",
   comment: "Commemt: ",
+  stateAll: "All",
+  stateSuccess: "Completed",
+  stateApproved: "Approved",
+  stateCancel: "Cancelled",
+  statePending: "Pending",
 };

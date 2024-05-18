@@ -74,9 +74,9 @@ function ListRegisPackage(props: IProps) {
     }
   }, [dataTotal]);
 
-  useEffect(() => {
-    useNProgress(loading || loadTotalData);
-  }, [loading, loadTotalData]);
+  // useEffect(() => {
+  useNProgress(loading || loadTotalData);
+  // }, [loading, loadTotalData]);
   // =================================================================
   const handleClickDetail = (p: Package) => {
     setPackage(p);

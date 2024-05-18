@@ -80,9 +80,9 @@ function ListProfile(props: IProps) {
     if (dateShare?.getProfileByCustomerKey)
       setProfileShare(dateShare.getProfileByCustomerKey);
   }, [dateShare]);
-  useEffect(() => {
-    useNProgress(loading || loadingShare);
-  }, [loading, loadingShare]);
+  // useEffect(() => {
+  useNProgress(loading || loadingShare);
+  // }, [loading, loadingShare]);
   // =================================================================
 
   const handleRegis = async () => {
@@ -270,7 +270,7 @@ function ListProfile(props: IProps) {
                     <span className="text-primary me-1">
                       <FaRegShareFromSquare />
                     </span>
-                    {lan.titleEthnic}:
+                    {lan.titleShare}:
                     <span className="text-info ms-2">
                       {profile.customer?.fullname}
                     </span>

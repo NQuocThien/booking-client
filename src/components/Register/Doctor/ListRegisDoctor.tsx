@@ -83,9 +83,9 @@ function ListRegisDoctor(props: IProps) {
       }));
   }, [dataTotal]);
 
-  useEffect(() => {
-    useNProgress(loading || loadTotalData);
-  }, [loading, loadTotalData]);
+  // useEffect(() => {
+  useNProgress(loading || loadTotalData);
+  // }, [loading, loadTotalData]);
   // =================================================================
   const getSpecialties = (): { id: string; name: string }[] => {
     const specialties: { id: string; name: string }[] = [];

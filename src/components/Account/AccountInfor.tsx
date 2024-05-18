@@ -139,12 +139,12 @@ function InforUserCpn({ isloginIn, lan, inforUser }: InforUserCpnProps) {
       setFormData(input);
     }
   }, [inforUser]);
+  useNProgress(loadingUpdateUser);
   useEffect(() => {
-    useNProgress(loadingUpdateUser);
     if (dataupdateUser) {
       dispatch(setUserInfo(dataupdateUser.updateUser));
     }
-  }, [dataupdateUser, loadingUpdateUser]);
+  }, [dataupdateUser]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setSelectedFile(file);
