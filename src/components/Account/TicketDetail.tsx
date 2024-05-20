@@ -81,9 +81,7 @@ function TicketDetail({ regisId, lan }: IProps) {
       setEvaluate(dataEvaluate?.getEvaluateByRegisId);
     }
   }, [dataEvaluate]);
-  // useEffect(() => {
   useNProgress(loading || loadingEvaluate || loadingUpdated || loadingCreated);
-  // }, [loading, loadingEvaluate]);
   //================================================================
 
   const handleSubmit = async (rating: number, comment: string) => {
@@ -97,11 +95,11 @@ function TicketDetail({ regisId, lan }: IProps) {
         };
         await update({ variables: { input: input } })
           .then((res) => {
-            showToast("Đã sửa đánh giá");
+            showToast(lan.messUpdateSuccess);
             if (res.data) setEvaluate(res.data.updateEvaluate);
           })
           .catch((err) => {
-            showToast("Có lỗi");
+            showToast("Có lỗi", "error");
             console.log(err);
           });
       }
@@ -176,7 +174,7 @@ function TicketDetail({ regisId, lan }: IProps) {
                 </span>
                 {lan.titleDateOfBirth}:
                 <span className="text-info ms-2">
-                  {regis?.profile?.dataOfBirth}
+                  {formatDate(regis?.profile?.dataOfBirth)}
                 </span>
               </h6>
             </div>
@@ -209,13 +207,6 @@ function TicketDetail({ regisId, lan }: IProps) {
                 <span className="text-info ms-2">{regis?.profile?.gender}</span>
               </h6>
             </div>
-            {/* <div className="px-3">
-              <h6>
-                <span className="text-primary">test IDDDDD:</span>
-                {lan.titleGender}:
-                <span className="text-info ms-2">{regisId}</span>
-              </h6>
-            </div> */}
             <div className="px-3">
               <h6>
                 <span className="text-primary">
@@ -356,8 +347,12 @@ function TicketDetail({ regisId, lan }: IProps) {
               </Button>
             </div>
           </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="my-3">
           {regis?.files && (
-            <div className="bg-light border border-info p-3 mt-2">
+            <div className="bg-light border border-info p-3">
               <h5 className="text-primary">
                 <i className="bi bi-paperclip"></i> {lan.listFile}
               </h5>
@@ -370,6 +365,18 @@ function TicketDetail({ regisId, lan }: IProps) {
                   </li>
                 ))}
               </ul>
+            </div>
+          )}
+        </Col>
+        <Col className="my-3">
+          {regis?.note && (
+            <div className="bg-light border border-info p-3">
+              <h5 className="text-primary">
+                <i className="bi bi-list-check"></i> {lan.note}
+              </h5>
+              <div
+                className="mt-2"
+                dangerouslySetInnerHTML={{ __html: regis.note }}></div>
             </div>
           )}
         </Col>

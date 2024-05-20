@@ -16,6 +16,7 @@ import { TiCancelOutline } from "react-icons/ti";
 import {
   FaBriefcaseMedical,
   FaBuilding,
+  FaCalendarCheck,
   FaPhone,
   FaRegClock,
 } from "react-icons/fa";
@@ -33,6 +34,8 @@ import { showToast } from "../subs/toast";
 import { GetEStateRegister } from "@/assets/contains/emun";
 import Link from "next/link";
 import { FiLoader } from "react-icons/fi";
+import ModalCpn from "../subs/Modal";
+import GoogleCalendar from "../subs/AntdCalendar";
 
 interface IProps {
   customerId: string;
@@ -53,6 +56,7 @@ function ManagerTicked({ customerId, lan, customerKey }: IProps) {
     cancel: undefined,
     stateRegis: undefined,
   });
+  const [showCalendar, setShowCalendar] = useState(false);
   // =================================================================
   const { refetch, data, loading, error } =
     useGetProfileTicketByCustomerIdQuery({
@@ -195,6 +199,12 @@ function ManagerTicked({ customerId, lan, customerKey }: IProps) {
                 {(loading || loadingShare) && (
                   <Spinner size="sm" variant="primary" />
                 )}{" "}
+                <Button
+                  size="sm"
+                  variant="outline-success"
+                  onClick={() => setShowCalendar(true)}>
+                  <FaCalendarCheck />
+                </Button>
               </h4>
             </div>
           )}
@@ -215,6 +225,12 @@ function ManagerTicked({ customerId, lan, customerKey }: IProps) {
                 {(loading || loadingShare) && (
                   <Spinner size="sm" variant="primary" />
                 )}{" "}
+                <Button
+                  size="sm"
+                  variant="outline-success"
+                  onClick={() => setShowCalendar(true)}>
+                  <FaCalendarCheck />
+                </Button>
               </h4>
             </div>
           )}
@@ -787,6 +803,26 @@ function ManagerTicked({ customerId, lan, customerKey }: IProps) {
           </div>
         </Col>
       </Row>
+      <ModalCpn
+        headerText="Lịch Khám"
+        handleClose={() => setShowCalendar(false)}
+        onlyClose
+        handleSave={() => {}}
+        fullscreen
+        openRequest={showCalendar}>
+        <div>
+          {shareList && (
+            <GoogleCalendar
+              list={undefined}
+              shareList={profileShare}
+              lan={lan}
+            />
+          )}
+          {!shareList && (
+            <GoogleCalendar list={list} shareList={undefined} lan={lan} />
+          )}
+        </div>
+      </ModalCpn>
     </div>
   );
 }

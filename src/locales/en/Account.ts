@@ -127,6 +127,7 @@ export const formCustomerUs = {
   star: "Rating: ",
   modalHeaderShare: "Share Profile",
   comment: "Commemt: ",
+  note: "Note",
   stateAll: "All",
   stateSuccess: "Completed",
   stateApproved: "Approved",

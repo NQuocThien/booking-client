@@ -121,6 +121,7 @@ export const formCustomerVi = {
   cancelledRegis: "Đã hủy",
   cancelledMess: "Đã hủy",
   listFile: "File đính kèm",
+  note: "Ghi chú",
   modalRating: "Đánh giá dịch vụ",
   star: "Đánh giá: ",
   comment: "Bình luận: ",

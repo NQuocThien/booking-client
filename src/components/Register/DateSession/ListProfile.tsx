@@ -54,6 +54,7 @@ function ListProfile(props: IProps) {
     useState<GetProfileByCustomerKeyQuery["getProfileByCustomerKey"]>();
   // =================================================================
   const { data, loading, error } = useGetProfileByCustomerIdQuery({
+    fetchPolicy: "no-cache",
     variables: {
       input: infoUser?.customer?.id || "",
     },

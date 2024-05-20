@@ -46,6 +46,7 @@ export type Blog = {
 };
 
 export type ConfirmRegisterInput = {
+  note?: InputMaybe<Scalars['String']['input']>;
   registerId: Scalars['String']['input'];
   state: EStateRegister;
 };
@@ -446,13 +447,11 @@ export type GetEvaluateOptionInput = {
 
 export type GetRegisPendingInput = {
   cancel: Scalars['Boolean']['input'];
-  doctorIds: Array<Scalars['String']['input']>;
   endTime: Scalars['String']['input'];
-  packageIds: Array<Scalars['String']['input']>;
-  specialtyIds: Array<Scalars['String']['input']>;
+  facilityIdFromStaff?: InputMaybe<Scalars['String']['input']>;
   startTime: Scalars['String']['input'];
   typeOfService?: InputMaybe<ETypeOfService>;
-  vaccineIds: Array<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type GetRegisterByOptionInput = {
@@ -631,6 +630,7 @@ export type Mutation = {
   deleteProfile: Profile;
   deleteUnDeleteBlog: Blog;
   deleteUser: User;
+  deleteUserAndDoctor: Doctor;
   deleteVaccination: Vaccination;
   login: LoginRespone;
   logout: LogoutUser;
@@ -811,6 +811,12 @@ export type MutationDeleteUnDeleteBlogArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteUserAndDoctorArgs = {
+  doctorId: Scalars['String']['input'];
+  medicalFactilitiesId: Scalars['String']['input'];
 };
 
 
@@ -1053,6 +1059,7 @@ export type Query = {
   getAllRegisCountByOption: Register;
   getAllRegisOfService: Array<Register>;
   getAllRegisPending: Array<Register>;
+  getAllRegisPendingCount: Scalars['Float']['output'];
   getAllRegisterByOption: Array<Register>;
   getAllStaffPagination: Array<MedicalStaff>;
   getAllUsersPagination: Array<User>;
@@ -1338,6 +1345,14 @@ export type QueryGetAllRegisOfServiceArgs = {
 
 
 export type QueryGetAllRegisPendingArgs = {
+  input: GetRegisPendingInput;
+  limit?: Scalars['Float']['input'];
+  page?: Scalars['Float']['input'];
+  search?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGetAllRegisPendingCountArgs = {
   input: GetRegisPendingInput;
 };
 
@@ -1659,6 +1674,17 @@ export type QueryTotalUsersCountArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type RegisPendingInput = {
+  cancel: Scalars['Boolean']['input'];
+  doctorIds: Array<Scalars['String']['input']>;
+  endTime: Scalars['String']['input'];
+  packageIds: Array<Scalars['String']['input']>;
+  specialtyIds: Array<Scalars['String']['input']>;
+  startTime: Scalars['String']['input'];
+  typeOfService?: InputMaybe<ETypeOfService>;
+  vaccineIds: Array<Scalars['String']['input']>;
+};
+
 export type Register = {
   __typename?: 'Register';
   cancel: Scalars['Boolean']['output'];
@@ -1669,6 +1695,7 @@ export type Register = {
   doctorId?: Maybe<Scalars['String']['output']>;
   files?: Maybe<Array<LinkImage>>;
   id: Scalars['ID']['output'];
+  note?: Maybe<Scalars['String']['output']>;
   package?: Maybe<Package>;
   packageId?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
@@ -1736,7 +1763,7 @@ export type SubscriptionRegisterCreatedArgs = {
 
 
 export type SubscriptionRegisterPendingCreatedArgs = {
-  option: GetRegisPendingInput;
+  option: RegisPendingInput;
 };
 
 export type UpLoadFileRegisInput = {
@@ -1785,7 +1812,7 @@ export type UpdateDoctorInput = {
   numberPhone: Scalars['String']['input'];
   price: Scalars['Float']['input'];
   specialistId: Scalars['String']['input'];
-  userId: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['String']['input']>;
   workSchedule: WorkScheduleInput;
 };
 
@@ -1900,10 +1927,10 @@ export type UpdateUserAndDoctorInput = {
   id: Scalars['String']['input'];
   medicalFactilitiesId: Scalars['String']['input'];
   numberPhone: Scalars['String']['input'];
-  password: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
   price: Scalars['Float']['input'];
   specialistId: Scalars['String']['input'];
-  userId: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['String']['input']>;
   username: Scalars['String']['input'];
   workSchedule: WorkScheduleInput;
 };
@@ -2411,7 +2438,7 @@ export type GetRegisByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetRegisByIdQuery = { __typename?: 'Query', getRegisById: { __typename?: 'Register', id: string, cancel: boolean, createdAt: any, date: any, profileId: string, typeOfService: string, doctorId?: string | null, packageId?: string | null, specialtyId?: string | null, vaccineId?: string | null, state: string, session: { __typename?: 'Session', startTime: string, endTime: string }, doctor?: { __typename?: 'Doctor', doctorName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, files?: Array<{ __typename?: 'LinkImage', filename: string, type: string, url: string }> | null, profile?: { __typename?: 'Profile', id: string, fullname: string, address: string, email: string, numberPhone: string, gender: string, ethnic: string, identity?: string | null, medicalInsurance?: string | null, job: string, relationship: string, dataOfBirth: any, customerId: string } | null } };
+export type GetRegisByIdQuery = { __typename?: 'Query', getRegisById: { __typename?: 'Register', id: string, cancel: boolean, createdAt: any, date: any, profileId: string, note?: string | null, typeOfService: string, doctorId?: string | null, packageId?: string | null, specialtyId?: string | null, vaccineId?: string | null, state: string, session: { __typename?: 'Session', startTime: string, endTime: string }, doctor?: { __typename?: 'Doctor', doctorName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, specialty?: { __typename?: 'MedicalSpecialties', specialtyName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, vaccination?: { __typename?: 'Vaccination', vaccineName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, package?: { __typename?: 'Package', packageName: string, price: number, facility?: { __typename?: 'MedicalFacilities', address: string, medicalFacilityName: string } | null } | null, files?: Array<{ __typename?: 'LinkImage', filename: string, type: string, url: string }> | null, profile?: { __typename?: 'Profile', id: string, fullname: string, address: string, email: string, numberPhone: string, gender: string, ethnic: string, identity?: string | null, medicalInsurance?: string | null, job: string, relationship: string, dataOfBirth: any, customerId: string } | null } };
 
 export type GetEvaluateByRegisIdQueryVariables = Exact<{
   regisId: Scalars['String']['input'];
@@ -5043,6 +5070,7 @@ export const GetRegisByIdDocument = gql`
     createdAt
     date
     profileId
+    note
     session {
       startTime
       endTime
@@ -5432,7 +5460,7 @@ export type MedicalStaffFieldPolicy = {
 	staffName?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('activeUser' | 'cancelRegister' | 'cancelRegisterByAdmin' | 'confirmRegister' | 'createBlog' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotification' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createUserAndStaff' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUnDeleteBlog' | 'deleteUser' | 'deleteVaccination' | 'login' | 'logout' | 'seenAllNotification' | 'seenNotificationById' | 'shareProfile' | 'signup' | 'signupAndCreateDoctor' | 'signupUser' | 'updateBlog' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserAndDoctor' | 'updateUserAndStaff' | 'updateUserWithPass' | 'updateVaccination' | 'uploadFileRegister' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('activeUser' | 'cancelRegister' | 'cancelRegisterByAdmin' | 'confirmRegister' | 'createBlog' | 'createCustomer' | 'createDoctor' | 'createEvaluate' | 'createMedicalFacility' | 'createMedicalSpecialty' | 'createMedicalStaff' | 'createNotification' | 'createPackage' | 'createProfile' | 'createRegisterDoctor' | 'createRegisterPackage' | 'createRegisterSpecialty' | 'createRegisterVaccine' | 'createUserAndStaff' | 'createVaccination' | 'deleteDoctor' | 'deleteEvaluate' | 'deleteMecialSpecialty' | 'deleteMedicalFacility' | 'deleteMedicalStaff' | 'deleteNotification' | 'deletePackage' | 'deleteProfile' | 'deleteUnDeleteBlog' | 'deleteUser' | 'deleteUserAndDoctor' | 'deleteVaccination' | 'login' | 'logout' | 'seenAllNotification' | 'seenNotificationById' | 'shareProfile' | 'signup' | 'signupAndCreateDoctor' | 'signupUser' | 'updateBlog' | 'updateCustomer' | 'updateDoctor' | 'updateEvaluate' | 'updateGeneralInfor' | 'updateMedicalFacility' | 'updateMedicalSpecialty' | 'updateMedicalStaff' | 'updateNotification' | 'updatePackage' | 'updateProfile' | 'updateRegister' | 'updateRoles' | 'updateSetting' | 'updateUser' | 'updateUserAndDoctor' | 'updateUserAndStaff' | 'updateUserWithPass' | 'updateVaccination' | 'uploadFileRegister' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	activeUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	cancelRegister?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -5464,6 +5492,7 @@ export type MutationFieldPolicy = {
 	deleteProfile?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteUnDeleteBlog?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteUser?: FieldPolicy<any> | FieldReadFunction<any>,
+	deleteUserAndDoctor?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteVaccination?: FieldPolicy<any> | FieldReadFunction<any>,
 	login?: FieldPolicy<any> | FieldReadFunction<any>,
 	logout?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -5535,7 +5564,7 @@ export type ProfileFieldPolicy = {
 	relationship?: FieldPolicy<any> | FieldReadFunction<any>,
 	shares?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllBlogOfFacilityPagination' | 'getAllBlogPagination' | 'getAllBlogPaginationForClient' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorOfFacility' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalFacilityPaginationForClient' | 'getAllMedicalSpecialtiesOfFacility' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllNotificationByUserId' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackageOfFacility' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisCountByOption' | 'getAllRegisOfService' | 'getAllRegisPending' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationOfFacility' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getBlogBySlug' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getEvaluateByOption' | 'getEvaluateByRegisId' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfileByCustomerKey' | 'getProfileById' | 'getProfiles' | 'getRegisById' | 'getRegisHistory' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalBlogsCount' | 'getTotalBlogsCountForClient' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesCountForClient' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('checklogin' | 'checkloginCustomer' | 'getAllBlogOfFacilityPagination' | 'getAllBlogPagination' | 'getAllBlogPaginationForClient' | 'getAllCustomer' | 'getAllCustomerPagination' | 'getAllDoctor' | 'getAllDoctorByFacilityId' | 'getAllDoctorOfFacility' | 'getAllDoctorPagination' | 'getAllDoctorPaginationOfFacility' | 'getAllDoctorPaginationOfFacilityForClient' | 'getAllDoctorPending' | 'getAllEvaluate' | 'getAllMecialSpecialty' | 'getAllMedicalFacility' | 'getAllMedicalFacilityHaveSrvPaginationForClient' | 'getAllMedicalFacilityPagination' | 'getAllMedicalFacilityPaginationForClient' | 'getAllMedicalSpecialtiesOfFacility' | 'getAllMedicalSpecialtiesPaginationByStaff' | 'getAllMedicalSpecialtiesPaginationOfFacility' | 'getAllMedicalSpecialtiesPaginationOfFacilityForClient' | 'getAllMedicalStaff' | 'getAllMedicalStaffPaginationOfFacility' | 'getAllNotification' | 'getAllNotificationByUserId' | 'getAllPackage' | 'getAllPackageByFacilityId' | 'getAllPackageOfFacility' | 'getAllPackagePaginationByStaff' | 'getAllPackagePaginationOfFacility' | 'getAllPackagePaginationOfFacilityForClient' | 'getAllPackageSelect' | 'getAllProfile' | 'getAllRegisCountByOption' | 'getAllRegisOfService' | 'getAllRegisPending' | 'getAllRegisPendingCount' | 'getAllRegisterByOption' | 'getAllStaffPagination' | 'getAllUsersPagination' | 'getAllVacation' | 'getAllVaccinationByFacilityId' | 'getAllVaccinationOfFacility' | 'getAllVaccinationPaginationByStaff' | 'getAllVaccinationPaginationOfFacility' | 'getAllVaccinationPaginationOfFacilityForClient' | 'getAllVaccinationSelect' | 'getBlogBySlug' | 'getDoctorbyId' | 'getDoctorbyUserId' | 'getEvaluateById' | 'getEvaluateByOption' | 'getEvaluateByRegisId' | 'getGeneralInfor' | 'getMedicalFacilityById' | 'getMedicalFacilityInfo' | 'getMedicalSpecialtiesByMedicalFacilityId' | 'getMedicalSpecialtyById' | 'getMedicalSpecialtySelect' | 'getMedicalStaffByFacilityId' | 'getMedicalStaffById' | 'getMedicalStaffByUserId' | 'getPackageById' | 'getProfileByCustomerId' | 'getProfileByCustomerKey' | 'getProfileById' | 'getProfiles' | 'getRegisById' | 'getRegisHistory' | 'getSetting' | 'getTopMedicalFacilities' | 'getTotalBlogsCount' | 'getTotalBlogsCountForClient' | 'getTotalCustomersCount' | 'getTotalDoctorsCount' | 'getTotalDoctorsCountForClient' | 'getTotalFacilitiesCount' | 'getTotalFacilitiesCountForClient' | 'getTotalFacilitiesHaveSrvCountForClient' | 'getTotalMedicalSpecialtiesCount' | 'getTotalMedicalSpecialtiesCountForClient' | 'getTotalPackagesCount' | 'getTotalPackagesCountForClient' | 'getTotalVaccinationsCount' | 'getTotalVaccinationsCountForClient' | 'getUser' | 'getUserDoctorPending' | 'getUserDoctorPendingUpdate' | 'getUserFacilitySelect' | 'getUserMedicalNon' | 'getUserSelect' | 'getUserSelected' | 'getUserStaffSelect' | 'getVaccineById' | 'totalStaffsCount' | 'totalUsersCount' | 'users' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	checklogin?: FieldPolicy<any> | FieldReadFunction<any>,
 	checkloginCustomer?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -5576,6 +5605,7 @@ export type QueryFieldPolicy = {
 	getAllRegisCountByOption?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllRegisOfService?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllRegisPending?: FieldPolicy<any> | FieldReadFunction<any>,
+	getAllRegisPendingCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllRegisterByOption?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllStaffPagination?: FieldPolicy<any> | FieldReadFunction<any>,
 	getAllUsersPagination?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -5637,7 +5667,7 @@ export type QueryFieldPolicy = {
 	totalUsersCount?: FieldPolicy<any> | FieldReadFunction<any>,
 	users?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type RegisterKeySpecifier = ('cancel' | 'createdAt' | 'createdBy' | 'date' | 'doctor' | 'doctorId' | 'files' | 'id' | 'package' | 'packageId' | 'profile' | 'profileId' | 'session' | 'specialty' | 'specialtyId' | 'state' | 'typeOfService' | 'vaccination' | 'vaccineId' | RegisterKeySpecifier)[];
+export type RegisterKeySpecifier = ('cancel' | 'createdAt' | 'createdBy' | 'date' | 'doctor' | 'doctorId' | 'files' | 'id' | 'note' | 'package' | 'packageId' | 'profile' | 'profileId' | 'session' | 'specialty' | 'specialtyId' | 'state' | 'typeOfService' | 'vaccination' | 'vaccineId' | RegisterKeySpecifier)[];
 export type RegisterFieldPolicy = {
 	cancel?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -5647,6 +5677,7 @@ export type RegisterFieldPolicy = {
 	doctorId?: FieldPolicy<any> | FieldReadFunction<any>,
 	files?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	note?: FieldPolicy<any> | FieldReadFunction<any>,
 	package?: FieldPolicy<any> | FieldReadFunction<any>,
 	packageId?: FieldPolicy<any> | FieldReadFunction<any>,
 	profile?: FieldPolicy<any> | FieldReadFunction<any>,

@@ -424,6 +424,7 @@ const getProfileTicketByCustomerId = gql`
         typeOfService
         state
         cancel
+        note
         session {
           endTime
           startTime
@@ -937,6 +938,7 @@ const getRegisById = gql`
       createdAt
       date
       profileId
+      note
       session {
         startTime
         endTime
