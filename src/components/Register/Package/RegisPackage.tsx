@@ -82,7 +82,7 @@ function RegisPackageCpn(props: IProps) {
           ).length;
           const maxCount: number =
             state.package?.workSchedule?.numberSlot || 10;
-          console.log("count regis: ", count, maxCount);
+          // console.log("count regis: ", count, maxCount);
           return count <= maxCount;
         }) || [];
       setSessions(sessionFiltered);

@@ -17,6 +17,7 @@ import {
   FaBriefcaseMedical,
   FaBuilding,
   FaCalendarCheck,
+  FaCheck,
   FaPhone,
   FaRegClock,
 } from "react-icons/fa";
@@ -27,7 +28,7 @@ import {
 } from "react-icons/fa6";
 import { MdAddLocation, MdOutlineTransgender } from "react-icons/md";
 import { formCustomerVi } from "@/locales/vi/Account";
-import { GiTriangleTarget } from "react-icons/gi";
+import { GiClockwork, GiTriangleTarget } from "react-icons/gi";
 import { Accordion, Button, Col, Row, Spinner } from "react-bootstrap";
 import { SlCalender } from "react-icons/sl";
 import { showToast } from "../subs/toast";
@@ -437,15 +438,38 @@ function ManagerTicked({ customerId, lan, customerKey }: IProps) {
                                 {regis.session.endTime}
                               </span>
                             </h6>
-                            <h6>
-                              <span className="text-primary me-1">
-                                <FiLoader />
+                            <div className="fw-bold">
+                              <span className="fw-bold text-primary me-1">
+                                {regis.state === GetEStateRegister.Pending && (
+                                  <FiLoader />
+                                )}
+                                {regis.state === GetEStateRegister.Approved && (
+                                  <GiClockwork />
+                                )}
+                                {regis.state === GetEStateRegister.Success && (
+                                  <FaCheck />
+                                )}
                               </span>
                               {/* {lan.titleFacilityName}: */}
-                              <span className="text-primary ms-2 fw-bold">
-                                {regis.state}
+                              <span
+                                className={`${
+                                  regis.state === GetEStateRegister.Approved &&
+                                  "text-warning"
+                                } ${
+                                  regis.state === GetEStateRegister.Success &&
+                                  "text-success"
+                                } ms-2 fw-bold`}>
+                                <span>{regis.state}</span>
+
+                                {regis.state === GetEStateRegister.Approved && (
+                                  <div className="mt-2 ms-1 text-dark fw-light">
+                                    (Vui lòng đến cơ sở y tế trước{" "}
+                                    {regis.session.startTime} ngày{" "}
+                                    {formatDate(regis.date)})
+                                  </div>
+                                )}
                               </span>
-                            </h6>
+                            </div>
                             <div className="d-flex justify-content-center ">
                               {!regis.cancel &&
                                 isCancel(
@@ -675,15 +699,38 @@ function ManagerTicked({ customerId, lan, customerKey }: IProps) {
                                 {regis.session.endTime}
                               </span>
                             </h6>
-                            <h6>
-                              <span className="text-primary me-1">
-                                <FiLoader />
+                            <div className="fw-bold">
+                              <span className="fw-bold text-primary me-1">
+                                {regis.state === GetEStateRegister.Pending && (
+                                  <FiLoader />
+                                )}
+                                {regis.state === GetEStateRegister.Approved && (
+                                  <GiClockwork />
+                                )}
+                                {regis.state === GetEStateRegister.Success && (
+                                  <FaCheck />
+                                )}
                               </span>
                               {/* {lan.titleFacilityName}: */}
-                              <span className="text-primary ms-2 fw-bold">
-                                {regis.state}
+                              <span
+                                className={`${
+                                  regis.state === GetEStateRegister.Approved &&
+                                  "text-warning"
+                                } ${
+                                  regis.state === GetEStateRegister.Success &&
+                                  "text-success"
+                                } ms-2 fw-bold`}>
+                                <span>{regis.state}</span>
+
+                                {regis.state === GetEStateRegister.Approved && (
+                                  <div className="mt-2 ms-1 text-dark fw-light">
+                                    (Vui lòng đến cơ sở y tế trước{" "}
+                                    {regis.session.startTime} ngày{" "}
+                                    {formatDate(regis.date)})
+                                  </div>
+                                )}
                               </span>
-                            </h6>
+                            </div>
                             <div className="d-flex justify-content-center ">
                               {!regis.cancel &&
                                 isCancel(

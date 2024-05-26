@@ -421,7 +421,7 @@ function ManaProfile({ customerId, lan, customerKey }: IProps) {
                       <BiMessageAltDetail />
                     </Button>
                     <Button
-                      variant="outline-info"
+                      variant="outline-success"
                       className="mx-1"
                       onClick={() => handleShowModalShare(profile)}
                       size="sm">

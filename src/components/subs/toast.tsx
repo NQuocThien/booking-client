@@ -8,9 +8,7 @@ export const showToast = (
   theme: Theme = "light",
   position: ToastPosition = "top-right"
 ) => {
-  console.log("show toast");
   if (type !== undefined) {
-    console.log("show toast type-undefined ");
     toast[type](message, {
       position: position,
       autoClose: autoClose,
@@ -22,7 +20,6 @@ export const showToast = (
       theme: theme,
     });
   } else {
-    console.log("show toast typ ");
     toast(message, {
       position: position,
       autoClose: autoClose,

@@ -81,7 +81,7 @@ function RegisVaccinationCpn(props: IProps) {
           ).length;
           const maxCount: number =
             state.vaccination?.workSchedule?.numberSlot || 10;
-          console.log("count regis: ", count, maxCount);
+          // console.log("count regis: ", count, maxCount);
           return count <= maxCount;
         }) || [];
       setSessions(sessionFiltered);
