@@ -1,3 +1,5 @@
+import { Exception, Session } from "@/graphql/webbooking-service.generated";
+
 export const asscessKey =
   process.env.NEXT_PUBLIC_ACCESS_TOKEN || "access_token";
 export const setLocalStorage = (key: string, value: string | object | []) => {
@@ -113,4 +115,30 @@ export const handleNotification = () => {
   const audio = new Audio("/audio/chuong.mp3");
   audio.loop = false;
   audio.play();
+};
+export const checkExceptions = (
+  dateSelected: string,
+  count: number,
+  s: {
+    endTime: string;
+    startTime: string;
+  },
+  ssMain: Session[]
+): boolean => {
+  // true được đk
+  const date = formatDate(dateSelected);
+  for (var ss of ssMain) {
+    if (ss.startTime === s.startTime && ss.endTime === s.endTime) {
+      if (ss?.exceptions) {
+        for (var ex of ss.exceptions) {
+          if (ex.dates.find((e) => formatDate(e) === date)) {
+            if (ex?.numbeSlot !== undefined && ex?.numbeSlot !== null)
+              if (count >= ex?.numbeSlot) return false;
+            if (ex.open === false) return false;
+          }
+        }
+      }
+    }
+  }
+  return true;
 };

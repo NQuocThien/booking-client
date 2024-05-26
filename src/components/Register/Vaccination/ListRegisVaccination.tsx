@@ -43,6 +43,7 @@ function ListRegisVaccination(props: IProps) {
   // =================================================================
   const { data, loading } =
     useGetAllVaccinationPaginationOfFacilityForClientQuery({
+      fetchPolicy: "no-cache",
       variables: {
         facilityId: facilityId || "",
         limit: filter.pagination.limit || 10,

@@ -43,6 +43,7 @@ function ListRegisSpecialty(props: IProps) {
 
   const { data, loading, error } =
     useGetAllMedicalSpecialtiesPaginationOfFacilityForClientQuery({
+      fetchPolicy: "no-cache",
       variables: {
         facilityId: facilityId || "",
         limit: filter.pagination.limit || 10,

@@ -10,6 +10,7 @@ import {
 } from "../reducer";
 import {
   EDayOfWeed,
+  ETypeOfService,
   Package,
   Register,
   ScheduleInput,
@@ -30,6 +31,7 @@ import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
 import { userInfo } from "os";
+import { checkExceptions, formatDate } from "@/utils/tools";
 
 interface IProps {
   lan: typeof regisVi;
@@ -45,19 +47,14 @@ function RegisPackageCpn(props: IProps) {
   const params = useSearchParams();
   const inforUser = useSelector((state: RootState) => state.client.inforUser);
   // =================================================================
-  const [getRegisPending, { data: dataRegis, loading: loadingRegis }] =
+  const [getRegisPending, { data: dataRegis, loading: loadingRegis, error }] =
     useGetAllRegisOfServiceLazyQuery();
 
   const [regisPackage, { loading: loadingRegisPackage }] =
     useCreateRegisterPackageMutation();
 
   // =================================================================
-
-  // useEffect(() => {
-  // set list schedule khi chọn dịch vụ
   useNProgress(loadingRegisPackage || loadingRegis);
-  // }, [loadingRegis, loadingRegisPackage]);
-
   useEffect(() => {
     if (state.package?.workSchedule) {
       const schedulesInput: ScheduleInput[] =
@@ -65,15 +62,22 @@ function RegisPackageCpn(props: IProps) {
           ...s,
           dayOfWeek: getEnumValueDayOfWeek(s.dayOfWeek),
         }));
-
       setListSchedule(schedulesInput);
     }
   }, [state.package?.workSchedule]);
+  useEffect(() => {
+    if (error) {
+      showToast("lỗi", "error");
+      console.log(error);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (dataRegis) {
+      console.log(dataRegis);
       const regis: Register[] = dataRegis.getAllRegisOfService;
       const sessionsExist: Session[] = regis.map((s) => s.session);
+      console.log("sessiong: ", schedule?.sessions);
 
       const sessionFiltered: Session[] =
         schedule?.sessions.filter((ss) => {
@@ -82,8 +86,26 @@ function RegisPackageCpn(props: IProps) {
           ).length;
           const maxCount: number =
             state.package?.workSchedule?.numberSlot || 10;
-          // console.log("count regis: ", count, maxCount);
-          return count <= maxCount;
+          console.log(
+            "--->checkExceptions: ",
+            checkExceptions(
+              state.regisPackage.date,
+              count,
+              ss,
+              schedule.sessions
+            )
+          );
+
+          if (
+            checkExceptions(
+              state.regisPackage.date,
+              count,
+              ss,
+              schedule.sessions
+            ) === false
+          )
+            return false;
+          return count < maxCount;
         }) || [];
       setSessions(sessionFiltered);
     }
@@ -136,10 +158,12 @@ function RegisPackageCpn(props: IProps) {
       })
     );
     getRegisPending({
+      fetchPolicy: "no-cache",
       variables: {
         input: {
           date: date,
-          packageId: state.regisPackage.packageId,
+          type: ETypeOfService.Package,
+          serviceId: state.regisPackage.packageId,
         },
       },
     });
@@ -150,19 +174,29 @@ function RegisPackageCpn(props: IProps) {
         );
         break;
       case 1:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Monday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Monday)
+        );
         break;
       case 2:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Tuesday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Tuesday)
+        );
         break;
       case 3:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Wednesday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Wednesday)
+        );
         break;
       case 4:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Thursday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Thursday)
+        );
         break;
       case 5:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Friday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Friday)
+        );
         break;
       case 6:
         setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Saturday));

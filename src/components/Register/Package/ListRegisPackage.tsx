@@ -39,6 +39,7 @@ function ListRegisPackage(props: IProps) {
   });
   // =================================================================
   const { data, loading } = useGetAllPackagePaginationOfFacilityForClientQuery({
+    fetchPolicy: "no-cache",
     variables: {
       facilityId: facilityId || "",
       limit: filter.pagination.limit || 10,

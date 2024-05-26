@@ -10,6 +10,7 @@ import {
 } from "../reducer";
 import {
   EDayOfWeed,
+  ETypeOfService,
   Register,
   ScheduleInput,
   SessionInput,
@@ -29,6 +30,7 @@ import useNProgress from "@/hooks/useNProgress";
 import { ETypeOfServiceParameters } from "@/assets/contains/emun";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
+import { checkExceptions } from "@/utils/tools";
 
 interface IProps {
   lan: typeof regisVi;
@@ -81,7 +83,15 @@ function RegisVaccinationCpn(props: IProps) {
           ).length;
           const maxCount: number =
             state.vaccination?.workSchedule?.numberSlot || 10;
-          // console.log("count regis: ", count, maxCount);
+          if (
+            checkExceptions(
+              state.regisVaccination.date,
+              count,
+              ss,
+              schedule.sessions
+            ) === false
+          )
+            return false;
           return count <= maxCount;
         }) || [];
       setSessions(sessionFiltered);
@@ -135,10 +145,12 @@ function RegisVaccinationCpn(props: IProps) {
       })
     );
     getRegisPending({
+      fetchPolicy: "no-cache",
       variables: {
         input: {
           date: date,
-          vaccineId: state.regisVaccination.vaccineId,
+          type: ETypeOfService.Vaccine,
+          serviceId: state.regisVaccination.vaccineId,
         },
       },
     });
@@ -149,22 +161,34 @@ function RegisVaccinationCpn(props: IProps) {
         );
         break;
       case 1:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Monday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Monday)
+        );
         break;
       case 2:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Tuesday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Tuesday)
+        );
         break;
       case 3:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Wednesday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Wednesday)
+        );
         break;
       case 4:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Thursday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Thursday)
+        );
         break;
       case 5:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Friday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Friday)
+        );
         break;
       case 6:
-        setSchedule(() => listSchedule?.find((item) => EDayOfWeed.Saturday));
+        setSchedule(() =>
+          listSchedule?.find((item) => item.dayOfWeek === EDayOfWeed.Saturday)
+        );
         break;
     }
   };

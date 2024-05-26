@@ -50,16 +50,16 @@ function ListRegisDoctor(props: IProps) {
   const [modal, setModal] = useState<boolean>(false);
 
   // =================================================================
-  const { data, loading, error } =
-    useGetAllDoctorPaginationOfFacilityForClientQuery({
-      variables: {
-        facilityId: facilityId,
-        limit: filter.pagination.limit,
-        page: filter.pagination.current,
-        filter: filter.filterDoctor,
-      },
-    });
-  console.log("filter: ", filter);
+  const { data, loading } = useGetAllDoctorPaginationOfFacilityForClientQuery({
+    fetchPolicy: "no-cache",
+    variables: {
+      facilityId: facilityId,
+      limit: filter.pagination.limit,
+      page: filter.pagination.current,
+      filter: filter.filterDoctor,
+    },
+  });
+  // console.log("filter: ", filter);
   const { data: dataTotal, loading: loadTotalData } =
     useGetTotalDoctorsCountForClientQuery({
       variables: {

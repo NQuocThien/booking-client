@@ -376,7 +376,7 @@ const getListVaccinationRegisInfoByFacilityId = gql`
   }
 `;
 const getAllRegisPending = gql`
-  query getAllRegisOfService($input: GetRegisterByOptionInput!) {
+  query getAllRegisOfService($input: GetRegisterHaveInput!) {
     getAllRegisOfService(input: $input) {
       id
       date
@@ -384,6 +384,11 @@ const getAllRegisPending = gql`
       session {
         endTime
         startTime
+        exceptions {
+          dates
+          numbeSlot
+          open
+        }
       }
       cancel
       packageId
@@ -602,6 +607,11 @@ const getAllDoctorPaginationOfFacilityForClient = gql`
           sessions {
             endTime
             startTime
+            exceptions {
+              dates
+              numbeSlot
+              open
+            }
           }
         }
       }
@@ -660,6 +670,11 @@ const getAllPackagePaginationOfFacilityForClient = gql`
           sessions {
             startTime
             endTime
+            exceptions {
+              dates
+              numbeSlot
+              open
+            }
           }
         }
       }
@@ -708,6 +723,11 @@ const getAllMedicalSpecialtiesPaginationOfFacilityForClient = gql`
           sessions {
             endTime
             startTime
+            exceptions {
+              dates
+              numbeSlot
+              open
+            }
           }
         }
       }
@@ -748,6 +768,11 @@ const getAllVaccinationPaginationOfFacilityForClient = gql`
           sessions {
             startTime
             endTime
+            exceptions {
+              dates
+              numbeSlot
+              open
+            }
           }
         }
         status
