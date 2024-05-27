@@ -192,7 +192,7 @@ const MyCalendar: React.FC<IProps> = ({ list, shareList, lan }) => {
         <div>
           {list &&
             regisSelect.map((p, i) => (
-              <div>
+              <div key={`titeck-${i}`}>
                 <div className="shadow-lg bg-light border p-2">
                   <h5>
                     {lan.titleTicketInfor} {p.fullname}
@@ -287,54 +287,6 @@ const MyCalendar: React.FC<IProps> = ({ list, shareList, lan }) => {
                           {regis.state}
                         </span>
                       </h6>
-                      {/* <div className="d-flex justify-content-center ">
-                      {!regis.cancel &&
-                        isCancel(
-                          regis.state,
-                          regis.date,
-                          regis.session.startTime
-                        ) && (
-                          <Button
-                            size="sm"
-                            className=""
-                            onClick={() => handleCancel(regis.id, item.id)}
-                            variant="outline-secondary">
-                            <TiCancelOutline />
-                            {lan.cancelRegis}
-                            {loadingCancel && (
-                              <Spinner
-                                size="sm"
-                                animation="border"
-                                variant="warning"
-                              />
-                            )}
-                          </Button>
-                        )}
-                      {regis.cancel && (
-                        <div className="text-danger text-center">
-                          <h5>
-                            <TiCancelOutline />
-                          </h5>
-                          {lan.cancelledRegis}
-                        </div>
-                      )}
-
-                      {regis.state === GetEStateRegister.Success &&
-                        !regis.cancel && (
-                          <Link
-                            className="btn btn-primary btn-sm"
-                            href={`/account/ticket/${regis.id}`}>
-                            {lan.detailLink}
-                            {loadingCancel && (
-                              <Spinner
-                                size="sm"
-                                animation="border"
-                                variant="warning"
-                              />
-                            )}
-                          </Link>
-                        )}
-                    </div> */}
                     </div>
                   ))}
                 </div>
@@ -342,7 +294,7 @@ const MyCalendar: React.FC<IProps> = ({ list, shareList, lan }) => {
             ))}
           {shareList &&
             regisSelectShare.map((p, i) => (
-              <div>
+              <div key={`share-${i}`}>
                 <div className="shadow-lg bg-light border p-2">
                   <h5>
                     {lan.titleTicketInfor} {p.fullname}
